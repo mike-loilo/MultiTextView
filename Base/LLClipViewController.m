@@ -32,6 +32,13 @@
     
     _item = [LLClipItem new];
     _playView = [LLFullScreenPlayView.alloc initWithFrame:self.view.bounds];
+    _playView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin
+    | UIViewAutoresizingFlexibleWidth
+    | UIViewAutoresizingFlexibleRightMargin
+    | UIViewAutoresizingFlexibleTopMargin
+    | UIViewAutoresizingFlexibleHeight
+    | UIViewAutoresizingFlexibleBottomMargin;
+    [self.view insertSubview:_playView belowSubview:_topController];
     
     return self;
 }
