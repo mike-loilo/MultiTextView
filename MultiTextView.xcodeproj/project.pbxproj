@@ -12,6 +12,15 @@
 		2789D8A21D86254100B283A7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8A01D86254100B283A7 /* Main.storyboard */; };
 		2789D8A41D86254100B283A7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8A31D86254100B283A7 /* Assets.xcassets */; };
 		2789D8A71D86254100B283A7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8A51D86254100B283A7 /* LaunchScreen.storyboard */; };
+		2789D8B21D86268C00B283A7 /* LLClipViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2789D8B11D86268C00B283A7 /* LLClipViewController.m */; };
+		2789D8B51D8626F200B283A7 /* LLClipItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2789D8B41D8626F200B283A7 /* LLClipItem.m */; };
+		2789D8B81D86270300B283A7 /* LLClip.m in Sources */ = {isa = PBXBuildFile; fileRef = 2789D8B71D86270300B283A7 /* LLClip.m */; };
+		2789D8BA1D8627D400B283A7 /* LLClipViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8B91D8627D400B283A7 /* LLClipViewController.xib */; };
+		2789D8BE1D862E2B00B283A7 /* LLClipViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8BD1D862E2B00B283A7 /* LLClipViewController~iphone.xib */; };
+		2789D8C11D8640E500B283A7 /* LLClipMultiTextInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2789D8BF1D8640E500B283A7 /* LLClipMultiTextInputViewController.swift */; };
+		2789D8C21D8640E500B283A7 /* LLClipMultiTextInputViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8C01D8640E500B283A7 /* LLClipMultiTextInputViewController.xib */; };
+		2789D8C51D86426200B283A7 /* LLBorderedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2789D8C41D86426200B283A7 /* LLBorderedButton.m */; };
+		2789D8C81D86494800B283A7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8CA1D86494800B283A7 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +31,23 @@
 		2789D8A31D86254100B283A7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2789D8A61D86254100B283A7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2789D8A81D86254100B283A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2789D8AF1D86268C00B283A7 /* MultiTextView-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MultiTextView-Bridging-Header.h"; sourceTree = "<group>"; };
+		2789D8B01D86268C00B283A7 /* LLClipViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LLClipViewController.h; path = Base/LLClipViewController.h; sourceTree = "<group>"; };
+		2789D8B11D86268C00B283A7 /* LLClipViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LLClipViewController.m; path = Base/LLClipViewController.m; sourceTree = "<group>"; };
+		2789D8B31D8626F200B283A7 /* LLClipItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LLClipItem.h; path = Base/LLClipItem.h; sourceTree = "<group>"; };
+		2789D8B41D8626F200B283A7 /* LLClipItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LLClipItem.m; path = Base/LLClipItem.m; sourceTree = "<group>"; };
+		2789D8B61D86270300B283A7 /* LLClip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LLClip.h; path = Base/LLClip.h; sourceTree = "<group>"; };
+		2789D8B71D86270300B283A7 /* LLClip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LLClip.m; path = Base/LLClip.m; sourceTree = "<group>"; };
+		2789D8B91D8627D400B283A7 /* LLClipViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LLClipViewController.xib; path = Base/LLClipViewController.xib; sourceTree = "<group>"; };
+		2789D8BD1D862E2B00B283A7 /* LLClipViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "LLClipViewController~iphone.xib"; path = "Base/LLClipViewController~iphone.xib"; sourceTree = "<group>"; };
+		2789D8BF1D8640E500B283A7 /* LLClipMultiTextInputViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLClipMultiTextInputViewController.swift; sourceTree = "<group>"; };
+		2789D8C01D8640E500B283A7 /* LLClipMultiTextInputViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LLClipMultiTextInputViewController.xib; sourceTree = "<group>"; };
+		2789D8C31D86426200B283A7 /* LLBorderedButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LLBorderedButton.h; path = Base/LLBorderedButton.h; sourceTree = "<group>"; };
+		2789D8C41D86426200B283A7 /* LLBorderedButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LLBorderedButton.m; path = Base/LLBorderedButton.m; sourceTree = "<group>"; };
+		2789D8CB1D86494D00B283A7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		2789D8CC1D86498D00B283A7 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Main.strings; sourceTree = "<group>"; };
+		2789D8CD1D86498D00B283A7 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		2789D8CE1D86498D00B283A7 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +64,7 @@
 		2789D8901D86254100B283A7 = {
 			isa = PBXGroup;
 			children = (
+				2789D8AE1D86264E00B283A7 /* Base */,
 				2789D89B1D86254100B283A7 /* MultiTextView */,
 				2789D89A1D86254100B283A7 /* Products */,
 			);
@@ -60,8 +87,29 @@
 				2789D8A31D86254100B283A7 /* Assets.xcassets */,
 				2789D8A51D86254100B283A7 /* LaunchScreen.storyboard */,
 				2789D8A81D86254100B283A7 /* Info.plist */,
+				2789D8BF1D8640E500B283A7 /* LLClipMultiTextInputViewController.swift */,
+				2789D8C01D8640E500B283A7 /* LLClipMultiTextInputViewController.xib */,
 			);
 			path = MultiTextView;
+			sourceTree = "<group>";
+		};
+		2789D8AE1D86264E00B283A7 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				2789D8C31D86426200B283A7 /* LLBorderedButton.h */,
+				2789D8C41D86426200B283A7 /* LLBorderedButton.m */,
+				2789D8B61D86270300B283A7 /* LLClip.h */,
+				2789D8B71D86270300B283A7 /* LLClip.m */,
+				2789D8B31D8626F200B283A7 /* LLClipItem.h */,
+				2789D8B41D8626F200B283A7 /* LLClipItem.m */,
+				2789D8B01D86268C00B283A7 /* LLClipViewController.h */,
+				2789D8B11D86268C00B283A7 /* LLClipViewController.m */,
+				2789D8AF1D86268C00B283A7 /* MultiTextView-Bridging-Header.h */,
+				2789D8B91D8627D400B283A7 /* LLClipViewController.xib */,
+				2789D8BD1D862E2B00B283A7 /* LLClipViewController~iphone.xib */,
+				2789D8CA1D86494800B283A7 /* Localizable.strings */,
+			);
+			name = Base;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -106,6 +154,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ja,
 			);
 			mainGroup = 2789D8901D86254100B283A7;
 			productRefGroup = 2789D89A1D86254100B283A7 /* Products */;
@@ -122,8 +171,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2789D8BA1D8627D400B283A7 /* LLClipViewController.xib in Resources */,
+				2789D8C81D86494800B283A7 /* Localizable.strings in Resources */,
 				2789D8A71D86254100B283A7 /* LaunchScreen.storyboard in Resources */,
+				2789D8BE1D862E2B00B283A7 /* LLClipViewController~iphone.xib in Resources */,
 				2789D8A41D86254100B283A7 /* Assets.xcassets in Resources */,
+				2789D8C21D8640E500B283A7 /* LLClipMultiTextInputViewController.xib in Resources */,
 				2789D8A21D86254100B283A7 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -136,6 +189,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				2789D89F1D86254100B283A7 /* ViewController.swift in Sources */,
+				2789D8B21D86268C00B283A7 /* LLClipViewController.m in Sources */,
+				2789D8C11D8640E500B283A7 /* LLClipMultiTextInputViewController.swift in Sources */,
+				2789D8B81D86270300B283A7 /* LLClip.m in Sources */,
+				2789D8C51D86426200B283A7 /* LLBorderedButton.m in Sources */,
+				2789D8B51D8626F200B283A7 /* LLClipItem.m in Sources */,
 				2789D89D1D86254100B283A7 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -147,6 +205,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				2789D8A11D86254100B283A7 /* Base */,
+				2789D8CC1D86498D00B283A7 /* ja */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -155,8 +214,19 @@
 			isa = PBXVariantGroup;
 			children = (
 				2789D8A61D86254100B283A7 /* Base */,
+				2789D8CD1D86498D00B283A7 /* ja */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		2789D8CA1D86494800B283A7 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2789D8CB1D86494D00B283A7 /* en */,
+				2789D8CE1D86498D00B283A7 /* ja */,
+			);
+			name = Localizable.strings;
+			path = Base;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -199,7 +269,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -239,7 +309,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -251,10 +321,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = MultiTextView/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Bottega.MultiTextView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "MultiTextView-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -262,10 +335,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = MultiTextView/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Bottega.MultiTextView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "MultiTextView-Bridging-Header.h";
 			};
 			name = Release;
 		};
@@ -288,6 +363,7 @@
 				2789D8AD1D86254100B283A7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
