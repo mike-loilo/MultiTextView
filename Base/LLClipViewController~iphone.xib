@@ -17,22 +17,29 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Bm9-Mu-31b">
-                    <rect key="frame" x="145" y="269" width="30" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="Text"/>
-                    <connections>
-                        <action selector="textButtonDidTap:" destination="-1" eventType="touchUpInside" id="YWe-Bo-CIj"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="M9I-B6-fvh">
-                    <rect key="frame" x="8" y="8" width="30" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="x"/>
-                    <connections>
-                        <action selector="closeButtonDidTap:" destination="-1" eventType="touchUpInside" id="bAq-wx-EAv"/>
-                    </connections>
-                </button>
+                <view contentMode="scaleToFill" id="hfn-wC-1qA">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="M9I-B6-fvh">
+                            <rect key="frame" x="10" y="10" width="30" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="x"/>
+                            <connections>
+                                <action selector="closeButtonDidTap:" destination="-1" eventType="touchUpInside" id="bAq-wx-EAv"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Bm9-Mu-31b">
+                            <rect key="frame" x="145" y="10" width="30" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="Text"/>
+                            <connections>
+                                <action selector="textButtonDidTap:" destination="-1" eventType="touchUpInside" id="YWe-Bo-CIj"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <nil key="simulatedStatusBarMetrics"/>

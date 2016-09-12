@@ -21,6 +21,13 @@
 		2789D8C21D8640E500B283A7 /* LLClipMultiTextInputViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8C01D8640E500B283A7 /* LLClipMultiTextInputViewController.xib */; };
 		2789D8C51D86426200B283A7 /* LLBorderedButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2789D8C41D86426200B283A7 /* LLBorderedButton.m */; };
 		2789D8C81D86494800B283A7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8CA1D86494800B283A7 /* Localizable.strings */; };
+		2789D8D11D8674B400B283A7 /* LLFullScreenPlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2789D8D01D8674B400B283A7 /* LLFullScreenPlayView.m */; };
+		2789D8D91D867F7E00B283A7 /* NewDrawing.png in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8D31D867F7E00B283A7 /* NewDrawing.png */; };
+		2789D8DA1D867F7E00B283A7 /* NewDrawing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8D41D867F7E00B283A7 /* NewDrawing@2x.png */; };
+		2789D8DB1D867F7E00B283A7 /* WhiteCircleButton_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8D51D867F7E00B283A7 /* WhiteCircleButton_on.png */; };
+		2789D8DC1D867F7E00B283A7 /* WhiteCircleButton_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8D61D867F7E00B283A7 /* WhiteCircleButton_on@2x.png */; };
+		2789D8DD1D867F7E00B283A7 /* WhiteCircleButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8D71D867F7E00B283A7 /* WhiteCircleButton.png */; };
+		2789D8DE1D867F7E00B283A7 /* WhiteCircleButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8D81D867F7E00B283A7 /* WhiteCircleButton@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +55,14 @@
 		2789D8CC1D86498D00B283A7 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Main.strings; sourceTree = "<group>"; };
 		2789D8CD1D86498D00B283A7 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		2789D8CE1D86498D00B283A7 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		2789D8CF1D8674B400B283A7 /* LLFullScreenPlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LLFullScreenPlayView.h; path = Base/LLFullScreenPlayView.h; sourceTree = "<group>"; };
+		2789D8D01D8674B400B283A7 /* LLFullScreenPlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LLFullScreenPlayView.m; path = Base/LLFullScreenPlayView.m; sourceTree = "<group>"; };
+		2789D8D31D867F7E00B283A7 /* NewDrawing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = NewDrawing.png; path = images/NewDrawing.png; sourceTree = "<group>"; };
+		2789D8D41D867F7E00B283A7 /* NewDrawing@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "NewDrawing@2x.png"; path = "images/NewDrawing@2x.png"; sourceTree = "<group>"; };
+		2789D8D51D867F7E00B283A7 /* WhiteCircleButton_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WhiteCircleButton_on.png; path = images/WhiteCircleButton_on.png; sourceTree = "<group>"; };
+		2789D8D61D867F7E00B283A7 /* WhiteCircleButton_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "WhiteCircleButton_on@2x.png"; path = "images/WhiteCircleButton_on@2x.png"; sourceTree = "<group>"; };
+		2789D8D71D867F7E00B283A7 /* WhiteCircleButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WhiteCircleButton.png; path = images/WhiteCircleButton.png; sourceTree = "<group>"; };
+		2789D8D81D867F7E00B283A7 /* WhiteCircleButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "WhiteCircleButton@2x.png"; path = "images/WhiteCircleButton@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +81,7 @@
 			children = (
 				2789D8AE1D86264E00B283A7 /* Base */,
 				2789D89B1D86254100B283A7 /* MultiTextView */,
+				2789D8D21D867F6800B283A7 /* images */,
 				2789D89A1D86254100B283A7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -104,12 +120,27 @@
 				2789D8B41D8626F200B283A7 /* LLClipItem.m */,
 				2789D8B01D86268C00B283A7 /* LLClipViewController.h */,
 				2789D8B11D86268C00B283A7 /* LLClipViewController.m */,
+				2789D8CF1D8674B400B283A7 /* LLFullScreenPlayView.h */,
+				2789D8D01D8674B400B283A7 /* LLFullScreenPlayView.m */,
 				2789D8AF1D86268C00B283A7 /* MultiTextView-Bridging-Header.h */,
 				2789D8B91D8627D400B283A7 /* LLClipViewController.xib */,
 				2789D8BD1D862E2B00B283A7 /* LLClipViewController~iphone.xib */,
 				2789D8CA1D86494800B283A7 /* Localizable.strings */,
 			);
 			name = Base;
+			sourceTree = "<group>";
+		};
+		2789D8D21D867F6800B283A7 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				2789D8D31D867F7E00B283A7 /* NewDrawing.png */,
+				2789D8D41D867F7E00B283A7 /* NewDrawing@2x.png */,
+				2789D8D51D867F7E00B283A7 /* WhiteCircleButton_on.png */,
+				2789D8D61D867F7E00B283A7 /* WhiteCircleButton_on@2x.png */,
+				2789D8D71D867F7E00B283A7 /* WhiteCircleButton.png */,
+				2789D8D81D867F7E00B283A7 /* WhiteCircleButton@2x.png */,
+			);
+			name = images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -171,13 +202,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2789D8DB1D867F7E00B283A7 /* WhiteCircleButton_on.png in Resources */,
+				2789D8DA1D867F7E00B283A7 /* NewDrawing@2x.png in Resources */,
 				2789D8BA1D8627D400B283A7 /* LLClipViewController.xib in Resources */,
 				2789D8C81D86494800B283A7 /* Localizable.strings in Resources */,
 				2789D8A71D86254100B283A7 /* LaunchScreen.storyboard in Resources */,
+				2789D8DE1D867F7E00B283A7 /* WhiteCircleButton@2x.png in Resources */,
+				2789D8DC1D867F7E00B283A7 /* WhiteCircleButton_on@2x.png in Resources */,
 				2789D8BE1D862E2B00B283A7 /* LLClipViewController~iphone.xib in Resources */,
+				2789D8DD1D867F7E00B283A7 /* WhiteCircleButton.png in Resources */,
 				2789D8A41D86254100B283A7 /* Assets.xcassets in Resources */,
 				2789D8C21D8640E500B283A7 /* LLClipMultiTextInputViewController.xib in Resources */,
 				2789D8A21D86254100B283A7 /* Main.storyboard in Resources */,
+				2789D8D91D867F7E00B283A7 /* NewDrawing.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -193,6 +230,7 @@
 				2789D8C11D8640E500B283A7 /* LLClipMultiTextInputViewController.swift in Sources */,
 				2789D8B81D86270300B283A7 /* LLClip.m in Sources */,
 				2789D8C51D86426200B283A7 /* LLBorderedButton.m in Sources */,
+				2789D8D11D8674B400B283A7 /* LLFullScreenPlayView.m in Sources */,
 				2789D8B51D8626F200B283A7 /* LLClipItem.m in Sources */,
 				2789D89D1D86254100B283A7 /* AppDelegate.swift in Sources */,
 			);

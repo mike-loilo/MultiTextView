@@ -6,3 +6,4 @@
 #import "LLClipItem.h"
 #import "LLClipViewController.h"
 #import "LLBorderedButton.h"
+#import "LLFullScreenPlayView.h"

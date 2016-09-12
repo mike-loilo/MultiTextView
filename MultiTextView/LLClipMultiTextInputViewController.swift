@@ -10,15 +10,45 @@ import UIKit
 
 class LLClipMultiTextInputViewController: UIViewController {
 
-    @IBOutlet weak var _closeButton: LLBorderedButton!
-    private var _closeCallback: (() -> ())?
+    @IBOutlet weak var closeButton: LLBorderedButton!
+    @IBOutlet weak var backgroundColorButton: UIButton!
+    @IBOutlet weak var backgroundColorView: UIView!
+    @IBOutlet weak var addClipButton: UIButton!
+
+    private var topButtons = [UIView]()
     
-    init(closeCallback: (() -> ())?) {
+    private var clipItem: LLClipItem?
+    private var playView: LLFullScreenPlayView?
+    private var changeBGColorBlock: ((color: UIColor?) -> ())?
+    private var addClipBlock: ((item: LLClipItem?) -> ())?
+    private var closeCallback: (() -> ())?
+    
+    init(clipItem: LLClipItem!, playView: LLFullScreenPlayView!, changeBGColorBlock: ((color: UIColor?) -> ())?, addClipBlock: ((item: LLClipItem?) -> ())?, closeCallback: (() -> ())?) {
         super.init(nibName: "LLClipMultiTextInputViewController", bundle: nil)
-        
-        self._closeCallback = closeCallback
+
+        self.clipItem = clipItem
+        self.playView = playView
+        self.changeBGColorBlock = changeBGColorBlock
+        self.addClipBlock = addClipBlock
+        self.closeCallback = closeCallback
     }
     
+    /** ボタンの親になるビューを設定 */
+    var controllerParent: UIView? {
+        willSet {
+            (self.topButtons as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
+                obj.removeFromSuperview()
+            }
+        }
+        didSet {
+            if (nil != self.controllerParent) {
+                (self.topButtons as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
+                    self.controllerParent!.addSubview(obj as! UIView)
+                }
+            }
+        }
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -26,19 +56,45 @@ class LLClipMultiTextInputViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self._closeButton.setTitle(NSLocalizedString("026", comment: "") /* 完了 */, forState: .Normal)
-        self._closeButton.setWhiteStyle()
+        self.topButtons.append(self.closeButton)
+        self.topButtons.append(self.backgroundColorButton)
+        self.topButtons.append(self.backgroundColorView)
+        self.topButtons.append(self.addClipButton)
+        
+        self.closeButton.setTitle(NSLocalizedString("026", comment: "") /* 完了 */, forState: .Normal)
+        self.closeButton.setWhiteStyle()
     }
     
-    deinit { NSLog("\(NSStringFromClass(self.dynamicType) + "." + #function)") }
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        self.view.frame = self.view.superview!.bounds
+    }
+    
+    deinit {
+        NSLog("\(NSStringFromClass(self.dynamicType) + "." + #function)")
+        (self.topButtons as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
+            obj.removeFromSuperview()
+        }
+    }
     
     override func prefersStatusBarHidden() -> Bool { return true }
     
     @IBAction func closeButtonDidTap(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true) { 
-            if (nil != self._closeCallback) {
-                self._closeCallback!()
-            }
+        if (nil != self.closeCallback) {
+            self.closeCallback!()
+        }
+    }
+    
+    @IBAction func backgroundColorButtonDidTap(sender: AnyObject) {
+        if (nil != self.changeBGColorBlock) {
+            self.changeBGColorBlock!(color: UIColor.brownColor())
+        }
+    }
+    
+    @IBAction func addClipButtonDidTap(sender: AnyObject) {
+        if (nil != self.addClipBlock) {
+            self.addClipBlock!(item: nil);
         }
     }
 }
