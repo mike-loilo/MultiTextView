@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2753BECD1D891AD900BFED52 /* LLTextHandleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2753BECC1D891AD900BFED52 /* LLTextHandleView.swift */; };
 		2789D89D1D86254100B283A7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2789D89C1D86254100B283A7 /* AppDelegate.swift */; };
 		2789D89F1D86254100B283A7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2789D89E1D86254100B283A7 /* ViewController.swift */; };
 		2789D8A21D86254100B283A7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8A01D86254100B283A7 /* Main.storyboard */; };
@@ -31,6 +32,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2753BECC1D891AD900BFED52 /* LLTextHandleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLTextHandleView.swift; sourceTree = "<group>"; };
 		2789D8991D86254100B283A7 /* MultiTextView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MultiTextView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2789D89C1D86254100B283A7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2789D89E1D86254100B283A7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				2789D8A81D86254100B283A7 /* Info.plist */,
 				2789D8BF1D8640E500B283A7 /* LLClipMultiTextInputViewController.swift */,
 				2789D8C01D8640E500B283A7 /* LLClipMultiTextInputViewController.xib */,
+				2753BECC1D891AD900BFED52 /* LLTextHandleView.swift */,
 			);
 			path = MultiTextView;
 			sourceTree = "<group>";
@@ -230,6 +233,7 @@
 				2789D8C11D8640E500B283A7 /* LLClipMultiTextInputViewController.swift in Sources */,
 				2789D8B81D86270300B283A7 /* LLClip.m in Sources */,
 				2789D8C51D86426200B283A7 /* LLBorderedButton.m in Sources */,
+				2753BECD1D891AD900BFED52 /* LLTextHandleView.swift in Sources */,
 				2789D8D11D8674B400B283A7 /* LLFullScreenPlayView.m in Sources */,
 				2789D8B51D8626F200B283A7 /* LLClipItem.m in Sources */,
 				2789D89D1D86254100B283A7 /* AppDelegate.swift in Sources */,

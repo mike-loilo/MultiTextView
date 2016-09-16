@@ -63,6 +63,13 @@ class LLClipMultiTextInputViewController: UIViewController {
         
         self.closeButton.setTitle(NSLocalizedString("026", comment: "") /* 完了 */, forState: .Normal)
         self.closeButton.setWhiteStyle()
+        
+        //MARK:- TEST
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
+            let test = LLTextHandleView(frame: CGRectMake(0, 0, 200, 50), type: .Normal)
+            self.playView!.currentPageContentView.addSubview(test)
+            test.center = CGPointMake(CGRectGetWidth(self.view.bounds) * 0.5, CGRectGetHeight(self.view.bounds) * 0.5)
+        })
     }
     
     override func viewDidAppear(animated: Bool) {

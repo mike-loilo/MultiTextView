@@ -38,6 +38,7 @@
     | UIViewAutoresizingFlexibleTopMargin
     | UIViewAutoresizingFlexibleHeight
     | UIViewAutoresizingFlexibleBottomMargin;
+    _playView.backgroundColor = UIColor.lightGrayColor;
     [self.view insertSubview:_playView belowSubview:_topController];
     
     return self;
