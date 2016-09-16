@@ -134,6 +134,7 @@ class LLTextHandleView: UIWebView {
         
         let circleHandleSize = CGSizeMake(16, 16)
         let rectangleHandleSize = CGSizeMake(14, 14)
+        let minSize = CGSizeMake(6, 6)
         weak var w = self
         var startRect: CGRect = self.frame
         _tlHandle = LLSizeChangerView(frame: CGRectMake(0, 0, circleHandleSize.width, circleHandleSize.height), type: .Circle, touchesBegan: { (view, touches, event) in
@@ -142,7 +143,10 @@ class LLTextHandleView: UIWebView {
             }, touchesMoved: { (view, touches, event) in
                 guard let s = w else { return }
                 let point = (touches.first?.locationInView(s.superview))!
-                s.frame = CGRectMake(point.x, point.y, CGRectGetMaxX(startRect) - point.x, CGRectGetMaxY(startRect) - point.y)
+                let size = CGSizeMake(CGRectGetMaxX(startRect) - point.x, CGRectGetMaxY(startRect) - point.y)
+                if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
+                    s.frame = CGRectMake(point.x, point.y, size.width, size.height)
+                }
             }, touchesEnded: { (view, touches, event) in
 
             }, touchesCancelled: { (view, touches, event) in
@@ -156,7 +160,10 @@ class LLTextHandleView: UIWebView {
             }, touchesMoved: { (view, touches, event) in
                 guard let s = w else { return }
                 let point = (touches.first?.locationInView(s.superview))!
-                s.frame = CGRectMake(CGRectGetMinX(startRect), point.y, CGRectGetWidth(startRect), CGRectGetMaxY(startRect) - point.y)
+                let size = CGSizeMake(CGRectGetWidth(startRect), CGRectGetMaxY(startRect) - point.y)
+                if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
+                    s.frame = CGRectMake(CGRectGetMinX(startRect), point.y, size.width, size.height)
+                }
             }, touchesEnded: { (view, touches, event) in
                 
             }, touchesCancelled: { (view, touches, event) in
@@ -170,7 +177,10 @@ class LLTextHandleView: UIWebView {
             }, touchesMoved: { (view, touches, event) in
                 guard let s = w else { return }
                 let point = (touches.first?.locationInView(s.superview))!
-                s.frame = CGRectMake(CGRectGetMinX(startRect), point.y, point.x - CGRectGetMinX(startRect), CGRectGetMaxY(startRect) - point.y)
+                let size = CGSizeMake(point.x - CGRectGetMinX(startRect), CGRectGetMaxY(startRect) - point.y)
+                if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
+                    s.frame = CGRectMake(CGRectGetMinX(startRect), point.y, size.width, size.height)
+                }
             }, touchesEnded: { (view, touches, event) in
                 
             }, touchesCancelled: { (view, touches, event) in
@@ -184,7 +194,10 @@ class LLTextHandleView: UIWebView {
             }, touchesMoved: { (view, touches, event) in
                 guard let s = w else { return }
                 let point = (touches.first?.locationInView(s.superview))!
-                s.frame = CGRectMake(point.x, CGRectGetMinY(startRect), CGRectGetMaxX(startRect) - point.x, CGRectGetHeight(startRect))
+                let size = CGSizeMake(CGRectGetMaxX(startRect) - point.x, CGRectGetHeight(startRect))
+                if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
+                    s.frame = CGRectMake(point.x, CGRectGetMinY(startRect), size.width, size.height)
+                }
             }, touchesEnded: { (view, touches, event) in
                 
             }, touchesCancelled: { (view, touches, event) in
@@ -198,7 +211,10 @@ class LLTextHandleView: UIWebView {
             }, touchesMoved: { (view, touches, event) in
                 guard let s = w else { return }
                 let point = (touches.first?.locationInView(s.superview))!
-                s.frame = CGRectMake(CGRectGetMinX(startRect), CGRectGetMinY(startRect), point.x - CGRectGetMinX(startRect), CGRectGetHeight(startRect))
+                let size = CGSizeMake(point.x - CGRectGetMinX(startRect), CGRectGetHeight(startRect))
+                if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
+                    s.frame = CGRectMake(CGRectGetMinX(startRect), CGRectGetMinY(startRect), size.width, size.height)
+                }
             }, touchesEnded: { (view, touches, event) in
                 
             }, touchesCancelled: { (view, touches, event) in
@@ -212,7 +228,10 @@ class LLTextHandleView: UIWebView {
             }, touchesMoved: { (view, touches, event) in
                 guard let s = w else { return }
                 let point = (touches.first?.locationInView(s.superview))!
-                s.frame = CGRectMake(point.x, CGRectGetMinY(startRect), CGRectGetMaxX(startRect) - point.x, point.y - CGRectGetMinY(startRect))
+                let size = CGSizeMake(CGRectGetMaxX(startRect) - point.x, point.y - CGRectGetMinY(startRect))
+                if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
+                    s.frame = CGRectMake(point.x, CGRectGetMinY(startRect), size.width, size.height)
+                }
             }, touchesEnded: { (view, touches, event) in
                 
             }, touchesCancelled: { (view, touches, event) in
@@ -226,7 +245,10 @@ class LLTextHandleView: UIWebView {
             }, touchesMoved: { (view, touches, event) in
                 guard let s = w else { return }
                 let point = (touches.first?.locationInView(s.superview))!
-                s.frame = CGRectMake(CGRectGetMinX(startRect), CGRectGetMinY(startRect), CGRectGetWidth(startRect), point.y - CGRectGetMinY(startRect))
+                let size = CGSizeMake(CGRectGetWidth(startRect), point.y - CGRectGetMinY(startRect))
+                if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
+                    s.frame = CGRectMake(CGRectGetMinX(startRect), CGRectGetMinY(startRect), size.width, size.height)
+                }
             }, touchesEnded: { (view, touches, event) in
                 
             }, touchesCancelled: { (view, touches, event) in
@@ -240,7 +262,10 @@ class LLTextHandleView: UIWebView {
             }, touchesMoved: { (view, touches, event) in
                 guard let s = w else { return }
                 let point = (touches.first?.locationInView(s.superview))!
-                s.frame = CGRectMake(CGRectGetMinX(startRect), CGRectGetMinY(startRect), point.x - CGRectGetMinX(startRect), point.y - CGRectGetMinY(startRect))
+                let size = CGSizeMake(point.x - CGRectGetMinX(startRect), point.y - CGRectGetMinY(startRect))
+                if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
+                    s.frame = CGRectMake(CGRectGetMinX(startRect), CGRectGetMinY(startRect), size.width, size.height)
+                }
             }, touchesEnded: { (view, touches, event) in
                 
             }, touchesCancelled: { (view, touches, event) in
