@@ -8,42 +8,47 @@
 
 import UIKit
 
-class LLClipMultiTextInputViewController: UIViewController {
+class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var closeButton: LLBorderedButton!
     @IBOutlet weak var backgroundColorButton: UIButton!
     @IBOutlet weak var backgroundColorView: UIView!
     @IBOutlet weak var addClipButton: UIButton!
 
-    private var topButtons = [UIView]()
-    private var textHandleViews = [LLTextHandleView]()
+    private var _topButtons = [UIView]()
+    private var _textHandleViews = [LLTextHandleView]()
+    private var _tapGesture: UITapGestureRecognizer?
     
-    private var clipItem: LLClipItem?
-    private var playView: LLFullScreenPlayView?
-    private var changeBGColorBlock: ((color: UIColor?) -> ())?
-    private var addClipBlock: ((item: LLClipItem?) -> ())?
-    private var closeCallback: (() -> ())?
+    private var _clipItem: LLClipItem?
+    private var _playView: LLFullScreenPlayView?
+    private var _changeBGColorBlock: ((color: UIColor?) -> ())?
+    private var _addClipBlock: ((item: LLClipItem?) -> ())?
+    private var _closeCallback: (() -> ())?
     
     init(clipItem: LLClipItem!, playView: LLFullScreenPlayView!, changeBGColorBlock: ((color: UIColor?) -> ())?, addClipBlock: ((item: LLClipItem?) -> ())?, closeCallback: (() -> ())?) {
         super.init(nibName: "LLClipMultiTextInputViewController", bundle: nil)
 
-        self.clipItem = clipItem
-        self.playView = playView
-        self.changeBGColorBlock = changeBGColorBlock
-        self.addClipBlock = addClipBlock
-        self.closeCallback = closeCallback
+        _clipItem = clipItem
+        _playView = playView
+        _changeBGColorBlock = changeBGColorBlock
+        _addClipBlock = addClipBlock
+        _closeCallback = closeCallback
+        
+        _tapGesture = UITapGestureRecognizer(target: self, action: #selector(LLClipMultiTextInputViewController.tapGesture(_:)))
+        _tapGesture!.delegate = self
+        _playView?.currentPageContentView.addGestureRecognizer(_tapGesture!)
     }
     
     /** ボタンの親になるビューを設定 */
     var controllerParent: UIView? {
         willSet {
-            (self.topButtons as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
+            (_topButtons as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
                 obj.removeFromSuperview()
             }
         }
         didSet {
             if (nil != self.controllerParent) {
-                (self.topButtons as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
+                (_topButtons as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
                     self.controllerParent!.addSubview(obj as! UIView)
                 }
             }
@@ -57,20 +62,22 @@ class LLClipMultiTextInputViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.topButtons.append(self.closeButton)
-        self.topButtons.append(self.backgroundColorButton)
-        self.topButtons.append(self.backgroundColorView)
-        self.topButtons.append(self.addClipButton)
+        _topButtons.append(self.closeButton)
+        _topButtons.append(self.backgroundColorButton)
+        _topButtons.append(self.backgroundColorView)
+        _topButtons.append(self.addClipButton)
         
         self.closeButton.setTitle(NSLocalizedString("026", comment: "") /* 完了 */, forState: .Normal)
         self.closeButton.setWhiteStyle()
         
         //MARK:- TEST
+        weak var w = self
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
+            guard let s = w else { return }
             let textHandleView = LLTextHandleView(frame: CGRectMake(0, 0, 200, 50), type: .Normal)
-            self.playView!.currentPageContentView.addSubview(textHandleView)
-            textHandleView.center = CGPointMake(CGRectGetWidth(self.view.bounds) * 0.5, CGRectGetHeight(self.view.bounds) * 0.5)
-            self.textHandleViews.append(textHandleView)
+            s._playView!.currentPageContentView.addSubview(textHandleView)
+            textHandleView.center = CGPointMake(CGRectGetWidth(s.view.bounds) * 0.5, CGRectGetHeight(s.view.bounds) * 0.5)
+            s._textHandleViews.append(textHandleView)
         })
     }
     
@@ -87,31 +94,54 @@ class LLClipMultiTextInputViewController: UIViewController {
     }
     deinit {
         NSLog("\(self.className + "." + #function)")
-        (self.topButtons as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
+        (_topButtons as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
             obj.removeFromSuperview()
         }
-        (self.textHandleViews as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
+        (_textHandleViews as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
             obj.removeFromSuperview()
+        }
+        if (nil != _tapGesture!.view) {
+            _tapGesture!.view!.removeGestureRecognizer(_tapGesture!)
         }
     }
     
     override func prefersStatusBarHidden() -> Bool { return true }
     
     @IBAction func closeButtonDidTap(sender: AnyObject) {
-        if (nil != self.closeCallback) {
-            self.closeCallback!()
+        if (nil != _closeCallback) {
+            _closeCallback!()
         }
     }
     
     @IBAction func backgroundColorButtonDidTap(sender: AnyObject) {
-        if (nil != self.changeBGColorBlock) {
-            self.changeBGColorBlock!(color: UIColor.brownColor())
+        if (nil != _changeBGColorBlock) {
+            _changeBGColorBlock!(color: UIColor.brownColor())
         }
     }
     
     @IBAction func addClipButtonDidTap(sender: AnyObject) {
-        if (nil != self.addClipBlock) {
-            self.addClipBlock!(item: nil);
+        if (nil != _addClipBlock) {
+            _addClipBlock!(item: nil);
         }
+    }
+    
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
+        // テキストハンドルで、シングルタップを検出させないようにする
+        var receive = true
+        (_textHandleViews as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
+            if (obj.isKindOfClass(LLTextHandleView)) {
+                let textHandleView = (obj as! LLTextHandleView)
+                let point = touch.locationInView(textHandleView)
+                if (CGRectContainsPoint(textHandleView.bounds, point)) {
+                    receive = false
+                    stop.initialize(true)
+                }
+            }
+        }
+        return receive
+    }
+    
+    func tapGesture(sender: UIGestureRecognizer) {
+        NSLog("\(self.className + "." + #function)")
     }
 }

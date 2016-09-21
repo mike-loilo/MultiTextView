@@ -110,6 +110,12 @@ class LLTextHandleView: UIWebView {
     private var _bcHandle: LLSizeChangerView?
     private var _brHandle: LLSizeChangerView?
     
+    /** タップジェスチャー */
+    private var _tapGesture: UITapGestureRecognizer?
+    var tapGesture: UITapGestureRecognizer? {
+        get { return _tapGesture; }
+    }
+    
     init(frame: CGRect, type: LLTextHandleViewType) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.clearColor()
@@ -276,6 +282,10 @@ class LLTextHandleView: UIWebView {
         })
         _brHandle!.center = CGPointMake(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds))
         self.addSubview(_brHandle!)
+
+        _tapGesture = UITapGestureRecognizer(target: self, action: #selector(LLTextHandleView.tapGesture(_:)))
+        _tapGesture!.numberOfTapsRequired = 2
+        self.addGestureRecognizer(_tapGesture!)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -357,5 +367,9 @@ class LLTextHandleView: UIWebView {
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         let point = (touches.first?.locationInView(self.superview))!
         self.frame = CGRectMake(_startDiff.dx + point.x, _startDiff.dy + point.y, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame))
+    }
+    
+    func tapGesture(gesture: UIGestureRecognizer) {
+        NSLog("\(self.className + "." + #function)")
     }
 }
