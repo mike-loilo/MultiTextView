@@ -92,9 +92,7 @@ class LLTextHandleView: UIWebView {
 
     /** 種別（ノーマルの場合はハンドル自体を削除、タイトル / サブタイトルの場合はテキストがなくなったらプリセット文言を表示する） */
     private var _type: LLTextHandleViewType = .Normal
-    var type: LLTextHandleViewType {
-        get { return _type }
-    }
+    var type: LLTextHandleViewType { return _type }
     
     /** ボーダー用レイヤー */
     private var _borderLayerInner: CALayer?
@@ -112,11 +110,38 @@ class LLTextHandleView: UIWebView {
     
     /** タップジェスチャー */
     private var _tapGesture: UITapGestureRecognizer?
-    var tapGesture: UITapGestureRecognizer? {
-        get { return _tapGesture; }
+    var tapGesture: UITapGestureRecognizer? { return _tapGesture }
+    private var _doubleTapGesture: UITapGestureRecognizer?
+    var doubleTapGesture: UITapGestureRecognizer? { return _doubleTapGesture! }
+    
+    /** テキストがあるかどうか */
+    var hasText: Bool {
+        return false
     }
     
-    init(frame: CGRect, type: LLTextHandleViewType) {
+    /** 動かせるかどうか */
+    var movable: Bool = false {
+        didSet {
+            CATransaction.begin()
+            CATransaction.setDisableActions(true)
+            _borderLayerInner?.hidden = !movable
+            _borderLayerOuter?.hidden = !movable
+            _tlHandle?.hidden = !movable
+            _tcHandle?.hidden = !movable
+            _trHandle?.hidden = !movable
+            _lcHandle?.hidden = !movable
+            _rcHandle?.hidden = !movable
+            _blHandle?.hidden = !movable
+            _bcHandle?.hidden = !movable
+            _brHandle?.hidden = !movable
+            CATransaction.commit()
+        }
+    }
+    
+    private var _tapBlock: ((view: LLTextHandleView) -> ())?
+    private var _doubleTapBlock: ((view: LLTextHandleView) -> ())?
+    
+    init(frame: CGRect, type: LLTextHandleViewType, tapBlock: ((view: LLTextHandleView) -> ())?, doubleTapBlock: ((view: LLTextHandleView) -> ())?) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.clearColor()
         self.opaque = false
@@ -140,6 +165,8 @@ class LLTextHandleView: UIWebView {
         self.layer.addSublayer(_borderLayerOuter!)
         
         _type = type
+        _tapBlock = tapBlock
+        _doubleTapBlock = doubleTapBlock
         
         let circleHandleSize = CGSizeMake(16, 16)
         let rectangleHandleSize = CGSizeMake(14, 14)
@@ -284,8 +311,12 @@ class LLTextHandleView: UIWebView {
         self.addSubview(_brHandle!)
 
         _tapGesture = UITapGestureRecognizer(target: self, action: #selector(LLTextHandleView.tapGesture(_:)))
-        _tapGesture!.numberOfTapsRequired = 2
         self.addGestureRecognizer(_tapGesture!)
+        _doubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(LLTextHandleView.doubleTapGesture(_:)))
+        _doubleTapGesture?.numberOfTapsRequired = 2
+        self.addGestureRecognizer(_doubleTapGesture!)
+        
+        self.movable = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -360,16 +391,26 @@ class LLTextHandleView: UIWebView {
     
     private var _startDiff: CGVector = CGVectorMake(0, 0)
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        if (!self.movable) { return }
         let point = (touches.first?.locationInView(self.superview))!
         _startDiff = CGVectorMake(CGRectGetMinX(self.frame) - point.x, CGRectGetMinY(self.frame) - point.y)
     }
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        if (!self.movable) { return }
         let point = (touches.first?.locationInView(self.superview))!
         self.frame = CGRectMake(_startDiff.dx + point.x, _startDiff.dy + point.y, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame))
     }
     
     func tapGesture(gesture: UIGestureRecognizer) {
-        NSLog("\(self.className + "." + #function)")
+        if (nil != _tapBlock) {
+            _tapBlock!(view: self)
+        }
+    }
+    
+    func doubleTapGesture(gesture: UIGestureRecognizer) {
+        if (nil != _doubleTapBlock) {
+            _doubleTapBlock!(view: self)
+        }
     }
 }

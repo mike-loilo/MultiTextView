@@ -13,6 +13,7 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     @IBOutlet weak var closeButton: LLBorderedButton!
     @IBOutlet weak var backgroundColorButton: UIButton!
     @IBOutlet weak var backgroundColorView: UIView!
+    @IBOutlet weak var insertButton: LLBorderedButton!
     @IBOutlet weak var addClipButton: UIButton!
 
     private var _topButtons = [UIView]()
@@ -65,20 +66,13 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         _topButtons.append(self.closeButton)
         _topButtons.append(self.backgroundColorButton)
         _topButtons.append(self.backgroundColorView)
+        _topButtons.append(self.insertButton)
         _topButtons.append(self.addClipButton)
         
         self.closeButton.setTitle(NSLocalizedString("026", comment: "") /* 完了 */, forState: .Normal)
         self.closeButton.setWhiteStyle()
-        
-        //MARK:- TEST
-        weak var w = self
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
-            guard let s = w else { return }
-            let textHandleView = LLTextHandleView(frame: CGRectMake(0, 0, 200, 50), type: .Normal)
-            s._playView!.currentPageContentView.addSubview(textHandleView)
-            textHandleView.center = CGPointMake(CGRectGetWidth(s.view.bounds) * 0.5, CGRectGetHeight(s.view.bounds) * 0.5)
-            s._textHandleViews.append(textHandleView)
-        })
+        self.insertButton.setTitle(NSLocalizedString("689", comment: "") /* 挿入 */, forState: .Normal)
+        self.insertButton.setWhiteStyle()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -119,6 +113,21 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         }
     }
     
+    @IBAction func insertButtonDidTap(sender: AnyObject) {
+        weak var w = self
+        let textHandleView = LLTextHandleView(frame: CGRectMake(0, 0, 200, 50), type: .Normal, tapBlock: { (view) in
+            guard let s = w else { return }
+            s.organizeTextObjects(view)
+        }) { (view) in
+            guard let s = w else { return }
+            //TODO:- 編集状態にする
+        }
+        _playView!.currentPageContentView.addSubview(textHandleView)
+        textHandleView.center = CGPointMake(CGRectGetWidth(self.view.bounds) * 0.5, CGRectGetHeight(self.view.bounds) * 0.5)
+        _textHandleViews.append(textHandleView)
+        self.organizeTextObjects(textHandleView)
+    }
+    
     @IBAction func addClipButtonDidTap(sender: AnyObject) {
         if (nil != _addClipBlock) {
             _addClipBlock!(item: nil);
@@ -129,19 +138,38 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         // テキストハンドルで、シングルタップを検出させないようにする
         var receive = true
         (_textHandleViews as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
-            if (obj.isKindOfClass(LLTextHandleView)) {
-                let textHandleView = (obj as! LLTextHandleView)
-                let point = touch.locationInView(textHandleView)
-                if (CGRectContainsPoint(textHandleView.bounds, point)) {
-                    receive = false
-                    stop.initialize(true)
-                }
+            if (!obj.isKindOfClass(LLTextHandleView)) { return }
+            let textHandleView = obj as! LLTextHandleView
+            let point = touch.locationInView(textHandleView)
+            if (CGRectContainsPoint(textHandleView.bounds, point)) {
+                receive = false
+                stop.initialize(true)
             }
         }
         return receive
     }
     
     func tapGesture(sender: UIGestureRecognizer) {
-        NSLog("\(self.className + "." + #function)")
+        self.organizeTextObjects(nil)
+    }
+    
+    /** テキストボックスを整理する */
+    private func organizeTextObjects(movable: LLTextHandleView?) {
+        // 種別を確認して、ノーマルの場合はハンドル自体を削除、タイトル / サブタイトルの場合はテキストがなくなったらプリセット文言を表示する
+        var removeTextHandleViews = [LLTextHandleView]()
+        (_textHandleViews as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
+            if (!obj.isKindOfClass(LLTextHandleView)) { return }
+            let textHandleView = obj as! LLTextHandleView
+            textHandleView.movable = textHandleView == movable
+            if (!textHandleView.movable && textHandleView.type == .Normal) {
+                if (!textHandleView.hasText) {
+                    textHandleView.removeFromSuperview()
+                    removeTextHandleViews.append(textHandleView)
+                }
+            }
+        }
+        (removeTextHandleViews as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
+            self._textHandleViews.removeAtIndex(self._textHandleViews.indexOf(obj as! LLTextHandleView)!)
+        }
     }
 }
