@@ -114,6 +114,9 @@ class LLTextHandleView: UIWebView {
         super.init(frame: frame)
         self.backgroundColor = UIColor.clearColor()
         self.opaque = false
+        self.scrollView.showsVerticalScrollIndicator = false
+        self.scrollView.showsHorizontalScrollIndicator = false
+        self.scrollView.userInteractionEnabled = false
       
         _borderLayerInner = CALayer()
         _borderLayerInner!.backgroundColor = UIColor.clearColor().CGColor
@@ -279,6 +282,15 @@ class LLTextHandleView: UIWebView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private var className: String {
+        get {
+            return NSStringFromClass(self.dynamicType).stringByReplacingOccurrencesOfString(NSBundle.mainBundle().infoDictionary?[kCFBundleNameKey as String] as! String + ".", withString: "", options: .CaseInsensitiveSearch, range: nil)
+        }
+    }
+    deinit {
+        NSLog("\(self.className + "." + #function)")
+    }
+    
     override var frame: CGRect {
         didSet {
             CATransaction.begin()
@@ -334,5 +346,16 @@ class LLTextHandleView: UIWebView {
             return _brHandle!.hitTest(pointForTargetView, withEvent: event)
         }
         return super.hitTest(point, withEvent: event)
+    }
+    
+    private var _startDiff: CGVector = CGVectorMake(0, 0)
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        let point = (touches.first?.locationInView(self.superview))!
+        _startDiff = CGVectorMake(CGRectGetMinX(self.frame) - point.x, CGRectGetMinY(self.frame) - point.y)
+    }
+    
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        let point = (touches.first?.locationInView(self.superview))!
+        self.frame = CGRectMake(_startDiff.dx + point.x, _startDiff.dy + point.y, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame))
     }
 }

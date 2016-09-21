@@ -16,6 +16,7 @@ class LLClipMultiTextInputViewController: UIViewController {
     @IBOutlet weak var addClipButton: UIButton!
 
     private var topButtons = [UIView]()
+    private var textHandleViews = [LLTextHandleView]()
     
     private var clipItem: LLClipItem?
     private var playView: LLFullScreenPlayView?
@@ -66,9 +67,10 @@ class LLClipMultiTextInputViewController: UIViewController {
         
         //MARK:- TEST
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
-            let test = LLTextHandleView(frame: CGRectMake(0, 0, 200, 50), type: .Normal)
-            self.playView!.currentPageContentView.addSubview(test)
-            test.center = CGPointMake(CGRectGetWidth(self.view.bounds) * 0.5, CGRectGetHeight(self.view.bounds) * 0.5)
+            let textHandleView = LLTextHandleView(frame: CGRectMake(0, 0, 200, 50), type: .Normal)
+            self.playView!.currentPageContentView.addSubview(textHandleView)
+            textHandleView.center = CGPointMake(CGRectGetWidth(self.view.bounds) * 0.5, CGRectGetHeight(self.view.bounds) * 0.5)
+            self.textHandleViews.append(textHandleView)
         })
     }
     
@@ -78,9 +80,17 @@ class LLClipMultiTextInputViewController: UIViewController {
         self.view.frame = self.view.superview!.bounds
     }
     
+    private var className: String {
+        get {
+            return NSStringFromClass(self.dynamicType).stringByReplacingOccurrencesOfString(NSBundle.mainBundle().infoDictionary?[kCFBundleNameKey as String] as! String + ".", withString: "", options: .CaseInsensitiveSearch, range: nil)
+        }
+    }
     deinit {
-        NSLog("\(NSStringFromClass(self.dynamicType) + "." + #function)")
+        NSLog("\(self.className + "." + #function)")
         (self.topButtons as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
+            obj.removeFromSuperview()
+        }
+        (self.textHandleViews as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
             obj.removeFromSuperview()
         }
     }
