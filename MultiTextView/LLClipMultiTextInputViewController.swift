@@ -121,6 +121,7 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         }) { (view) in
             guard let s = w else { return }
             //TODO:- 編集状態にする
+            view.enterEditMode()
         }
         _playView!.currentPageContentView.addSubview(textHandleView)
         textHandleView.center = CGPointMake(CGRectGetWidth(self.view.bounds) * 0.5, CGRectGetHeight(self.view.bounds) * 0.5)

@@ -394,6 +394,7 @@ class LLTextHandleView: UIWebView {
         if (!self.movable) { return }
         let point = (touches.first?.locationInView(self.superview))!
         _startDiff = CGVectorMake(CGRectGetMinX(self.frame) - point.x, CGRectGetMinY(self.frame) - point.y)
+        self.hideMenu()
     }
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -403,6 +404,7 @@ class LLTextHandleView: UIWebView {
     }
     
     func tapGesture(gesture: UIGestureRecognizer) {
+        self.showMenu()
         if (nil != _tapBlock) {
             _tapBlock!(view: self)
         }
@@ -412,5 +414,60 @@ class LLTextHandleView: UIWebView {
         if (nil != _doubleTapBlock) {
             _doubleTapBlock!(view: self)
         }
+    }
+    
+    /** 編集状態にする */
+    func enterEditMode() {
+        NSLog("\(self.className + "." + #function)")
+        self.hideMenu()
+    }
+    
+    /** メニューを表示する */
+    func showMenu() {
+        self.becomeFirstResponder()
+        let menuItemCut: UIMenuItem = UIMenuItem(title: NSLocalizedString("690", comment: "") /* カット */, action: #selector(LLTextHandleView.menuCut(_:)))
+        let menuItemCopy: UIMenuItem = UIMenuItem(title: NSLocalizedString("052", comment: "") /* コピー */, action: #selector(LLTextHandleView.menuCopy(_:)))
+        let menuItemDelete: UIMenuItem = UIMenuItem(title: NSLocalizedString("114", comment: "") /* 削除 */, action: #selector(LLTextHandleView.menuDelete(_:)))
+        let menuItemEditText: UIMenuItem = UIMenuItem(title: NSLocalizedString("691", comment: "") /* テキストの編集 */, action: #selector(LLTextHandleView.menuEditText(_:)))
+        UIMenuController.sharedMenuController().menuItems = [menuItemCut, menuItemCopy, menuItemDelete, menuItemEditText]
+        UIMenuController.sharedMenuController().setTargetRect(CGRectMake(0, 0, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds)), inView: self)
+        UIMenuController.sharedMenuController().setMenuVisible(true, animated: true)
+    }
+    
+    override func canBecomeFirstResponder() -> Bool {
+        return true
+    }
+    
+    override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
+        if (action == #selector(LLTextHandleView.menuCut(_:))
+            || action == #selector(LLTextHandleView.menuCopy(_:))
+            || action == #selector(LLTextHandleView.menuDelete(_:))
+            || action == #selector(LLTextHandleView.menuEditText(_:))) {
+            return true
+        }
+        return false
+    }
+    
+    func menuCut(sender: AnyObject) {
+        NSLog("\(self.className + "." + #function)")
+    }
+    
+    func menuCopy(sender: AnyObject) {
+        NSLog("\(self.className + "." + #function)")
+    }
+    
+    func menuDelete(sender: AnyObject) {
+        NSLog("\(self.className + "." + #function)")
+    }
+    
+    func menuEditText(sender: AnyObject) {
+        NSLog("\(self.className + "." + #function)")
+        self.enterEditMode()
+    }
+    
+    /** メニューを消す */
+    func hideMenu() {
+        self.resignFirstResponder()
+        UIMenuController.sharedMenuController().menuVisible = false
     }
 }

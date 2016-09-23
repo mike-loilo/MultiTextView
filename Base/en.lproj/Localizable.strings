@@ -6,4 +6,8 @@
   Copyright © 2016年 loilo. All rights reserved.
 */
 "026" = "Done";
+"052" = "Copy";
+"114" = "Delete";
 "689" = "Insert";
+"690" = "Cut";
+"691" = "Edit Text";
