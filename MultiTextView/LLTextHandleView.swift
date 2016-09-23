@@ -124,8 +124,6 @@ class LLTextHandleView: UIWebView {
         didSet {
             CATransaction.begin()
             CATransaction.setDisableActions(true)
-            _borderLayerInner?.hidden = !movable
-            _borderLayerOuter?.hidden = !movable
             _tlHandle?.hidden = !movable
             _tcHandle?.hidden = !movable
             _trHandle?.hidden = !movable
@@ -138,9 +136,22 @@ class LLTextHandleView: UIWebView {
         }
     }
     
+    /** ボーダーの表示 */
+    var hiddenBorder: Bool = true {
+        didSet {
+            CATransaction.begin()
+            CATransaction.setDisableActions(true)
+            _borderLayerInner?.hidden = hiddenBorder
+            _borderLayerOuter?.hidden = hiddenBorder
+            CATransaction.commit()
+        }
+    }
+    
     private var _tapBlock: ((view: LLTextHandleView) -> ())?
     private var _doubleTapBlock: ((view: LLTextHandleView) -> ())?
     
+    private var _richTextEditor: ZSSRichTextEditor?
+
     init(frame: CGRect, type: LLTextHandleViewType, tapBlock: ((view: LLTextHandleView) -> ())?, doubleTapBlock: ((view: LLTextHandleView) -> ())?) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.clearColor()
@@ -317,6 +328,7 @@ class LLTextHandleView: UIWebView {
         self.addGestureRecognizer(_doubleTapGesture!)
         
         self.movable = true
+        self.hiddenBorder = !self.movable
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -330,6 +342,7 @@ class LLTextHandleView: UIWebView {
     }
     deinit {
         NSLog("\(self.className + "." + #function)")
+        self.leaveEditMode()
     }
     
     override var frame: CGRect {
@@ -419,7 +432,39 @@ class LLTextHandleView: UIWebView {
     /** 編集状態にする */
     func enterEditMode() {
         NSLog("\(self.className + "." + #function)")
+        self.movable = false
         self.hideMenu()
+        _tapGesture?.enabled = false
+        _doubleTapGesture?.enabled = false
+        
+        if (nil != _richTextEditor) {
+            _richTextEditor!.removeFromParentViewController()
+            _richTextEditor!.view.removeFromSuperview()
+        }
+        _richTextEditor = ZSSRichTextEditor()
+//        findViewControllerInResponderChain(self).addChildViewController(_richTextEditor!)
+        _richTextEditor!.view.autoresizingMask = [.FlexibleLeftMargin, .FlexibleWidth, .FlexibleRightMargin, .FlexibleTopMargin, .FlexibleHeight, .FlexibleBottomMargin];
+        _richTextEditor!.view.frame = self.bounds
+        self.addSubview(_richTextEditor!.view)
+        _richTextEditor!.alwaysShowToolbar = false
+        _richTextEditor!.receiveEditorDidChangeEvents = false
+        _richTextEditor!.baseURL = NSURL(string: "http://www.zedsaid.com")
+        _richTextEditor!.setHTML("<!-- This is an HTML comment --><p>This is a test of the <strong>ZSSRichTextEditor</strong> by <a title=\"Zed Said\" href=\"http://www.zedsaid.com\">Zed Said Studio</a></p>")
+    }
+    
+    var isEditingText: Bool { return nil != _richTextEditor }
+    
+    /** 編集状態を抜ける */
+    func leaveEditMode() {
+        NSLog("\(self.className + "." + #function)")
+        if (nil != _richTextEditor) {
+            _richTextEditor!.removeFromParentViewController()
+            _richTextEditor!.view.removeFromSuperview()
+        }
+        _richTextEditor = nil
+        
+        _tapGesture?.enabled = true
+        _doubleTapGesture?.enabled = true
     }
     
     /** メニューを表示する */
@@ -439,10 +484,10 @@ class LLTextHandleView: UIWebView {
     }
     
     override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
-        if (action == #selector(LLTextHandleView.menuCut(_:))
+        if ((action == #selector(LLTextHandleView.menuCut(_:))
             || action == #selector(LLTextHandleView.menuCopy(_:))
             || action == #selector(LLTextHandleView.menuDelete(_:))
-            || action == #selector(LLTextHandleView.menuEditText(_:))) {
+            || action == #selector(LLTextHandleView.menuEditText(_:))) && !self.isEditingText) {
             return true
         }
         return false

@@ -115,12 +115,10 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     
     @IBAction func insertButtonDidTap(sender: AnyObject) {
         weak var w = self
-        let textHandleView = LLTextHandleView(frame: CGRectMake(0, 0, 200, 50), type: .Normal, tapBlock: { (view) in
+        let textHandleView = LLTextHandleView(frame: CGRectMake(0, 0, 400, 200), type: .Normal, tapBlock: { (view) in
             guard let s = w else { return }
             s.organizeTextObjects(view)
         }) { (view) in
-            guard let s = w else { return }
-            //TODO:- 編集状態にする
             view.enterEditMode()
         }
         _playView!.currentPageContentView.addSubview(textHandleView)
@@ -162,6 +160,7 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
             if (!obj.isKindOfClass(LLTextHandleView)) { return }
             let textHandleView = obj as! LLTextHandleView
             textHandleView.movable = textHandleView == movable
+            textHandleView.hiddenBorder = !textHandleView.movable
             if (!textHandleView.movable && textHandleView.type == .Normal) {
                 if (!textHandleView.hasText) {
                     textHandleView.removeFromSuperview()
