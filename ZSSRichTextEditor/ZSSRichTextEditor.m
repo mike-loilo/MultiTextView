@@ -1668,10 +1668,14 @@ static CGFloat kDefaultScale = 0.5;
      Callback for when text is changed, solution posted by richardortiz84 https://github.com/nnhubbard/ZSSRichTextEditor/issues/5
      
      */
+    __weak typeof(self) w = self;
     JSContext *ctx = [webView valueForKeyPath:@"documentView.webView.mainFrame.javaScriptContext"];
     ctx[@"contentUpdateCallback"] = ^(JSValue *msg) {
         
-        if (_receiveEditorDidChangeEvents) {
+        typeof(self) self = w;
+        if (!self) return;
+        
+        if (self->_receiveEditorDidChangeEvents) {
             
             [self editorDidChangeWithText:[self getText] andHTML:[self getHTML]];
             
