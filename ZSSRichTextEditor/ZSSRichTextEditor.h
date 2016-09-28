@@ -222,4 +222,19 @@ static NSString * const ZSSRichTextEditorToolbarFonts = @"com.zedsaid.toolbarite
  */
 - (void)mentionRecognizedWithWord:(NSString *)word;
 
+#pragma mark - Custom
+
+/** ツールバーの親ビュー(nilの場合はself.view) */
+@property (nonatomic, weak) UIView *parentViewForToolbar;
+/** キーボードに連動して動かすビュー(nilの場合はself.view) */
+@property (nonatomic, weak) UIView *viewWithKeyboard;
+
+@end
+
+
+#pragma mark - Custom ZSSRichTextViewer
+
+/** ZSSRichTextEditor.editorViewのHTML読込、表示部分だけを抽出したビュー */
+@interface ZSSRichTextViewer : UIWebView
+- (void)setHTML:(NSString *)html;
 @end

@@ -161,6 +161,9 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
             let textHandleView = obj as! LLTextHandleView
             textHandleView.movable = textHandleView == movable
             textHandleView.hiddenBorder = !textHandleView.movable
+            if (textHandleView.isEditingText) {
+                textHandleView.leaveEditMode()
+            }
             if (!textHandleView.movable && textHandleView.type == .Normal) {
                 if (!textHandleView.hasText) {
                     textHandleView.removeFromSuperview()

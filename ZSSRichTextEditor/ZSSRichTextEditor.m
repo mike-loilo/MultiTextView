@@ -288,7 +288,10 @@ static CGFloat kDefaultScale = 0.5;
         
     }
     
-    [self.view addSubview:self.toolbarHolder];
+    if (_parentViewForToolbar)
+        [_parentViewForToolbar addSubview:self.toolbarHolder];
+    else
+        [self.view addSubview:self.toolbarHolder];
     
     //Build the toolbar
     [self buildToolbar];
@@ -350,7 +353,8 @@ static CGFloat kDefaultScale = 0.5;
     self.editorView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
     self.editorView.dataDetectorTypes = UIDataDetectorTypeNone;
     self.editorView.scrollView.bounces = NO;
-    self.editorView.backgroundColor = [UIColor whiteColor];
+    self.editorView.backgroundColor = UIColor.clearColor;
+    self.editorView.opaque = NO;
     [self.view addSubview:self.editorView];
     
 }
@@ -392,10 +396,11 @@ static CGFloat kDefaultScale = 0.5;
     //Parent holding view
     self.toolbarHolder = [[UIView alloc] init];
     
+    CGSize const parentSize = _parentViewForToolbar ? _parentViewForToolbar.bounds.size : self.view.bounds.size;
     if (_alwaysShowToolbar) {
-        self.toolbarHolder.frame = CGRectMake(0, self.view.frame.size.height - 44, self.view.frame.size.width, 44);
+        self.toolbarHolder.frame = CGRectMake(0, parentSize.height - 44, parentSize.width, 44);
     } else {
-        self.toolbarHolder.frame = CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 44);
+        self.toolbarHolder.frame = CGRectMake(0, parentSize.height, parentSize.width, 44);
     }
     
     self.toolbarHolder.autoresizingMask = self.toolbar.autoresizingMask;
@@ -408,27 +413,7 @@ static CGFloat kDefaultScale = 0.5;
 
 - (void)loadResources {
     
-    //Create a string with the contents of editor.html
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"editor" ofType:@"html"];
-    NSData *htmlData = [NSData dataWithContentsOfFile:filePath];
-    NSString *htmlString = [[NSString alloc] initWithData:htmlData encoding:NSUTF8StringEncoding];
-    
-    //Add jQuery.js to the html file
-    NSString *jquery = [[NSBundle mainBundle] pathForResource:@"jQuery" ofType:@"js"];
-    NSString *jqueryString = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:jquery] encoding:NSUTF8StringEncoding];
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"<!-- jQuery -->" withString:jqueryString];
-    
-    //Add JSBeautifier.js to the html file
-    NSString *beautifier = [[NSBundle mainBundle] pathForResource:@"JSBeautifier" ofType:@"js"];
-    NSString *beautifierString = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:beautifier] encoding:NSUTF8StringEncoding];
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"<!-- jsbeautifier -->" withString:beautifierString];
-    
-    //Add ZSSRichTextEditor.js to the html file
-    NSString *source = [[NSBundle mainBundle] pathForResource:@"ZSSRichTextEditor" ofType:@"js"];
-    NSString *jsString = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:source] encoding:NSUTF8StringEncoding];
-    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"<!--editor-->" withString:jsString];
-    
-    [self.editorView loadHTMLString:htmlString baseURL:self.baseURL];
+    [self.editorView loadHTMLString:self.class.resourcesHtmlString baseURL:self.baseURL];
     self.resourcesLoaded = YES;
     
 }
@@ -918,6 +903,14 @@ static CGFloat kDefaultScale = 0.5;
     
 }
 
+- (void)setContentWidth:(float)contentWidth {
+    
+    //Call the contentWidth javascript method
+    NSString *js = [NSString stringWithFormat:@"zss_editor.contentWidth = %f;", contentWidth];
+    [self.editorView stringByEvaluatingJavaScriptFromString:js];
+    
+}
+
 - (void)setContentHeight:(float)contentHeight {
     
     //Call the contentHeight javascript method
@@ -953,9 +946,7 @@ static CGFloat kDefaultScale = 0.5;
     
     NSString *html = self.internalHTML;
     self.sourceView.text = html;
-    NSString *cleanedHTML = [self removeQuotesFromHTML:self.sourceView.text];
-    NSString *trigger = [NSString stringWithFormat:@"zss_editor.setHTML(\"%@\");", cleanedHTML];
-    [self.editorView stringByEvaluatingJavaScriptFromString:trigger];
+    [self.editorView stringByEvaluatingJavaScriptFromString:[self.class javaScriptForResourceLoadedFromSetHTML:self.sourceView.text]];
     
 }
 
@@ -1657,6 +1648,7 @@ static CGFloat kDefaultScale = 0.5;
         self.internalHTML = @"";
     }
     [self updateHTML];
+    self.editorView.backgroundColor = [UIColor whiteColor];
     if (self.shouldShowKeyboard) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self focusTextEditor];
@@ -1904,25 +1896,27 @@ static CGFloat kDefaultScale = 0.5;
             
             // Toolbar
             CGRect frame = self.toolbarHolder.frame;
-            frame.origin.y = self.view.frame.size.height - (keyboardHeight + sizeOfToolbar);
+            frame.origin.y = self.toolbarHolder.superview.frame.size.height - (keyboardHeight + sizeOfToolbar);
             self.toolbarHolder.frame = frame;
             
             // Editor View
-            CGRect editorFrame = self.editorView.frame;
-            editorFrame.size.height = (self.view.frame.size.height - keyboardHeight) - sizeOfToolbar - extraHeight;
-            self.editorView.frame = editorFrame;
-            self.editorViewFrame = self.editorView.frame;
+//            CGRect editorFrame = self.editorView.frame;
+//            editorFrame.size.height = (self.view.frame.size.height - keyboardHeight) - sizeOfToolbar - extraHeight;
+//            self.editorView.frame = editorFrame;
+//            self.editorViewFrame = self.editorView.frame;
             self.editorView.scrollView.contentInset = UIEdgeInsetsZero;
             self.editorView.scrollView.scrollIndicatorInsets = UIEdgeInsetsZero;
             
-            // Source View
-            CGRect sourceFrame = self.sourceView.frame;
-            sourceFrame.size.height = (self.view.frame.size.height - keyboardHeight) - sizeOfToolbar - extraHeight;
-            self.sourceView.frame = sourceFrame;
+//            // Source View
+//            CGRect sourceFrame = self.sourceView.frame;
+//            sourceFrame.size.height = (self.view.frame.size.height - keyboardHeight) - sizeOfToolbar - extraHeight;
+//            self.sourceView.frame = sourceFrame;
             
-            // Provide editor with keyboard height and editor view height
-            [self setFooterHeight:(keyboardHeight - 8)];
-            [self setContentHeight: self.editorViewFrame.size.height];
+//            // Provide editor with keyboard height and editor view height
+//            [self setFooterHeight:(keyboardHeight - 8)];
+//            [self setContentHeight: self.editorViewFrame.size.height];
+
+            
             
         } completion:nil];
         
@@ -1941,29 +1935,29 @@ static CGFloat kDefaultScale = 0.5;
             self.toolbarHolder.frame = frame;
             
             // Editor View
-            CGRect editorFrame = self.editorView.frame;
-            
-            if (_alwaysShowToolbar) {
-                editorFrame.size.height = ((self.view.frame.size.height - sizeOfToolbar) - extraHeight);
-            } else {
-                editorFrame.size.height = self.view.frame.size.height;
-            }
-            
-            self.editorView.frame = editorFrame;
-            self.editorViewFrame = self.editorView.frame;
+//            CGRect editorFrame = self.editorView.frame;
+//            
+//            if (_alwaysShowToolbar) {
+//                editorFrame.size.height = ((self.view.frame.size.height - sizeOfToolbar) - extraHeight);
+//            } else {
+//                editorFrame.size.height = self.view.frame.size.height;
+//            }
+//            
+//            self.editorView.frame = editorFrame;
+//            self.editorViewFrame = self.editorView.frame;
             self.editorView.scrollView.contentInset = UIEdgeInsetsZero;
             self.editorView.scrollView.scrollIndicatorInsets = UIEdgeInsetsZero;
             
-            // Source View
-            CGRect sourceFrame = self.sourceView.frame;
-            
-            if (_alwaysShowToolbar) {
-                sourceFrame.size.height = ((self.view.frame.size.height - sizeOfToolbar) - extraHeight);
-            } else {
-                sourceFrame.size.height = self.view.frame.size.height;
-            }
-            
-            self.sourceView.frame = sourceFrame;
+//            // Source View
+//            CGRect sourceFrame = self.sourceView.frame;
+//            
+//            if (_alwaysShowToolbar) {
+//                sourceFrame.size.height = ((self.view.frame.size.height - sizeOfToolbar) - extraHeight);
+//            } else {
+//                sourceFrame.size.height = self.view.frame.size.height;
+//            }
+//            
+//            self.sourceView.frame = sourceFrame;
             
         } completion:nil];
         
@@ -1975,6 +1969,9 @@ static CGFloat kDefaultScale = 0.5;
 #pragma mark - Utilities
 
 - (NSString *)removeQuotesFromHTML:(NSString *)html {
+    return [self.class removeQuotesFromHTML:html];
+}
++ (NSString *)removeQuotesFromHTML:(NSString *)html {
     html = [html stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
     html = [html stringByReplacingOccurrencesOfString:@"“" withString:@"&quot;"];
     html = [html stringByReplacingOccurrencesOfString:@"”" withString:@"&quot;"];
@@ -2039,4 +2036,95 @@ static CGFloat kDefaultScale = 0.5;
     [super didReceiveMemoryWarning];
 }
 
+#pragma mark - Custom
+
+- (void)setParentViewForToolbar:(UIView *)parentViewForToolbar {
+    _parentViewForToolbar = parentViewForToolbar;
+    [self.toolbarHolder removeFromSuperview];
+    self.toolbarHolder.frame = (CGRect) { .origin = self.toolbarHolder.frame.origin, .size.width = CGRectGetWidth(_parentViewForToolbar.bounds), .size.height = CGRectGetHeight(self.toolbarHolder.frame) };
+    [_parentViewForToolbar addSubview:self.toolbarHolder];
+}
+
+- (void)dealloc {
+    [self.toolbarHolder removeFromSuperview];
+}
+
+/** WebView用のリソースHTMLString */
++ (NSString *)resourcesHtmlString {
+    //Create a string with the contents of editor.html
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"editor" ofType:@"html"];
+    NSData *htmlData = [NSData dataWithContentsOfFile:filePath];
+    NSString *htmlString = [[NSString alloc] initWithData:htmlData encoding:NSUTF8StringEncoding];
+    
+    //Add jQuery.js to the html file
+    NSString *jquery = [[NSBundle mainBundle] pathForResource:@"jQuery" ofType:@"js"];
+    NSString *jqueryString = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:jquery] encoding:NSUTF8StringEncoding];
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"<!-- jQuery -->" withString:jqueryString];
+    
+    //Add JSBeautifier.js to the html file
+    NSString *beautifier = [[NSBundle mainBundle] pathForResource:@"JSBeautifier" ofType:@"js"];
+    NSString *beautifierString = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:beautifier] encoding:NSUTF8StringEncoding];
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"<!-- jsbeautifier -->" withString:beautifierString];
+    
+    //Add ZSSRichTextEditor.js to the html file
+    NSString *source = [[NSBundle mainBundle] pathForResource:@"ZSSRichTextEditor" ofType:@"js"];
+    NSString *jsString = [[NSString alloc] initWithData:[NSData dataWithContentsOfFile:source] encoding:NSUTF8StringEncoding];
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"<!--editor-->" withString:jsString];
+    
+    return htmlString;
+}
+
+/** リソースをロード済のWebViewに対して、指定したHTMLStringを読み込ませるためのJavaScriptを取得する */
++ (NSString *)javaScriptForResourceLoadedFromSetHTML:(NSString *)html {
+    NSString *cleanedHTML = [self removeQuotesFromHTML:html];
+    NSString *trigger = [NSString stringWithFormat:@"zss_editor.setHTML(\"%@\");", cleanedHTML];
+    return trigger;
+}
+
+@end
+
+#pragma mark - Custom ZSSRichTextViewer
+
+@interface ZSSRichTextViewer() <UIWebViewDelegate>
+@end
+@implementation ZSSRichTextViewer {
+    NSString *_internalHTML;
+    BOOL _editorLoaded;
+}
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    
+    _internalHTML = nil;
+    _editorLoaded = NO;
+    
+    self.delegate = self;
+    self.hidesInputAccessoryView = YES;
+    self.keyboardDisplayRequiresUserAction = NO;
+    self.scalesPageToFit = YES;
+    self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+    self.dataDetectorTypes = UIDataDetectorTypeNone;
+    self.scrollView.bounces = NO;
+    self.scrollView.contentInset = UIEdgeInsetsZero;
+    self.scrollView.scrollIndicatorInsets = UIEdgeInsetsZero;
+    [self loadHTMLString:ZSSRichTextEditor.resourcesHtmlString baseURL:nil];
+    return self;
+}
+- (void)setHTML:(NSString *)html {
+    _internalHTML = html;
+    
+    if (_editorLoaded) {
+        [self updateHTML];
+    }
+}
+
+- (void)updateHTML {
+    [self stringByEvaluatingJavaScriptFromString:[ZSSRichTextEditor javaScriptForResourceLoadedFromSetHTML:_internalHTML]];
+}
+- (void)webViewDidFinishLoad:(UIWebView *)webView {
+    _editorLoaded = YES;
+    if (!_internalHTML) {
+        _internalHTML = @"";
+    }
+    [self updateHTML];
+}
 @end

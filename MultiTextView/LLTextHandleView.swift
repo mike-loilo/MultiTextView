@@ -88,7 +88,7 @@ private class LLSizeChangerView: UIView {
 }
 
 /** テキストのハンドル */
-class LLTextHandleView: UIWebView {
+class LLTextHandleView: ZSSRichTextViewer {
 
     /** 種別（ノーマルの場合はハンドル自体を削除、タイトル / サブタイトルの場合はテキストがなくなったらプリセット文言を表示する） */
     private var _type: LLTextHandleViewType = .Normal
@@ -116,8 +116,15 @@ class LLTextHandleView: UIWebView {
     
     /** テキストがあるかどうか */
     var hasText: Bool {
+        if (nil != _richTextEditor) {
+            return 0 < _richTextEditor!.getHTML().lengthOfBytesUsingEncoding(NSUTF8StringEncoding)
+        }
+        else if (nil != _htmlString) {
+            return 0 < _htmlString!.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)
+        }
         return false
     }
+    private var _htmlString: String?
     
     /** 動かせるかどうか */
     var movable: Bool = false {
@@ -159,7 +166,14 @@ class LLTextHandleView: UIWebView {
         self.scrollView.showsVerticalScrollIndicator = false
         self.scrollView.showsHorizontalScrollIndicator = false
         self.scrollView.userInteractionEnabled = false
-      
+
+        //TODO:- 本当は既存のHTML文字列を読み込ませる
+        _htmlString = "<!-- This is an HTML comment --><p>This is a test of the <strong>ZSSRichTextEditor</strong> by <a title=\"Zed Said\" href=\"http://www.zedsaid.com\">Zed Said Studio</a></p>"
+        if (nil == _htmlString) {
+            _htmlString = ""
+        }
+        self.setHTML(_htmlString!)
+        
         _borderLayerInner = CALayer()
         _borderLayerInner!.backgroundColor = UIColor.clearColor().CGColor
         _borderLayerInner!.borderColor = UIColor.whiteColor().CGColor
@@ -431,7 +445,6 @@ class LLTextHandleView: UIWebView {
     
     /** 編集状態にする */
     func enterEditMode() {
-        NSLog("\(self.className + "." + #function)")
         self.movable = false
         self.hideMenu()
         _tapGesture?.enabled = false
@@ -442,22 +455,22 @@ class LLTextHandleView: UIWebView {
             _richTextEditor!.view.removeFromSuperview()
         }
         _richTextEditor = ZSSRichTextEditor()
-//        findViewControllerInResponderChain(self).addChildViewController(_richTextEditor!)
         _richTextEditor!.view.autoresizingMask = [.FlexibleLeftMargin, .FlexibleWidth, .FlexibleRightMargin, .FlexibleTopMargin, .FlexibleHeight, .FlexibleBottomMargin];
         _richTextEditor!.view.frame = self.bounds
         self.addSubview(_richTextEditor!.view)
+        _richTextEditor!.parentViewForToolbar = self.superview!
+        _richTextEditor!.viewWithKeyboard = self
         _richTextEditor!.alwaysShowToolbar = false
         _richTextEditor!.receiveEditorDidChangeEvents = false
-        _richTextEditor!.baseURL = NSURL(string: "http://www.zedsaid.com")
-        _richTextEditor!.setHTML("<!-- This is an HTML comment --><p>This is a test of the <strong>ZSSRichTextEditor</strong> by <a title=\"Zed Said\" href=\"http://www.zedsaid.com\">Zed Said Studio</a></p>")
+        _richTextEditor!.setHTML(_htmlString!)
     }
     
     var isEditingText: Bool { return nil != _richTextEditor }
     
     /** 編集状態を抜ける */
     func leaveEditMode() {
-        NSLog("\(self.className + "." + #function)")
         if (nil != _richTextEditor) {
+            _htmlString = _richTextEditor!.getHTML()
             _richTextEditor!.removeFromParentViewController()
             _richTextEditor!.view.removeFromSuperview()
         }
@@ -465,6 +478,10 @@ class LLTextHandleView: UIWebView {
         
         _tapGesture?.enabled = true
         _doubleTapGesture?.enabled = true
+        
+        if (nil != _htmlString) {
+            self.setHTML(_htmlString!)
+        }
     }
     
     /** メニューを表示する */
@@ -506,7 +523,6 @@ class LLTextHandleView: UIWebView {
     }
     
     func menuEditText(sender: AnyObject) {
-        NSLog("\(self.className + "." + #function)")
         self.enterEditMode()
     }
     
