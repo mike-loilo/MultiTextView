@@ -335,6 +335,16 @@ zss_editor.setFontFamily = function(fontFamily) {
 		
 }
 
+zss_editor.setFontSize = function(fontSize) {
+    
+    zss_editor.restorerange();
+    document.execCommand("styleWithCSS", null, true);
+    document.execCommand("fontSize", false, fontSize);
+    document.execCommand("styleWithCSS", null, false);
+    zss_editor.enabledEditingItems();
+    
+}
+
 zss_editor.setTextColor = function(color) {
 		
     zss_editor.restorerange();
@@ -614,6 +624,12 @@ zss_editor.enabledEditingItems = function(e) {
 		if (font.length != 0 && font != 'Arial, Helvetica, sans-serif') {
 			items.push('fonts');	
 		}
+        
+        // Size
+        var textSize = t.css('font-size');
+        if (textSize.length != 0) {
+            items.push('size')
+        }
 		
         // Link
         if (nodeName == 'a') {

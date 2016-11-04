@@ -458,10 +458,23 @@ class LLTextHandleView: ZSSRichTextViewer {
         _richTextEditor!.view.autoresizingMask = [.FlexibleLeftMargin, .FlexibleWidth, .FlexibleRightMargin, .FlexibleTopMargin, .FlexibleHeight, .FlexibleBottomMargin];
         _richTextEditor!.view.frame = self.bounds
         self.addSubview(_richTextEditor!.view)
+//        findViewControllerInResponderChain(self).addChildViewController(_richTextEditor!)
         _richTextEditor!.parentViewForToolbar = self.superview!
         _richTextEditor!.viewWithKeyboard = self
         _richTextEditor!.alwaysShowToolbar = false
         _richTextEditor!.receiveEditorDidChangeEvents = false
+        _richTextEditor!.enabledToolbarItems = [ZSSRichTextEditorToolbarBold,
+                                                ZSSRichTextEditorToolbarFonts,
+                                                ZSSRichTextEditorToolbarFontSize,
+                                                ZSSRichTextEditorToolbarTextColor,
+                                                ZSSRichTextEditorToolbarJustifyLeft,
+                                                ZSSRichTextEditorToolbarJustifyCenter,
+                                                ZSSRichTextEditorToolbarJustifyRight,
+                                                ZSSRichTextEditorToolbarJustifyFull,
+                                                ZSSRichTextEditorToolbarUnorderedList,
+                                                ZSSRichTextEditorToolbarOrderedList,
+                                                ZSSRichTextEditorToolbarIndent,
+                                                ZSSRichTextEditorToolbarOutdent]
         _richTextEditor!.setHTML(_htmlString!)
     }
     

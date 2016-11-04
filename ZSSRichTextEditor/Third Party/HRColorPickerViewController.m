@@ -102,14 +102,31 @@
     [self.view addSubview:colorPickerView];
     
     if (_saveStyle == HCPCSaveStyleSaveAndCancel) {
-        UIBarButtonItem *buttonItem;
-        
-        buttonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
-        self.navigationItem.leftBarButtonItem = buttonItem;
-        
-        buttonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(save:)];
-        self.navigationItem.rightBarButtonItem = buttonItem;
+        if (self.navigationController) {
+            UIBarButtonItem *buttonItem;
+            
+            buttonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)];
+            self.navigationItem.leftBarButtonItem = buttonItem;
+            
+            buttonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(save:)];
+            self.navigationItem.rightBarButtonItem = buttonItem;
+        }
+        else {
+            UIToolbar *toolbar = [UIToolbar.alloc initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 44)];
+            toolbar.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleBottomMargin;
+            toolbar.items = @[[UIBarButtonItem.alloc initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)],
+                              [UIBarButtonItem.alloc initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
+                              [UIBarButtonItem.alloc initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(save:)]];
+            [self.view addSubview:toolbar];
+            self.view.frame = CGRectMake(CGRectGetMinX(self.view.frame), CGRectGetMinY(self.view.frame), CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) + CGRectGetHeight(toolbar.frame));
+            colorPickerView.frame = CGRectMake(CGRectGetMinX(self.view.bounds), CGRectGetMaxY(toolbar.frame), CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(toolbar.frame));
+        }
     }
+}
+
+- (BOOL)prefersStatusBarHidden
+{
+    return nil == self.navigationController;
 }
 
 - (void)viewDidLoad
@@ -136,7 +153,10 @@
         HRRGBColor rgbColor = [colorPickerView RGBColor];
         [self.delegate setSelectedColor:[UIColor colorWithRed:rgbColor.r green:rgbColor.g blue:rgbColor.b alpha:1.0f] tag:self.tag];
     }
-    [self.navigationController popViewControllerAnimated:YES];
+    if (self.navigationController)
+        [self.navigationController popViewControllerAnimated:YES];
+    else
+        [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 - (void)save:(id)sender
@@ -146,7 +166,10 @@
 
 - (void)cancel:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (self.navigationController)
+        [self.navigationController popViewControllerAnimated:YES];
+    else
+        [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 

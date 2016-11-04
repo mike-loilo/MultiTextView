@@ -40,11 +40,29 @@
     
     [super viewDidLoad];
     
-    //Set up navigation
-    [self setUpNavigation];
-    
-    //Create table view
-    [self createTableView];
+    if (self.navigationController) {
+        //Set up navigation
+        [self setUpNavigation];
+        
+        //Create table view
+        [self createTableView];
+    }
+    else {
+        UIToolbar *toolbar = [UIToolbar.alloc initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 44)];
+        toolbar.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleBottomMargin;
+        toolbar.items = @[[UIBarButtonItem.alloc initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel:)],
+                          [UIBarButtonItem.alloc initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
+                          [UIBarButtonItem.alloc initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(save:)]];
+        [self.view addSubview:toolbar];
+        
+        UITableView *tableView = UITableView.new;
+        tableView.frame = CGRectMake(0, CGRectGetMaxY(toolbar.frame), CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - CGRectGetMaxY(toolbar.frame));
+        tableView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleBottomMargin;
+        tableView.delegate = self;
+        tableView.dataSource = self;
+        
+        [self.view addSubview:tableView];
+    }
     
 }
 
@@ -193,7 +211,10 @@
         [self.delegate setSelectedFontFamily:selectedFontFamily];
     }
     
-    [self.navigationController popViewControllerAnimated:YES];
+    if (self.navigationController)
+        [self.navigationController popViewControllerAnimated:YES];
+    else
+        [self dismissViewControllerAnimated:YES completion:NULL];
 
 }
 
@@ -202,7 +223,10 @@
 }
 
 - (void)cancel:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (self.navigationController)
+        [self.navigationController popViewControllerAnimated:YES];
+    else
+        [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 #pragma mark - Memory Warning Section

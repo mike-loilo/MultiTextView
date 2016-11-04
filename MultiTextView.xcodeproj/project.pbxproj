@@ -102,6 +102,7 @@
 		2711B4871D951F8800BB1363 /* ZSSviewsource@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2711B4381D951F8800BB1363 /* ZSSviewsource@2x.png */; };
 		2711B4881D951F8800BB1363 /* jQuery.js in Resources */ = {isa = PBXBuildFile; fileRef = 2711B4391D951F8800BB1363 /* jQuery.js */; };
 		2711B4891D951F8800BB1363 /* JSBeautifier.js in Resources */ = {isa = PBXBuildFile; fileRef = 2711B43A1D951F8800BB1363 /* JSBeautifier.js */; };
+		2724BE261DCC74C1001812E6 /* LLClipTextInputViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2724BE251DCC74C1001812E6 /* LLClipTextInputViewController.mm */; };
 		2753BECD1D891AD900BFED52 /* LLTextHandleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2753BECC1D891AD900BFED52 /* LLTextHandleView.swift */; };
 		2789D89D1D86254100B283A7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2789D89C1D86254100B283A7 /* AppDelegate.swift */; };
 		2789D89F1D86254100B283A7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2789D89E1D86254100B283A7 /* ViewController.swift */; };
@@ -124,6 +125,8 @@
 		2789D8DC1D867F7E00B283A7 /* WhiteCircleButton_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8D61D867F7E00B283A7 /* WhiteCircleButton_on@2x.png */; };
 		2789D8DD1D867F7E00B283A7 /* WhiteCircleButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8D71D867F7E00B283A7 /* WhiteCircleButton.png */; };
 		2789D8DE1D867F7E00B283A7 /* WhiteCircleButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8D81D867F7E00B283A7 /* WhiteCircleButton@2x.png */; };
+		27AC94B91DC9E80D007C8D56 /* ZSSfontSize.png in Resources */ = {isa = PBXBuildFile; fileRef = 27AC94B71DC9E80D007C8D56 /* ZSSfontSize.png */; };
+		27AC94BA1DC9E80D007C8D56 /* ZSSfontSize@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 27AC94B81DC9E80D007C8D56 /* ZSSfontSize@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -238,6 +241,8 @@
 		2711B4381D951F8800BB1363 /* ZSSviewsource@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ZSSviewsource@2x.png"; sourceTree = "<group>"; };
 		2711B4391D951F8800BB1363 /* jQuery.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jQuery.js; sourceTree = "<group>"; };
 		2711B43A1D951F8800BB1363 /* JSBeautifier.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = JSBeautifier.js; sourceTree = "<group>"; };
+		2724BE241DCC74C1001812E6 /* LLClipTextInputViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LLClipTextInputViewController.h; path = Base/LLClipTextInputViewController.h; sourceTree = "<group>"; };
+		2724BE251DCC74C1001812E6 /* LLClipTextInputViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = LLClipTextInputViewController.mm; path = Base/LLClipTextInputViewController.mm; sourceTree = "<group>"; };
 		2753BECC1D891AD900BFED52 /* LLTextHandleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLTextHandleView.swift; sourceTree = "<group>"; };
 		2789D8991D86254100B283A7 /* MultiTextView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MultiTextView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2789D89C1D86254100B283A7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -271,6 +276,8 @@
 		2789D8D61D867F7E00B283A7 /* WhiteCircleButton_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "WhiteCircleButton_on@2x.png"; path = "images/WhiteCircleButton_on@2x.png"; sourceTree = "<group>"; };
 		2789D8D71D867F7E00B283A7 /* WhiteCircleButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WhiteCircleButton.png; path = images/WhiteCircleButton.png; sourceTree = "<group>"; };
 		2789D8D81D867F7E00B283A7 /* WhiteCircleButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "WhiteCircleButton@2x.png"; path = "images/WhiteCircleButton@2x.png"; sourceTree = "<group>"; };
+		27AC94B71DC9E80D007C8D56 /* ZSSfontSize.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ZSSfontSize.png; sourceTree = "<group>"; };
+		27AC94B81DC9E80D007C8D56 /* ZSSfontSize@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ZSSfontSize@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -354,6 +361,8 @@
 				2711B3F41D951F8800BB1363 /* ZSSclearstyle@2x.png */,
 				2711B3F51D951F8800BB1363 /* ZSSfonts.png */,
 				2711B3F61D951F8800BB1363 /* ZSSfonts@2x.png */,
+				27AC94B71DC9E80D007C8D56 /* ZSSfontSize.png */,
+				27AC94B81DC9E80D007C8D56 /* ZSSfontSize@2x.png */,
 				2711B3F71D951F8800BB1363 /* ZSSforcejustify.png */,
 				2711B3F81D951F8800BB1363 /* ZSSforcejustify@2x.png */,
 				2711B3F91D951F8800BB1363 /* ZSSh1.png */,
@@ -468,16 +477,18 @@
 				2789D8B71D86270300B283A7 /* LLClip.m */,
 				2789D8B31D8626F200B283A7 /* LLClipItem.h */,
 				2789D8B41D8626F200B283A7 /* LLClipItem.m */,
+				2724BE241DCC74C1001812E6 /* LLClipTextInputViewController.h */,
+				2724BE251DCC74C1001812E6 /* LLClipTextInputViewController.mm */,
 				2789D8B01D86268C00B283A7 /* LLClipViewController.h */,
 				2789D8B11D86268C00B283A7 /* LLClipViewController.m */,
+				2789D8B91D8627D400B283A7 /* LLClipViewController.xib */,
+				2789D8BD1D862E2B00B283A7 /* LLClipViewController~iphone.xib */,
 				2789D8CF1D8674B400B283A7 /* LLFullScreenPlayView.h */,
 				2789D8D01D8674B400B283A7 /* LLFullScreenPlayView.m */,
 				2711B3E81D950EF200BB1363 /* LLUtility.h */,
 				2711B3E91D950EF200BB1363 /* LLUtility.m */,
-				2789D8AF1D86268C00B283A7 /* MultiTextView-Bridging-Header.h */,
-				2789D8B91D8627D400B283A7 /* LLClipViewController.xib */,
-				2789D8BD1D862E2B00B283A7 /* LLClipViewController~iphone.xib */,
 				2789D8CA1D86494800B283A7 /* Localizable.strings */,
+				2789D8AF1D86268C00B283A7 /* MultiTextView-Bridging-Header.h */,
 			);
 			name = Base;
 			sourceTree = "<group>";
@@ -554,6 +565,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27AC94BA1DC9E80D007C8D56 /* ZSSfontSize@2x.png in Resources */,
 				2711B4701D951F8800BB1363 /* ZSSredo.png in Resources */,
 				2711B4871D951F8800BB1363 /* ZSSviewsource@2x.png in Resources */,
 				2711B4811D951F8800BB1363 /* ZSSundo@2x.png in Resources */,
@@ -604,6 +616,7 @@
 				2711B45A1D951F8800BB1363 /* ZSSindent.png in Resources */,
 				2711B4401D951F8800BB1363 /* ZSScenterjustify.png in Resources */,
 				2711B4751D951F8800BB1363 /* ZSSstrikethrough@2x.png in Resources */,
+				27AC94B91DC9E80D007C8D56 /* ZSSfontSize.png in Resources */,
 				2711B43F1D951F8800BB1363 /* ZSSbold@2x.png in Resources */,
 				2711B43C1D951F8800BB1363 /* ZSSbgcolor.png in Resources */,
 				2711B4501D951F8800BB1363 /* ZSSh5.png in Resources */,
@@ -657,6 +670,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2724BE261DCC74C1001812E6 /* LLClipTextInputViewController.mm in Sources */,
 				2711B3E11D95007C00BB1363 /* HRColorPickerViewController.m in Sources */,
 				2711B3E41D95007C00BB1363 /* ZSSFontsViewController.m in Sources */,
 				2789D89F1D86254100B283A7 /* ViewController.swift in Sources */,

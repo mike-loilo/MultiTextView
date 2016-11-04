@@ -49,6 +49,7 @@ static NSString * const ZSSRichTextEditorToolbarParagraph = @"com.zedsaid.toolba
 static NSString * const ZSSRichTextEditorToolbarAll = @"com.zedsaid.toolbaritem.all";
 static NSString * const ZSSRichTextEditorToolbarNone = @"com.zedsaid.toolbaritem.none";
 static NSString * const ZSSRichTextEditorToolbarFonts = @"com.zedsaid.toolbaritem.fonts";
+static NSString * const ZSSRichTextEditorToolbarFontSize = @"com.zedsaid.toolbaritem.fontSize";
 
 @class ZSSBarButtonItem;
 

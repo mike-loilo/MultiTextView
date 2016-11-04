@@ -12,6 +12,7 @@
 #import "ZSSBarButtonItem.h"
 #import "HRColorUtil.h"
 #import "ZSSTextView.h"
+#import "LLClipTextInputViewController.h"
 
 @import JavaScriptCore;
 
@@ -223,7 +224,11 @@ static Class hackishFixClass = Nil;
  ZSSRichTextEditor
  
  */
-@implementation ZSSRichTextEditor
+@interface ZSSRichTextEditor() <UIPopoverControllerDelegate>
+@end
+@implementation ZSSRichTextEditor {
+    UIPopoverController *_popoverController;
+}
 
 //Scale image from device
 static CGFloat kJPEGCompression = 0.8;
@@ -555,6 +560,19 @@ static CGFloat kDefaultScale = 0.5;
         
     }
     
+    //  FontSize
+    if ((_enabledToolbarItems && [_enabledToolbarItems containsObject:ZSSRichTextEditorToolbarFontSize]) || (_enabledToolbarItems && [_enabledToolbarItems containsObject:ZSSRichTextEditorToolbarAll])) {
+        
+        ZSSBarButtonItem *fonts = [[ZSSBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ZSSfontSize.png"] style:UIBarButtonItemStylePlain target:self action:@selector(showFontSizePicker)];
+        fonts.label = @"fontSize";
+        if (customOrder) {
+            [items replaceObjectAtIndex:[_enabledToolbarItems indexOfObject:ZSSRichTextEditorToolbarFontSize] withObject:fonts];
+        } else {
+            [items addObject:fonts];
+        }
+        
+    }
+    
     // Undo
     if ((_enabledToolbarItems && [_enabledToolbarItems containsObject:ZSSRichTextEditorToolbarUndo]) || (_enabledToolbarItems && [_enabledToolbarItems containsObject:ZSSRichTextEditorToolbarAll])) {
         ZSSBarButtonItem *undoButton = [[ZSSBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ZSSundo.png"] style:UIBarButtonItemStylePlain target:self action:@selector(undo:)];
@@ -876,7 +894,7 @@ static CGFloat kDefaultScale = 0.5;
         item.tintColor = [self barButtonItemDefaultColor];
     }
     
-    self.toolbar.frame = CGRectMake(0, 0, toolbarWidth, 44);
+    self.toolbar.frame = CGRectMake(0, 0, MAX(toolbarWidth, CGRectGetWidth(self.toolbar.superview.bounds)), 44);
     self.toolBarScroll.contentSize = CGSizeMake(self.toolbar.frame.size.width, 44);
 }
 
@@ -1119,7 +1137,64 @@ static CGFloat kDefaultScale = 0.5;
     //Call picker
     ZSSFontsViewController *fontPicker = [ZSSFontsViewController cancelableFontPickerViewControllerWithFontFamily:ZSSFontFamilyDefault];
     fontPicker.delegate = self;
-    [self.navigationController pushViewController:fontPicker animated:YES];
+    if (nil != self.navigationController)
+        [self.navigationController pushViewController:fontPicker animated:YES];
+    else {
+        if (_popoverController)
+            [_popoverController dismissPopoverAnimated:NO];
+        _popoverController = [UIPopoverController.alloc initWithContentViewController:fontPicker];
+        _popoverController.delegate = self;
+        __block ZSSBarButtonItem *fonts = nil;
+        [self.toolbar.items enumerateObjectsUsingBlock:^(UIBarButtonItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj isKindOfClass:ZSSBarButtonItem.class]) {
+                ZSSBarButtonItem *const item = (ZSSBarButtonItem *)obj;
+                if ([item.label isEqualToString:@"fonts"]) {
+                    fonts = item;
+                    *stop = YES;
+                }
+            }
+        }];
+        if (fonts) {
+            [_popoverController presentPopoverFromBarButtonItem:fonts permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+        }
+    }
+    
+}
+
+- (void)showFontSizePicker {
+    
+    NSLog(@"FontSize Picker Button Pressed");
+    
+    // Save the selection location
+    [self.editorView stringByEvaluatingJavaScriptFromString:@"zss_editor.prepareInsert();"];
+    
+    //Call picker
+    __weak typeof(self) __self = self;
+    LLClipTextSizePickerViewController *fontSizePicker = [LLClipTextSizePickerViewController.alloc initWithFontSize:30 callback:^(struct TextFontSize textFontSize) {
+        typeof(self) self = __self;
+        if (!self) return;
+
+#warning LLClipTextSizePickerViewControllerのデフォルトのサイズだと大きいので一時的に小さくしておく
+        [self setSelectedFontSize:textFontSize.fontSize / 8];
+    }];
+    if (_popoverController)
+        [_popoverController dismissPopoverAnimated:NO];
+    _popoverController = [UIPopoverController.alloc initWithContentViewController:fontSizePicker];
+    _popoverController.popoverContentSize = fontSizePicker.view.frame.size;
+    _popoverController.delegate = self;
+    __block ZSSBarButtonItem *fontSize = nil;
+    [self.toolbar.items enumerateObjectsUsingBlock:^(UIBarButtonItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj isKindOfClass:ZSSBarButtonItem.class]) {
+            ZSSBarButtonItem *const item = (ZSSBarButtonItem *)obj;
+            if ([item.label isEqualToString:@"fontSize"]) {
+                fontSize = item;
+                *stop = YES;
+            }
+        }
+    }];
+    if (fontSize) {
+        [_popoverController presentPopoverFromBarButtonItem:fontSize permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    }
     
 }
 
@@ -1172,12 +1247,39 @@ static CGFloat kDefaultScale = 0.5;
     // Save the selection location
     [self.editorView stringByEvaluatingJavaScriptFromString:@"zss_editor.prepareInsert();"];
     
+#warning HRColorPickerViewControllerは回転に対応しておらず、対応させるのは結構面倒そうなので、そもそも自前で大きくないのを用意するか、プリセットにしておいた方が良さそう
     // Call the picker
     HRColorPickerViewController *colorPicker = [HRColorPickerViewController cancelableFullColorPickerViewControllerWithColor:[UIColor whiteColor]];
     colorPicker.delegate = self;
     colorPicker.tag = 1;
     colorPicker.title = NSLocalizedString(@"Text Color", nil);
-    [self.navigationController pushViewController:colorPicker animated:YES];
+    if (nil != self.navigationController)
+        [self.navigationController pushViewController:colorPicker animated:YES];
+    else {
+        if (_popoverController)
+            [_popoverController dismissPopoverAnimated:NO];
+        _popoverController = [UIPopoverController.alloc initWithContentViewController:colorPicker];
+        _popoverController.delegate = self;
+        __block ZSSBarButtonItem *textColor = nil;
+        [self.toolbar.items enumerateObjectsUsingBlock:^(UIBarButtonItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj isKindOfClass:ZSSBarButtonItem.class]) {
+                ZSSBarButtonItem *const item = (ZSSBarButtonItem *)obj;
+                if ([item.label isEqualToString:@"textColor"]) {
+                    textColor = item;
+                    *stop = YES;
+                }
+            }
+        }];
+        if (textColor) {
+//            [self blurTextEditor];
+            CGSize size = CGSizeZero;
+            if (UIUserInterfaceIdiomPad == UI_USER_INTERFACE_IDIOM()) {
+                size = CGSizeMake(900, 600);
+            }
+            _popoverController.popoverContentSize = size;
+            [_popoverController presentPopoverFromBarButtonItem:textColor permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+        }
+    }
     
 }
 
@@ -1192,6 +1294,13 @@ static CGFloat kDefaultScale = 0.5;
     colorPicker.tag = 2;
     colorPicker.title = NSLocalizedString(@"BG Color", nil);
     [self.navigationController pushViewController:colorPicker animated:YES];
+    
+}
+
+- (void)setSelectedFontSize:(NSInteger)fontSize {
+    
+    NSString *trigger = [NSString stringWithFormat:@"zss_editor.setFontSize(\"%ld\");", fontSize];
+    [self.editorView stringByEvaluatingJavaScriptFromString:trigger];
     
 }
 
@@ -2079,6 +2188,10 @@ static CGFloat kDefaultScale = 0.5;
     NSString *cleanedHTML = [self removeQuotesFromHTML:html];
     NSString *trigger = [NSString stringWithFormat:@"zss_editor.setHTML(\"%@\");", cleanedHTML];
     return trigger;
+}
+
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
+    _popoverController.delegate = nil;
 }
 
 @end

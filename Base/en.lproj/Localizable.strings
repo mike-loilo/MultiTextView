@@ -6,8 +6,13 @@
   Copyright © 2016年 loilo. All rights reserved.
 */
 "026" = "Done";
+"036" = "S";
+"037" = "M";
+"038" = "L";
+"039" = "XL";
 "052" = "Copy";
 "114" = "Delete";
+"266" = "XS";
 "689" = "Insert";
 "690" = "Cut";
 "691" = "Edit Text";
