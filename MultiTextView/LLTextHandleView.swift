@@ -502,8 +502,9 @@ class LLTextHandleView: ZSSRichTextViewer {
         }
         
         // 元の位置に戻す
-        if nil != _zIndex {
+        if nil != _zIndex && nil != self.superview {
             self.superview!.insertSubview(self, atIndex: _zIndex!)
+            _zIndex = nil
         }
     }
     
