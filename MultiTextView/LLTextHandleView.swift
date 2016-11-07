@@ -95,8 +95,8 @@ class LLTextHandleView: ZSSRichTextViewer {
     var type: LLTextHandleViewType { return _type }
     
     /** ボーダー用レイヤー */
-    private var _borderLayerInner: CALayer?
-    private var _borderLayerOuter: CALayer?
+    private var _borderLayerInner: CAShapeLayer?
+    private var _borderLayerOuter: CAShapeLayer?
     
     /** サイズ変更ハンドル */
     private var _tlHandle: LLSizeChangerView?
@@ -173,19 +173,23 @@ class LLTextHandleView: ZSSRichTextViewer {
         }
         self.setHTML(_htmlString!)
         
-        _borderLayerInner = CALayer()
-        _borderLayerInner!.backgroundColor = UIColor.clearColor().CGColor
-        _borderLayerInner!.borderColor = UIColor.whiteColor().CGColor
-        let borderWidth = 1 / UIScreen.mainScreen().scale
-        _borderLayerInner!.borderWidth = borderWidth
+        _borderLayerInner = CAShapeLayer()
+        _borderLayerInner!.fillColor = UIColor.clearColor().CGColor
+        _borderLayerInner!.strokeColor = UIColor.whiteColor().CGColor
+        let borderWidth = 2 / UIScreen.mainScreen().scale
+        _borderLayerInner!.lineWidth = borderWidth
         _borderLayerInner!.frame = self.bounds
+        _borderLayerInner!.lineDashPattern = [8, 4]
+        _borderLayerInner!.path = UIBezierPath(rect: _borderLayerInner!.bounds).CGPath
         self.layer.addSublayer(_borderLayerInner!)
         
-        _borderLayerOuter = CALayer()
-        _borderLayerOuter!.backgroundColor = UIColor.clearColor().CGColor
-        _borderLayerOuter!.borderColor = UIColor.grayColor().CGColor
-        _borderLayerOuter!.borderWidth = _borderLayerInner!.borderWidth
+        _borderLayerOuter = CAShapeLayer()
+        _borderLayerOuter!.fillColor = UIColor.clearColor().CGColor
+        _borderLayerOuter!.strokeColor = UIColor.grayColor().CGColor
+        _borderLayerOuter!.lineWidth = _borderLayerInner!.lineWidth
         _borderLayerOuter!.frame = CGRectMake(-borderWidth, -borderWidth, CGRectGetWidth(self.bounds) + borderWidth * 2, CGRectGetHeight(self.bounds) + borderWidth * 2)
+        _borderLayerOuter!.lineDashPattern = _borderLayerInner!.lineDashPattern
+        _borderLayerOuter!.path = UIBezierPath(rect: _borderLayerOuter!.bounds).CGPath
         self.layer.addSublayer(_borderLayerOuter!)
         
         _type = type
@@ -363,8 +367,14 @@ class LLTextHandleView: ZSSRichTextViewer {
             CATransaction.begin()
             CATransaction.setDisableActions(true)
             _borderLayerInner?.frame = self.bounds
+            if nil != _borderLayerInner {
+                _borderLayerInner!.path = UIBezierPath(rect: _borderLayerInner!.bounds).CGPath
+            }
             let borderWidth = nil != _borderLayerInner ? _borderLayerInner!.borderWidth : 0
             _borderLayerOuter?.frame = CGRectMake(-borderWidth, -borderWidth, CGRectGetWidth(self.bounds) + borderWidth * 2, CGRectGetHeight(self.bounds) + borderWidth * 2)
+            if nil != _borderLayerOuter {
+                _borderLayerOuter!.path = UIBezierPath(rect: _borderLayerOuter!.bounds).CGPath
+            }
             CATransaction.commit()
             
             _tlHandle?.center = CGPointMake(0, 0)
