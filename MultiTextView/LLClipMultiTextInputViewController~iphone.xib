@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LLClipMultiTextInputViewController" customModule="MultiTextView" customModuleProvider="target">
+            <connections>
+                <outlet property="addClipButton" destination="Vz1-XD-vec" id="yBt-Us-mBd"/>
+                <outlet property="backgroundColorButton" destination="VXG-AL-vHk" id="wot-lq-rg2"/>
+                <outlet property="backgroundColorView" destination="JXa-Qw-UWC" id="gGw-RW-lxi"/>
+                <outlet property="closeButton" destination="a8M-Yv-q8P" id="Hj7-4B-wMV"/>
+                <outlet property="insertButton" destination="sQY-MT-rJU" id="nhn-2I-Bcm"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="384" height="576"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="a8M-Yv-q8P" customClass="LLBorderedButton">
+                    <rect key="frame" x="10" y="10" width="50" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="10"/>
+                    <state key="normal" title="*完了*"/>
+                    <connections>
+                        <action selector="closeButtonDidTap:" destination="-1" eventType="touchUpInside" id="80m-Fu-414"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="VXG-AL-vHk" userLabel="Background Color">
+                    <rect key="frame" x="60" y="5" width="40" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                    <state key="normal" backgroundImage="WhiteCircleButton.png">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <state key="highlighted" backgroundImage="WhiteCircleButton_on.png">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="backgroundColorButtonDidTap:" destination="-1" eventType="touchUpInside" id="LWN-L1-hOW"/>
+                    </connections>
+                </button>
+                <view userInteractionEnabled="NO" contentMode="scaleToFill" id="JXa-Qw-UWC" userLabel="Background Color">
+                    <rect key="frame" x="72" y="17" width="16" height="16"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="sQY-MT-rJU" customClass="LLBorderedButton">
+                    <rect key="frame" x="236" y="10" width="50" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="10"/>
+                    <state key="normal" title="*挿入*"/>
+                    <connections>
+                        <action selector="insertButtonDidTap:" destination="-1" eventType="touchUpInside" id="q9e-MC-t9Z"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="9999" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Khk-Sx-Ucx" userLabel="Counter">
+                    <rect key="frame" x="292" y="16" width="34" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Vz1-XD-vec">
+                    <rect key="frame" x="334" y="5" width="40" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                    <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
+                    <state key="normal" image="NewDrawing.png" backgroundImage="WhiteCircleButton.png"/>
+                    <state key="highlighted" backgroundImage="WhiteCircleButton_on.png"/>
+                    <connections>
+                        <action selector="addClipButtonDidTap:" destination="-1" eventType="touchUpInside" id="68G-nD-sYM"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="532" y="427"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="NewDrawing.png" width="30" height="30"/>
+        <image name="WhiteCircleButton.png" width="60" height="60"/>
+        <image name="WhiteCircleButton_on.png" width="60" height="60"/>
+    </resources>
+</document>

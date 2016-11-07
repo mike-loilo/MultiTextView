@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#pragma mark - LLClipTextSizePickerViewController
+
 struct TextFontSize
 {
     __unsafe_unretained NSString *name;
@@ -15,4 +17,10 @@ struct TextFontSize
 };
 @interface LLClipTextSizePickerViewController : UIViewController
 - (id)initWithFontSize:(CGFloat)fontSize callback:(void (^)(struct TextFontSize textFontSize))callback;
+@end
+
+#pragma mark - LLClipTextColorPickerViewController
+
+@interface LLClipTextColorPickerViewController : UIViewController
+- (id)initWithColor:(UIColor *)color callback:(void (^)(UIColor *color))callback;
 @end

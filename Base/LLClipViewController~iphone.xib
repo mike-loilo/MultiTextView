@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -8,7 +8,8 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LLClipViewController">
             <connections>
                 <outlet property="_closeButton" destination="M9I-B6-fvh" id="zs2-NH-gmw"/>
-                <outlet property="_textButton" destination="Bm9-Mu-31b" id="57V-xE-2Uk"/>
+                <outlet property="_textButton" destination="NXz-Jr-oyP" id="3T5-qt-QmR"/>
+                <outlet property="_topController" destination="hfn-wC-1qA" id="Jl0-R2-GVy"/>
                 <outlet property="view" destination="iN0-l3-epB" id="c3k-uz-jeK"/>
             </connections>
         </placeholder>
@@ -29,12 +30,20 @@
                                 <action selector="closeButtonDidTap:" destination="-1" eventType="touchUpInside" id="bAq-wx-EAv"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Bm9-Mu-31b">
-                            <rect key="frame" x="145" y="10" width="30" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                            <state key="normal" title="Text"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="NXz-Jr-oyP" customClass="LLButtonWithEdgeInsets">
+                            <rect key="frame" x="50" y="5" width="40" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                            <inset key="contentEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
+                            <state key="normal" image="TextButtonIcon.png" backgroundImage="moji.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <state key="highlighted" backgroundImage="moji_on.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
                             <connections>
-                                <action selector="textButtonDidTap:" destination="-1" eventType="touchUpInside" id="YWe-Bo-CIj"/>
+                                <action selector="textButtonDidTap:" destination="-1" eventType="touchUpInside" id="T5c-fC-hv7"/>
                             </connections>
                         </button>
                     </subviews>
@@ -46,4 +55,9 @@
             <point key="canvasLocation" x="532" y="499"/>
         </view>
     </objects>
+    <resources>
+        <image name="TextButtonIcon.png" width="30" height="30"/>
+        <image name="moji.png" width="60" height="60"/>
+        <image name="moji_on.png" width="60" height="60"/>
+    </resources>
 </document>

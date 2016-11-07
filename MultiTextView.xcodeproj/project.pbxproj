@@ -11,11 +11,6 @@
 		2711B3DA1D95007C00BB1363 /* CYRTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2711B3BE1D95007C00BB1363 /* CYRTextStorage.m */; };
 		2711B3DB1D95007C00BB1363 /* CYRTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2711B3C01D95007C00BB1363 /* CYRTextView.m */; };
 		2711B3DC1D95007C00BB1363 /* CYRToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 2711B3C21D95007C00BB1363 /* CYRToken.m */; };
-		2711B3DD1D95007C00BB1363 /* HRBrightnessCursor.m in Sources */ = {isa = PBXBuildFile; fileRef = 2711B3C41D95007C00BB1363 /* HRBrightnessCursor.m */; };
-		2711B3DE1D95007C00BB1363 /* HRCgUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 2711B3C61D95007C00BB1363 /* HRCgUtil.m */; };
-		2711B3DF1D95007C00BB1363 /* HRColorCursor.m in Sources */ = {isa = PBXBuildFile; fileRef = 2711B3C81D95007C00BB1363 /* HRColorCursor.m */; };
-		2711B3E01D95007C00BB1363 /* HRColorPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2711B3CB1D95007C00BB1363 /* HRColorPickerView.m */; };
-		2711B3E11D95007C00BB1363 /* HRColorPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2711B3CD1D95007C00BB1363 /* HRColorPickerViewController.m */; };
 		2711B3E21D95007C00BB1363 /* HRColorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 2711B3CF1D95007C00BB1363 /* HRColorUtil.m */; };
 		2711B3E31D95007C00BB1363 /* ZSSBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2711B3D11D95007C00BB1363 /* ZSSBarButtonItem.m */; };
 		2711B3E41D95007C00BB1363 /* ZSSFontsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2711B3D31D95007C00BB1363 /* ZSSFontsViewController.m */; };
@@ -125,6 +120,19 @@
 		2789D8DC1D867F7E00B283A7 /* WhiteCircleButton_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8D61D867F7E00B283A7 /* WhiteCircleButton_on@2x.png */; };
 		2789D8DD1D867F7E00B283A7 /* WhiteCircleButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8D71D867F7E00B283A7 /* WhiteCircleButton.png */; };
 		2789D8DE1D867F7E00B283A7 /* WhiteCircleButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8D81D867F7E00B283A7 /* WhiteCircleButton@2x.png */; };
+		278DE6171DCFF8A40034468B /* UIColor+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278DE6161DCFF8A40034468B /* UIColor+Util.swift */; };
+		278DE62D1DD005F00034468B /* MJArrowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 278DE6261DD005F00034468B /* MJArrowView.m */; };
+		278DE62E1DD005F00034468B /* MJPopoverContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 278DE6281DD005F00034468B /* MJPopoverContainerViewController.m */; };
+		278DE62F1DD005F00034468B /* MJPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 278DE62A1DD005F00034468B /* MJPopoverController.m */; };
+		278DE6301DD005F00034468B /* MJPopoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 278DE62C1DD005F00034468B /* MJPopoverView.m */; };
+		278DE6341DD011370034468B /* LLClipMultiTextInputViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 278DE6331DD011370034468B /* LLClipMultiTextInputViewController~iphone.xib */; };
+		278DE6371DD013780034468B /* TextButtonIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 278DE6351DD013780034468B /* TextButtonIcon.png */; };
+		278DE6381DD013780034468B /* TextButtonIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 278DE6361DD013780034468B /* TextButtonIcon@2x.png */; };
+		278DE63B1DD013910034468B /* LLButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 278DE63A1DD013910034468B /* LLButton.m */; };
+		278DE6401DD013FD0034468B /* moji_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 278DE63C1DD013FD0034468B /* moji_on.png */; };
+		278DE6411DD013FD0034468B /* moji_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 278DE63D1DD013FD0034468B /* moji_on@2x.png */; };
+		278DE6421DD013FD0034468B /* moji.png in Resources */ = {isa = PBXBuildFile; fileRef = 278DE63E1DD013FD0034468B /* moji.png */; };
+		278DE6431DD013FD0034468B /* moji@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 278DE63F1DD013FD0034468B /* moji@2x.png */; };
 		27AC94B91DC9E80D007C8D56 /* ZSSfontSize.png in Resources */ = {isa = PBXBuildFile; fileRef = 27AC94B71DC9E80D007C8D56 /* ZSSfontSize.png */; };
 		27AC94BA1DC9E80D007C8D56 /* ZSSfontSize@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 27AC94B81DC9E80D007C8D56 /* ZSSfontSize@2x.png */; };
 /* End PBXBuildFile section */
@@ -138,17 +146,6 @@
 		2711B3C01D95007C00BB1363 /* CYRTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYRTextView.m; sourceTree = "<group>"; };
 		2711B3C11D95007C00BB1363 /* CYRToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYRToken.h; sourceTree = "<group>"; };
 		2711B3C21D95007C00BB1363 /* CYRToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYRToken.m; sourceTree = "<group>"; };
-		2711B3C31D95007C00BB1363 /* HRBrightnessCursor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRBrightnessCursor.h; sourceTree = "<group>"; };
-		2711B3C41D95007C00BB1363 /* HRBrightnessCursor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HRBrightnessCursor.m; sourceTree = "<group>"; };
-		2711B3C51D95007C00BB1363 /* HRCgUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRCgUtil.h; sourceTree = "<group>"; };
-		2711B3C61D95007C00BB1363 /* HRCgUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HRCgUtil.m; sourceTree = "<group>"; };
-		2711B3C71D95007C00BB1363 /* HRColorCursor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRColorCursor.h; sourceTree = "<group>"; };
-		2711B3C81D95007C00BB1363 /* HRColorCursor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HRColorCursor.m; sourceTree = "<group>"; };
-		2711B3C91D95007C00BB1363 /* HRColorPickerMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRColorPickerMacros.h; sourceTree = "<group>"; };
-		2711B3CA1D95007C00BB1363 /* HRColorPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRColorPickerView.h; sourceTree = "<group>"; };
-		2711B3CB1D95007C00BB1363 /* HRColorPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HRColorPickerView.m; sourceTree = "<group>"; };
-		2711B3CC1D95007C00BB1363 /* HRColorPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRColorPickerViewController.h; sourceTree = "<group>"; };
-		2711B3CD1D95007C00BB1363 /* HRColorPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HRColorPickerViewController.m; sourceTree = "<group>"; };
 		2711B3CE1D95007C00BB1363 /* HRColorUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRColorUtil.h; sourceTree = "<group>"; };
 		2711B3CF1D95007C00BB1363 /* HRColorUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HRColorUtil.m; sourceTree = "<group>"; };
 		2711B3D01D95007C00BB1363 /* ZSSBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZSSBarButtonItem.h; sourceTree = "<group>"; };
@@ -276,6 +273,25 @@
 		2789D8D61D867F7E00B283A7 /* WhiteCircleButton_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "WhiteCircleButton_on@2x.png"; path = "images/WhiteCircleButton_on@2x.png"; sourceTree = "<group>"; };
 		2789D8D71D867F7E00B283A7 /* WhiteCircleButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WhiteCircleButton.png; path = images/WhiteCircleButton.png; sourceTree = "<group>"; };
 		2789D8D81D867F7E00B283A7 /* WhiteCircleButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "WhiteCircleButton@2x.png"; path = "images/WhiteCircleButton@2x.png"; sourceTree = "<group>"; };
+		278DE6161DCFF8A40034468B /* UIColor+Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIColor+Util.swift"; path = "Base/UIColor+Util.swift"; sourceTree = "<group>"; };
+		278DE6251DD005F00034468B /* MJArrowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MJArrowView.h; path = MJPopover/MJArrowView.h; sourceTree = "<group>"; };
+		278DE6261DD005F00034468B /* MJArrowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MJArrowView.m; path = MJPopover/MJArrowView.m; sourceTree = "<group>"; };
+		278DE6271DD005F00034468B /* MJPopoverContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MJPopoverContainerViewController.h; path = MJPopover/MJPopoverContainerViewController.h; sourceTree = "<group>"; };
+		278DE6281DD005F00034468B /* MJPopoverContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MJPopoverContainerViewController.m; path = MJPopover/MJPopoverContainerViewController.m; sourceTree = "<group>"; };
+		278DE6291DD005F00034468B /* MJPopoverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MJPopoverController.h; path = MJPopover/MJPopoverController.h; sourceTree = "<group>"; };
+		278DE62A1DD005F00034468B /* MJPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MJPopoverController.m; path = MJPopover/MJPopoverController.m; sourceTree = "<group>"; };
+		278DE62B1DD005F00034468B /* MJPopoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MJPopoverView.h; path = MJPopover/MJPopoverView.h; sourceTree = "<group>"; };
+		278DE62C1DD005F00034468B /* MJPopoverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MJPopoverView.m; path = MJPopover/MJPopoverView.m; sourceTree = "<group>"; };
+		278DE6321DD006C50034468B /* MultiTextView_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MultiTextView_Prefix.pch; sourceTree = "<group>"; };
+		278DE6331DD011370034468B /* LLClipMultiTextInputViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "LLClipMultiTextInputViewController~iphone.xib"; sourceTree = "<group>"; };
+		278DE6351DD013780034468B /* TextButtonIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TextButtonIcon.png; path = images/TextButtonIcon.png; sourceTree = "<group>"; };
+		278DE6361DD013780034468B /* TextButtonIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TextButtonIcon@2x.png"; path = "images/TextButtonIcon@2x.png"; sourceTree = "<group>"; };
+		278DE6391DD013910034468B /* LLButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LLButton.h; path = Base/LLButton.h; sourceTree = "<group>"; };
+		278DE63A1DD013910034468B /* LLButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LLButton.m; path = Base/LLButton.m; sourceTree = "<group>"; };
+		278DE63C1DD013FD0034468B /* moji_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = moji_on.png; path = images/moji_on.png; sourceTree = "<group>"; };
+		278DE63D1DD013FD0034468B /* moji_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "moji_on@2x.png"; path = "images/moji_on@2x.png"; sourceTree = "<group>"; };
+		278DE63E1DD013FD0034468B /* moji.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = moji.png; path = images/moji.png; sourceTree = "<group>"; };
+		278DE63F1DD013FD0034468B /* moji@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "moji@2x.png"; path = "images/moji@2x.png"; sourceTree = "<group>"; };
 		27AC94B71DC9E80D007C8D56 /* ZSSfontSize.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ZSSfontSize.png; sourceTree = "<group>"; };
 		27AC94B81DC9E80D007C8D56 /* ZSSfontSize@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ZSSfontSize@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -294,6 +310,7 @@
 		2711B3B81D95006100BB1363 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				278DE6241DD005E40034468B /* MJPopover */,
 				2711B3B91D95007C00BB1363 /* ZSSRichTextEditor */,
 			);
 			name = External;
@@ -331,17 +348,6 @@
 				2711B3C01D95007C00BB1363 /* CYRTextView.m */,
 				2711B3C11D95007C00BB1363 /* CYRToken.h */,
 				2711B3C21D95007C00BB1363 /* CYRToken.m */,
-				2711B3C31D95007C00BB1363 /* HRBrightnessCursor.h */,
-				2711B3C41D95007C00BB1363 /* HRBrightnessCursor.m */,
-				2711B3C51D95007C00BB1363 /* HRCgUtil.h */,
-				2711B3C61D95007C00BB1363 /* HRCgUtil.m */,
-				2711B3C71D95007C00BB1363 /* HRColorCursor.h */,
-				2711B3C81D95007C00BB1363 /* HRColorCursor.m */,
-				2711B3C91D95007C00BB1363 /* HRColorPickerMacros.h */,
-				2711B3CA1D95007C00BB1363 /* HRColorPickerView.h */,
-				2711B3CB1D95007C00BB1363 /* HRColorPickerView.m */,
-				2711B3CC1D95007C00BB1363 /* HRColorPickerViewController.h */,
-				2711B3CD1D95007C00BB1363 /* HRColorPickerViewController.m */,
 				2711B3CE1D95007C00BB1363 /* HRColorUtil.h */,
 				2711B3CF1D95007C00BB1363 /* HRColorUtil.m */,
 			);
@@ -436,6 +442,7 @@
 		2789D8901D86254100B283A7 = {
 			isa = PBXGroup;
 			children = (
+				278DE6311DD006710034468B /* Other Sources */,
 				2711B3B81D95006100BB1363 /* External */,
 				2789D8AE1D86264E00B283A7 /* Base */,
 				2789D89B1D86254100B283A7 /* MultiTextView */,
@@ -456,14 +463,15 @@
 			isa = PBXGroup;
 			children = (
 				2789D89C1D86254100B283A7 /* AppDelegate.swift */,
-				2789D89E1D86254100B283A7 /* ViewController.swift */,
-				2789D8A01D86254100B283A7 /* Main.storyboard */,
 				2789D8A31D86254100B283A7 /* Assets.xcassets */,
-				2789D8A51D86254100B283A7 /* LaunchScreen.storyboard */,
 				2789D8A81D86254100B283A7 /* Info.plist */,
+				2789D8A51D86254100B283A7 /* LaunchScreen.storyboard */,
 				2789D8BF1D8640E500B283A7 /* LLClipMultiTextInputViewController.swift */,
 				2789D8C01D8640E500B283A7 /* LLClipMultiTextInputViewController.xib */,
+				278DE6331DD011370034468B /* LLClipMultiTextInputViewController~iphone.xib */,
 				2753BECC1D891AD900BFED52 /* LLTextHandleView.swift */,
+				2789D8A01D86254100B283A7 /* Main.storyboard */,
+				2789D89E1D86254100B283A7 /* ViewController.swift */,
 			);
 			path = MultiTextView;
 			sourceTree = "<group>";
@@ -473,6 +481,8 @@
 			children = (
 				2789D8C31D86426200B283A7 /* LLBorderedButton.h */,
 				2789D8C41D86426200B283A7 /* LLBorderedButton.m */,
+				278DE6391DD013910034468B /* LLButton.h */,
+				278DE63A1DD013910034468B /* LLButton.m */,
 				2789D8B61D86270300B283A7 /* LLClip.h */,
 				2789D8B71D86270300B283A7 /* LLClip.m */,
 				2789D8B31D8626F200B283A7 /* LLClipItem.h */,
@@ -489,6 +499,7 @@
 				2711B3E91D950EF200BB1363 /* LLUtility.m */,
 				2789D8CA1D86494800B283A7 /* Localizable.strings */,
 				2789D8AF1D86268C00B283A7 /* MultiTextView-Bridging-Header.h */,
+				278DE6161DCFF8A40034468B /* UIColor+Util.swift */,
 			);
 			name = Base;
 			sourceTree = "<group>";
@@ -496,14 +507,43 @@
 		2789D8D21D867F6800B283A7 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				278DE63C1DD013FD0034468B /* moji_on.png */,
+				278DE63D1DD013FD0034468B /* moji_on@2x.png */,
+				278DE63E1DD013FD0034468B /* moji.png */,
+				278DE63F1DD013FD0034468B /* moji@2x.png */,
 				2789D8D31D867F7E00B283A7 /* NewDrawing.png */,
 				2789D8D41D867F7E00B283A7 /* NewDrawing@2x.png */,
+				278DE6351DD013780034468B /* TextButtonIcon.png */,
+				278DE6361DD013780034468B /* TextButtonIcon@2x.png */,
 				2789D8D51D867F7E00B283A7 /* WhiteCircleButton_on.png */,
 				2789D8D61D867F7E00B283A7 /* WhiteCircleButton_on@2x.png */,
 				2789D8D71D867F7E00B283A7 /* WhiteCircleButton.png */,
 				2789D8D81D867F7E00B283A7 /* WhiteCircleButton@2x.png */,
 			);
 			name = images;
+			sourceTree = "<group>";
+		};
+		278DE6241DD005E40034468B /* MJPopover */ = {
+			isa = PBXGroup;
+			children = (
+				278DE6251DD005F00034468B /* MJArrowView.h */,
+				278DE6261DD005F00034468B /* MJArrowView.m */,
+				278DE6271DD005F00034468B /* MJPopoverContainerViewController.h */,
+				278DE6281DD005F00034468B /* MJPopoverContainerViewController.m */,
+				278DE6291DD005F00034468B /* MJPopoverController.h */,
+				278DE62A1DD005F00034468B /* MJPopoverController.m */,
+				278DE62B1DD005F00034468B /* MJPopoverView.h */,
+				278DE62C1DD005F00034468B /* MJPopoverView.m */,
+			);
+			name = MJPopover;
+			sourceTree = "<group>";
+		};
+		278DE6311DD006710034468B /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				278DE6321DD006C50034468B /* MultiTextView_Prefix.pch */,
+			);
+			name = "Other Sources";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -584,6 +624,7 @@
 				2711B4801D951F8800BB1363 /* ZSSundo.png in Resources */,
 				2711B4531D951F8800BB1363 /* ZSSh6@2x.png in Resources */,
 				2711B43B1D951F8800BB1363 /* editor.html in Resources */,
+				278DE6421DD013FD0034468B /* moji.png in Resources */,
 				2711B44D1D951F8800BB1363 /* ZSSh3@2x.png in Resources */,
 				2711B4481D951F8800BB1363 /* ZSSh1.png in Resources */,
 				2711B3E51D95007C00BB1363 /* ZSSRichTextEditor.js in Resources */,
@@ -597,6 +638,8 @@
 				2711B46D1D951F8800BB1363 /* ZSSpicker@2x.png in Resources */,
 				2789D8C81D86494800B283A7 /* Localizable.strings in Resources */,
 				2711B4551D951F8800BB1363 /* ZSShorizontalrule@2x.png in Resources */,
+				278DE6401DD013FD0034468B /* moji_on.png in Resources */,
+				278DE6371DD013780034468B /* TextButtonIcon.png in Resources */,
 				2789D8A71D86254100B283A7 /* LaunchScreen.storyboard in Resources */,
 				2789D8DE1D867F7E00B283A7 /* WhiteCircleButton@2x.png in Resources */,
 				2711B4851D951F8800BB1363 /* ZSSunorderedlist@2x.png in Resources */,
@@ -628,6 +671,7 @@
 				2711B47F1D951F8800BB1363 /* ZSSunderline@2x.png in Resources */,
 				2789D8BE1D862E2B00B283A7 /* LLClipViewController~iphone.xib in Resources */,
 				2711B4731D951F8800BB1363 /* ZSSrightjustify@2x.png in Resources */,
+				278DE6381DD013780034468B /* TextButtonIcon@2x.png in Resources */,
 				2711B47A1D951F8800BB1363 /* ZSStable.png in Resources */,
 				2711B45F1D951F8800BB1363 /* ZSSitalic@2x.png in Resources */,
 				2711B44C1D951F8800BB1363 /* ZSSh3.png in Resources */,
@@ -648,17 +692,20 @@
 				2711B4831D951F8800BB1363 /* ZSSunlink@2x.png in Resources */,
 				2711B4611D951F8800BB1363 /* ZSSkeyboard@2x.png in Resources */,
 				2711B4841D951F8800BB1363 /* ZSSunorderedlist.png in Resources */,
+				278DE6411DD013FD0034468B /* moji_on@2x.png in Resources */,
 				2711B4491D951F8800BB1363 /* ZSSh1@2x.png in Resources */,
 				2711B4671D951F8800BB1363 /* ZSSorderedlist@2x.png in Resources */,
 				2711B46E1D951F8800BB1363 /* ZSSquicklink.png in Resources */,
 				2711B4581D951F8800BB1363 /* ZSSimageDevice.png in Resources */,
 				2711B4571D951F8800BB1363 /* ZSSimage@2x.png in Resources */,
+				278DE6431DD013FD0034468B /* moji@2x.png in Resources */,
 				2711B4741D951F8800BB1363 /* ZSSstrikethrough.png in Resources */,
 				2711B4681D951F8800BB1363 /* ZSSoutdent.png in Resources */,
 				2711B43E1D951F8800BB1363 /* ZSSbold.png in Resources */,
 				2711B45E1D951F8800BB1363 /* ZSSitalic.png in Resources */,
 				2711B46C1D951F8800BB1363 /* ZSSpicker.png in Resources */,
 				2711B4461D951F8800BB1363 /* ZSSforcejustify.png in Resources */,
+				278DE6341DD011370034468B /* LLClipMultiTextInputViewController~iphone.xib in Resources */,
 				2711B47B1D951F8800BB1363 /* ZSStable@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -671,26 +718,27 @@
 			buildActionMask = 2147483647;
 			files = (
 				2724BE261DCC74C1001812E6 /* LLClipTextInputViewController.mm in Sources */,
-				2711B3E11D95007C00BB1363 /* HRColorPickerViewController.m in Sources */,
 				2711B3E41D95007C00BB1363 /* ZSSFontsViewController.m in Sources */,
 				2789D89F1D86254100B283A7 /* ViewController.swift in Sources */,
-				2711B3DF1D95007C00BB1363 /* HRColorCursor.m in Sources */,
 				2711B3E21D95007C00BB1363 /* HRColorUtil.m in Sources */,
 				2789D8B21D86268C00B283A7 /* LLClipViewController.m in Sources */,
+				278DE63B1DD013910034468B /* LLButton.m in Sources */,
 				2711B3DB1D95007C00BB1363 /* CYRTextView.m in Sources */,
+				278DE62F1DD005F00034468B /* MJPopoverController.m in Sources */,
 				2789D8C11D8640E500B283A7 /* LLClipMultiTextInputViewController.swift in Sources */,
 				2711B3E71D95007C00BB1363 /* ZSSTextView.m in Sources */,
 				2789D8B81D86270300B283A7 /* LLClip.m in Sources */,
 				2789D8C51D86426200B283A7 /* LLBorderedButton.m in Sources */,
 				2711B3E61D95007C00BB1363 /* ZSSRichTextEditor.m in Sources */,
-				2711B3DD1D95007C00BB1363 /* HRBrightnessCursor.m in Sources */,
 				2711B3DA1D95007C00BB1363 /* CYRTextStorage.m in Sources */,
+				278DE6171DCFF8A40034468B /* UIColor+Util.swift in Sources */,
 				2753BECD1D891AD900BFED52 /* LLTextHandleView.swift in Sources */,
-				2711B3DE1D95007C00BB1363 /* HRCgUtil.m in Sources */,
+				278DE6301DD005F00034468B /* MJPopoverView.m in Sources */,
 				2711B3D91D95007C00BB1363 /* CYRLayoutManager.m in Sources */,
-				2711B3E01D95007C00BB1363 /* HRColorPickerView.m in Sources */,
 				2711B3EA1D950EF200BB1363 /* LLUtility.m in Sources */,
+				278DE62E1DD005F00034468B /* MJPopoverContainerViewController.m in Sources */,
 				2711B3DC1D95007C00BB1363 /* CYRToken.m in Sources */,
+				278DE62D1DD005F00034468B /* MJArrowView.m in Sources */,
 				2789D8D11D8674B400B283A7 /* LLFullScreenPlayView.m in Sources */,
 				2711B3E31D95007C00BB1363 /* ZSSBarButtonItem.m in Sources */,
 				2789D8B51D8626F200B283A7 /* LLClipItem.m in Sources */,
@@ -822,6 +870,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				GCC_PREFIX_HEADER = MultiTextView_Prefix.pch;
 				INFOPLIST_FILE = MultiTextView/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Bottega.MultiTextView;
@@ -836,6 +885,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				GCC_PREFIX_HEADER = MultiTextView_Prefix.pch;
 				INFOPLIST_FILE = MultiTextView/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Bottega.MultiTextView;
