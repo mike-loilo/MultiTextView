@@ -184,9 +184,14 @@ static Class hackishFixClass = Nil;
 @property (nonatomic, strong) NSMutableArray *customZSSBarButtonItems;
 
 /*
- *  NSString holdign the html
+ *  NSString holding the html
  */
 @property (nonatomic, strong) NSString *internalHTML;
+
+/*
+ *  NSString holding the css
+ */
+@property (nonatomic, strong) NSString *customCSS;
 
 /*
  *  BOOL for if the editor is loaded or not
@@ -902,10 +907,31 @@ static CGFloat kDefaultScale = 0.5;
 
 #pragma mark - Editor Modification Section
 
+- (void)setCSS:(NSString *)css {
+    
+    self.customCSS = css;
+    
+    if (self.editorLoaded) {
+        [self updateCSS];
+    }
+    
+}
+
+- (void)updateCSS {
+    
+    if (self.customCSS != NULL && [self.customCSS length] != 0) {
+        
+        NSString *js = [NSString stringWithFormat:@"zss_editor.setCustomCSS(\"%@\");", self.customCSS];
+        [self.editorView stringByEvaluatingJavaScriptFromString:js];
+        
+    }
+    
+}
+
 - (void)setPlaceholderText {
     
     //Call the setPlaceholder javascript method if a placeholder has been set
-    if (self.placeholder != NULL) {
+    if (self.placeholder != NULL && [self.placeholder length] != 0) {
     
         NSString *js = [NSString stringWithFormat:@"zss_editor.setPlaceholder(\"%@\");", self.placeholder];
         [self.editorView stringByEvaluatingJavaScriptFromString:js];
@@ -965,7 +991,9 @@ static CGFloat kDefaultScale = 0.5;
     
     NSString *html = self.internalHTML;
     self.sourceView.text = html;
-    [self.editorView stringByEvaluatingJavaScriptFromString:[self.class javaScriptForResourceLoadedFromSetHTML:self.sourceView.text]];
+    NSString *cleanedHTML = [self removeQuotesFromHTML:self.sourceView.text];
+    NSString *trigger = [NSString stringWithFormat:@"zss_editor.setHTML(\"%@\");", cleanedHTML];
+    [self.editorView stringByEvaluatingJavaScriptFromString:trigger];
     
 }
 
@@ -1129,9 +1157,7 @@ static CGFloat kDefaultScale = 0.5;
 }
 
 - (void)showFontsPicker {
-    
-    NSLog(@"Fonts Picker Button Pressed");
-    
+        
     // Save the selection location
     [self.editorView stringByEvaluatingJavaScriptFromString:@"zss_editor.prepareInsert();"];
     
@@ -1163,8 +1189,6 @@ static CGFloat kDefaultScale = 0.5;
 }
 
 - (void)showFontSizePicker {
-    
-    NSLog(@"FontSize Picker Button Pressed");
     
     // Save the selection location
     [self.editorView stringByEvaluatingJavaScriptFromString:@"zss_editor.prepareInsert();"];
@@ -1749,6 +1773,8 @@ static CGFloat kDefaultScale = 0.5;
         
     } else if ([urlString rangeOfString:@"debug://"].location != NSNotFound) {
         
+        NSLog(@"Debug Found");
+        
         // We recieved the callback
         NSString *debug = [urlString stringByReplacingOccurrencesOfString:@"debug://" withString:@""];
         debug = [debug stringByReplacingPercentEscapesUsingEncoding:NSStringEncodingConversionAllowLossy];
@@ -1768,12 +1794,21 @@ static CGFloat kDefaultScale = 0.5;
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     self.editorLoaded = YES;
-    [self setPlaceholderText];
+
     if (!self.internalHTML) {
         self.internalHTML = @"";
     }
     [self updateHTML];
-    self.editorView.backgroundColor = [UIColor whiteColor];
+    self.editorView.backgroundColor = UIColor.whiteColor;
+
+    if(self.placeholder) {
+        [self setPlaceholderText];
+    }
+    
+    if (self.customCSS) {
+        [self updateCSS];
+    }
+
     if (self.shouldShowKeyboard) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self focusTextEditor];
@@ -1959,7 +1994,7 @@ static CGFloat kDefaultScale = 0.5;
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *, id> *)info{
 
     UIImage *selectedImage = info[UIImagePickerControllerEditedImage]?:info[UIImagePickerControllerOriginalImage];
     
