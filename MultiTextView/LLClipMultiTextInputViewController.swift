@@ -114,8 +114,10 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     }
     
     @IBAction func insertButtonDidTap(sender: AnyObject) {
+        //TODO:- 本当は既存のHTML文字列を読み込ませる
+        let htmlString = "<!-- This is an HTML comment --><p>This is a test of the <strong>ZSSRichTextEditor</strong> by <a title=\"Zed Said\" href=\"http://www.zedsaid.com\">Zed Said Studio</a></p>"
         weak var w = self
-        let textHandleView = LLTextHandleView(frame: CGRectMake(0, 0, 400, 200), type: .Normal, tapBlock: { (view) in
+        let textHandleView = LLTextHandleView(frame: CGRectMake(0, 0, 400, 200), type: .Normal, htmlString: htmlString, tapBlock: { (view) in
             guard let s = w else { return }
             s.organizeTextObjects(view)
         }) { (view) in
@@ -125,6 +127,7 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         textHandleView.center = CGPointMake(CGRectGetWidth(self.view.bounds) * 0.5, CGRectGetHeight(self.view.bounds) * 0.5)
         _textHandleViews.append(textHandleView)
         self.organizeTextObjects(textHandleView)
+        textHandleView.enterEditMode()
     }
     
     @IBAction func addClipButtonDidTap(sender: AnyObject) {
@@ -149,11 +152,33 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     }
     
     func tapGesture(sender: UIGestureRecognizer) {
-        self.organizeTextObjects(nil)
+        // テキストボックスを整理する
+        var didEdit = false
+        self.organizeTextObjects(nil, didEdit: &didEdit)
+        
+        if !didEdit {
+            // タップした位置にテキストボックスを配置する
+            let location = sender.locationInView(_playView!.currentPageContentView)
+            weak var w = self
+            let textHandleView = LLTextHandleView(frame: CGRectMake(location.x, location.y, 80, 40), type: .Normal, htmlString: nil, tapBlock: { (view) in
+                guard let s = w else { return }
+                s.organizeTextObjects(view)
+            }) { (view) in
+                view.enterEditMode()
+            }
+            _playView!.currentPageContentView.addSubview(textHandleView)
+            _textHandleViews.append(textHandleView)
+            textHandleView.enterEditMode()
+        }
     }
     
     /** テキストボックスを整理する */
     private func organizeTextObjects(movable: LLTextHandleView?) {
+        var didEdit = false
+        self.organizeTextObjects(movable, didEdit: &didEdit)
+    }
+    private func organizeTextObjects(movable: LLTextHandleView?, inout didEdit: Bool) {
+        didEdit = false
         // 種別を確認して、ノーマルの場合はハンドル自体を削除、タイトル / サブタイトルの場合はテキストがなくなったらプリセット文言を表示する
         var removeTextHandleViews = [LLTextHandleView]()
         (_textHandleViews as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
@@ -163,6 +188,7 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
             textHandleView.hiddenBorder = !textHandleView.movable
             if (textHandleView.isEditingText) {
                 textHandleView.leaveEditMode()
+                didEdit = true
             }
             if (!textHandleView.movable && textHandleView.type == .Normal) {
                 if (!textHandleView.hasText) {

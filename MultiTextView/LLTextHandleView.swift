@@ -159,7 +159,7 @@ class LLTextHandleView: ZSSRichTextViewer {
     
     private var _richTextEditor: ZSSRichTextEditor?
 
-    init(frame: CGRect, type: LLTextHandleViewType, tapBlock: ((view: LLTextHandleView) -> ())?, doubleTapBlock: ((view: LLTextHandleView) -> ())?) {
+    init(frame: CGRect, type: LLTextHandleViewType, htmlString: String?, tapBlock: ((view: LLTextHandleView) -> ())?, doubleTapBlock: ((view: LLTextHandleView) -> ())?) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.clearColor()
         self.opaque = false
@@ -167,8 +167,7 @@ class LLTextHandleView: ZSSRichTextViewer {
         self.scrollView.showsHorizontalScrollIndicator = false
         self.scrollView.userInteractionEnabled = false
 
-        //TODO:- 本当は既存のHTML文字列を読み込ませる
-        _htmlString = "<!-- This is an HTML comment --><p>This is a test of the <strong>ZSSRichTextEditor</strong> by <a title=\"Zed Said\" href=\"http://www.zedsaid.com\">Zed Said Studio</a></p>"
+        _htmlString = htmlString
         if (nil == _htmlString) {
             _htmlString = ""
         }
@@ -443,6 +442,8 @@ class LLTextHandleView: ZSSRichTextViewer {
         }
     }
     
+    /** 編集状態にする直前のZIndex */
+    private var _zIndex:Int?
     /** 編集状態にする */
     func enterEditMode() {
         self.movable = false
@@ -476,6 +477,10 @@ class LLTextHandleView: ZSSRichTextViewer {
                                                 ZSSRichTextEditorToolbarIndent,
                                                 ZSSRichTextEditorToolbarOutdent]
         _richTextEditor!.setHTML(_htmlString!)
+        
+        // 最前面に持ってくる
+        _zIndex = self.superview!.subviews.indexOf(self)
+        self.superview!.bringSubviewToFront(self)
     }
     
     var isEditingText: Bool { return nil != _richTextEditor }
@@ -494,6 +499,11 @@ class LLTextHandleView: ZSSRichTextViewer {
         
         if (nil != _htmlString) {
             self.setHTML(_htmlString!)
+        }
+        
+        // 元の位置に戻す
+        if nil != _zIndex {
+            self.superview!.insertSubview(self, atIndex: _zIndex!)
         }
     }
     
