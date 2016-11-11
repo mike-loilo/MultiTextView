@@ -83,12 +83,13 @@ private class LLSizeChangerView: UIView {
 /** テキストのハンドル種別 */
 @objc enum LLTextHandleViewType: Int {
     case Normal
-    case Title
-    case SubTitle
+    case UnDeletable
 }
 
 /** プロトコル */
 @objc protocol LLTextHandleViewDelegate {
+    /** タップ */
+    optional func textHandleViewTap(textHandleView: LLTextHandleView, tapCount: Int)
     /** メニュー：カット */
     optional func textHandleViewMenuCut(textHandleView: LLTextHandleView)
     /** メニュー：コピー */
@@ -166,15 +167,12 @@ class LLTextHandleView: ZSSRichTextViewer {
         }
     }
     
-    private var _tapBlock: ((view: LLTextHandleView) -> ())?
-    private var _doubleTapBlock: ((view: LLTextHandleView) -> ())?
-    
     private var _richTextEditor: ZSSRichTextEditor?
     
     /** デリゲート */
     weak var viewDelegate: LLTextHandleViewDelegate?
     
-    init(frame: CGRect, type: LLTextHandleViewType, htmlString: String?, tapBlock: ((view: LLTextHandleView) -> ())?, doubleTapBlock: ((view: LLTextHandleView) -> ())?) {
+    init(frame: CGRect, type: LLTextHandleViewType, htmlString: String?) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.clearColor()
         self.opaque = false
@@ -208,8 +206,6 @@ class LLTextHandleView: ZSSRichTextViewer {
         self.layer.addSublayer(_borderLayerOuter!)
         
         _type = type
-        _tapBlock = tapBlock
-        _doubleTapBlock = doubleTapBlock
         
         let circleHandleSize = CGSizeMake(16, 16)
         let rectangleHandleSize = CGSizeMake(14, 14)
@@ -226,11 +222,7 @@ class LLTextHandleView: ZSSRichTextViewer {
                 if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
                     s.frame = CGRectMake(point.x, point.y, size.width, size.height)
                 }
-            }, touchesEnded: { (view, touches, event) in
-
-            }, touchesCancelled: { (view, touches, event) in
-
-        })
+            }, touchesEnded: nil, touchesCancelled: nil)
         _tlHandle!.center = CGPointMake(0, 0)
         self.addSubview(_tlHandle!)
         _tcHandle = LLSizeChangerView(frame: CGRectMake(0, 0, rectangleHandleSize.width, rectangleHandleSize.height), type: .Rectangle, touchesBegan: { (view, touches, event) in
@@ -243,11 +235,7 @@ class LLTextHandleView: ZSSRichTextViewer {
                 if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
                     s.frame = CGRectMake(CGRectGetMinX(startRect), point.y, size.width, size.height)
                 }
-            }, touchesEnded: { (view, touches, event) in
-                
-            }, touchesCancelled: { (view, touches, event) in
-                
-        })
+            }, touchesEnded: nil, touchesCancelled: nil)
         _tcHandle!.center = CGPointMake(CGRectGetWidth(self.bounds) * 0.5, 0)
         self.addSubview(_tcHandle!)
         _trHandle = LLSizeChangerView(frame: CGRectMake(0, 0, circleHandleSize.width, circleHandleSize.height), type: .Circle, touchesBegan: { (view, touches, event) in
@@ -260,11 +248,7 @@ class LLTextHandleView: ZSSRichTextViewer {
                 if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
                     s.frame = CGRectMake(CGRectGetMinX(startRect), point.y, size.width, size.height)
                 }
-            }, touchesEnded: { (view, touches, event) in
-                
-            }, touchesCancelled: { (view, touches, event) in
-                
-        })
+            }, touchesEnded: nil, touchesCancelled: nil)
         _trHandle!.center = CGPointMake(CGRectGetWidth(self.bounds), 0)
         self.addSubview(_trHandle!)
         _lcHandle = LLSizeChangerView(frame: CGRectMake(0, 0, rectangleHandleSize.width, rectangleHandleSize.height), type: .Rectangle, touchesBegan: { (view, touches, event) in
@@ -277,11 +261,7 @@ class LLTextHandleView: ZSSRichTextViewer {
                 if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
                     s.frame = CGRectMake(point.x, CGRectGetMinY(startRect), size.width, size.height)
                 }
-            }, touchesEnded: { (view, touches, event) in
-                
-            }, touchesCancelled: { (view, touches, event) in
-                
-        })
+            }, touchesEnded: nil, touchesCancelled: nil)
         _lcHandle!.center = CGPointMake(0, CGRectGetHeight(self.bounds) * 0.5)
         self.addSubview(_lcHandle!)
         _rcHandle = LLSizeChangerView(frame: CGRectMake(0, 0, rectangleHandleSize.width, rectangleHandleSize.height), type: .Rectangle, touchesBegan: { (view, touches, event) in
@@ -294,11 +274,7 @@ class LLTextHandleView: ZSSRichTextViewer {
                 if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
                     s.frame = CGRectMake(CGRectGetMinX(startRect), CGRectGetMinY(startRect), size.width, size.height)
                 }
-            }, touchesEnded: { (view, touches, event) in
-                
-            }, touchesCancelled: { (view, touches, event) in
-                
-        })
+            }, touchesEnded: nil, touchesCancelled: nil)
         _rcHandle!.center = CGPointMake(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds) * 0.5)
         self.addSubview(_rcHandle!)
         _blHandle = LLSizeChangerView(frame: CGRectMake(0, 0, circleHandleSize.width, circleHandleSize.height), type: .Circle, touchesBegan: { (view, touches, event) in
@@ -311,11 +287,7 @@ class LLTextHandleView: ZSSRichTextViewer {
                 if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
                     s.frame = CGRectMake(point.x, CGRectGetMinY(startRect), size.width, size.height)
                 }
-            }, touchesEnded: { (view, touches, event) in
-                
-            }, touchesCancelled: { (view, touches, event) in
-                
-        })
+            }, touchesEnded: nil, touchesCancelled: nil)
         _blHandle!.center = CGPointMake(0, CGRectGetHeight(self.bounds))
         self.addSubview(_blHandle!)
         _bcHandle = LLSizeChangerView(frame: CGRectMake(0, 0, rectangleHandleSize.width, rectangleHandleSize.height), type: .Rectangle, touchesBegan: { (view, touches, event) in
@@ -328,11 +300,7 @@ class LLTextHandleView: ZSSRichTextViewer {
                 if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
                     s.frame = CGRectMake(CGRectGetMinX(startRect), CGRectGetMinY(startRect), size.width, size.height)
                 }
-            }, touchesEnded: { (view, touches, event) in
-                
-            }, touchesCancelled: { (view, touches, event) in
-                
-        })
+            }, touchesEnded: nil, touchesCancelled: nil)
         _bcHandle!.center = CGPointMake(CGRectGetWidth(self.bounds) * 0.5, CGRectGetHeight(self.bounds))
         self.addSubview(_bcHandle!)
         _brHandle = LLSizeChangerView(frame: CGRectMake(0, 0, circleHandleSize.width, circleHandleSize.height), type: .Circle, touchesBegan: { (view, touches, event) in
@@ -345,11 +313,7 @@ class LLTextHandleView: ZSSRichTextViewer {
                 if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
                     s.frame = CGRectMake(CGRectGetMinX(startRect), CGRectGetMinY(startRect), size.width, size.height)
                 }
-            }, touchesEnded: { (view, touches, event) in
-                
-            }, touchesCancelled: { (view, touches, event) in
-                
-        })
+            }, touchesEnded: nil, touchesCancelled: nil)
         _brHandle!.center = CGPointMake(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds))
         self.addSubview(_brHandle!)
 
@@ -456,15 +420,11 @@ class LLTextHandleView: ZSSRichTextViewer {
     
     func tapGesture(gesture: UIGestureRecognizer) {
         self.showMenu()
-        if (nil != _tapBlock) {
-            _tapBlock!(view: self)
-        }
+        self.viewDelegate?.textHandleViewTap!(self, tapCount: 1)
     }
     
     func doubleTapGesture(gesture: UIGestureRecognizer) {
-        if (nil != _doubleTapBlock) {
-            _doubleTapBlock!(view: self)
-        }
+        self.viewDelegate?.textHandleViewTap!(self, tapCount: 2)
     }
     
     /** 編集状態にする直前のZIndex */
@@ -536,10 +496,10 @@ class LLTextHandleView: ZSSRichTextViewer {
     /** メニューを表示する */
     func showMenu() {
         self.becomeFirstResponder()
-        let menuItemCut: UIMenuItem = UIMenuItem(title: NSLocalizedString("690", comment: "") /* カット */, action: #selector(LLTextHandleView.menuCut(_:)))
+        let menuItemCut: UIMenuItem = UIMenuItem(title: NSLocalizedString("708", comment: "") /* カット */, action: #selector(LLTextHandleView.menuCut(_:)))
         let menuItemCopy: UIMenuItem = UIMenuItem(title: NSLocalizedString("052", comment: "") /* コピー */, action: #selector(LLTextHandleView.menuCopy(_:)))
         let menuItemDelete: UIMenuItem = UIMenuItem(title: NSLocalizedString("114", comment: "") /* 削除 */, action: #selector(LLTextHandleView.menuDelete(_:)))
-        let menuItemEditText: UIMenuItem = UIMenuItem(title: NSLocalizedString("691", comment: "") /* テキストの編集 */, action: #selector(LLTextHandleView.menuEditText(_:)))
+        let menuItemEditText: UIMenuItem = UIMenuItem(title: NSLocalizedString("709", comment: "") /* テキストの編集 */, action: #selector(LLTextHandleView.menuEditText(_:)))
         UIMenuController.sharedMenuController().menuItems = [menuItemCut, menuItemCopy, menuItemDelete, menuItemEditText]
         UIMenuController.sharedMenuController().setTargetRect(CGRectMake(0, 0, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds)), inView: self)
         UIMenuController.sharedMenuController().setMenuVisible(true, animated: true)
@@ -580,5 +540,34 @@ class LLTextHandleView: ZSSRichTextViewer {
     func hideMenu() {
         self.resignFirstResponder()
         UIMenuController.sharedMenuController().menuVisible = false
+    }
+    
+    /** シリアライズ */
+    func serialize(parentView: UIView?) -> NSDictionary! {
+        let frame = self.convertRect(self.bounds, toView: parentView)
+        return ["origin": ["x": (CGRectGetMinX(frame)), "y": (CGRectGetMinY(frame))],
+        "size": ["width": (CGRectGetWidth(frame)), "height": (CGRectGetHeight(frame))],
+        "type": (_type.rawValue),
+        "text": self.stringByEvaluatingJavaScriptFromString("document.body.innerHTML")!]
+    }
+    
+    /** デシリアライズしてオブジェクトを返す */
+    class func textHandleView(serialized: NSDictionary!) -> LLTextHandleView? {
+        func nn(obj: AnyObject?) -> AnyObject? { return true == obj?.isKindOfClass(NSNull) ? nil : obj }
+        func toFloat(obj: AnyObject?) -> Float { return nil == nn(obj) ? 0 : nn(obj)!.floatValue }
+        func toInt(obj: AnyObject?) -> Int { return nil == nn(obj) ? 0 : nn(obj)!.integerValue }
+        //TODO:- 不正なデータが入っていたときの検証をやっておくこと！
+        let origin = nn(serialized["origin"]) as? NSDictionary
+        let x = CGFloat(toFloat(origin?["x"]))
+        let y = CGFloat(toFloat(origin?["y"]))
+        let size = nn(serialized["size"]) as? NSDictionary
+        let width = CGFloat(toFloat(size?["width"]))
+        let height = CGFloat(toFloat(size?["height"]))
+        let type = LLTextHandleViewType(rawValue: toInt(serialized["type"]))
+        let text = nn(serialized["text"]) as? String
+        if width <= 0 || height <= 0 || nil == text {
+            return nil
+        }
+        return LLTextHandleView(frame: CGRectMake(x, y, width, height), type: type!, htmlString: text)
     }
 }

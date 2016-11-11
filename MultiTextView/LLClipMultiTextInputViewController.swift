@@ -26,6 +26,13 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     private var _addClipBlock: ((item: LLClipItem?) -> ())?
     private var _closeCallback: (() -> ())?
     
+    /** カット/コピー中のテキストボックス */
+    private var _copiedData: NSDictionary?
+    /** 長押し */
+    private var _longPressGesture: UILongPressGestureRecognizer?
+    /** 最後に長押しメニューを表示した位置 */
+    private var _locationWithLongPress: CGPoint?
+    
     init(clipItem: LLClipItem!, playView: LLFullScreenPlayView!, changeBGColorBlock: ((color: UIColor?) -> ())?, addClipBlock: ((item: LLClipItem?) -> ())?, closeCallback: (() -> ())?) {
         super.init(nibName: "LLClipMultiTextInputViewController", bundle: nil)
 
@@ -38,6 +45,10 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         _tapGesture = UITapGestureRecognizer(target: self, action: #selector(LLClipMultiTextInputViewController.tapGesture(_:)))
         _tapGesture!.delegate = self
         _playView?.currentPageContentView.addGestureRecognizer(_tapGesture!)
+        
+        _longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(LLClipMultiTextInputViewController.longPressGesture(_:)))
+        _longPressGesture!.delegate = self
+        _playView?.currentPageContentView.addGestureRecognizer(_longPressGesture!)
     }
     
     /** ボタンの親になるビューを設定 */
@@ -71,7 +82,7 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         
         self.closeButton.setTitle(NSLocalizedString("026", comment: "") /* 完了 */, forState: .Normal)
         self.closeButton.setWhiteStyle()
-        self.insertButton.setTitle(NSLocalizedString("689", comment: "") /* 挿入 */, forState: .Normal)
+        self.insertButton.setTitle(NSLocalizedString("707", comment: "") /* 挿入 */, forState: .Normal)
         self.insertButton.setWhiteStyle()
     }
     
@@ -94,8 +105,11 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         (_textHandleViews as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
             obj.removeFromSuperview()
         }
-        if (nil != _tapGesture!.view) {
+        if nil != _tapGesture!.view {
             _tapGesture!.view!.removeGestureRecognizer(_tapGesture!)
+        }
+        if nil != _longPressGesture!.view {
+           _longPressGesture!.view!.removeGestureRecognizer(_longPressGesture!)
         }
     }
     
@@ -116,13 +130,7 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     @IBAction func insertButtonDidTap(sender: AnyObject) {
         //TODO:- 本当は既存のHTML文字列を読み込ませる
         let htmlString = "<!-- This is an HTML comment --><p>This is a test of the <strong>ZSSRichTextEditor</strong> by <a title=\"Zed Said\" href=\"http://www.zedsaid.com\">Zed Said Studio</a></p>"
-        weak var w = self
-        let textHandleView = LLTextHandleView(frame: CGRectMake(0, 0, 400, 200), type: .Normal, htmlString: htmlString, tapBlock: { (view) in
-            guard let s = w else { return }
-            s.organizeTextObjects(view)
-        }) { (view) in
-            view.enterEditMode()
-        }
+        let textHandleView = LLTextHandleView(frame: CGRectMake(0, 0, 400, 200), type: .Normal, htmlString: htmlString)
         textHandleView.viewDelegate = self
         _playView!.currentPageContentView.addSubview(textHandleView)
         textHandleView.center = CGPointMake(CGRectGetWidth(self.view.bounds) * 0.5, CGRectGetHeight(self.view.bounds) * 0.5)
@@ -138,18 +146,21 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     }
     
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
-        // テキストハンドルで、シングルタップを検出させないようにする
-        var receive = true
-        (_textHandleViews as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
-            if (!obj.isKindOfClass(LLTextHandleView)) { return }
-            let textHandleView = obj as! LLTextHandleView
-            let point = touch.locationInView(textHandleView)
-            if (CGRectContainsPoint(textHandleView.bounds, point)) {
-                receive = false
-                stop.initialize(true)
+        if _tapGesture == gestureRecognizer {
+            // テキストハンドル上で、シングルタップを検出しないようにする
+            var receive = true
+            (_textHandleViews as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
+                if (!obj.isKindOfClass(LLTextHandleView)) { return }
+                let textHandleView = obj as! LLTextHandleView
+                let point = touch.locationInView(textHandleView)
+                if (CGRectContainsPoint(textHandleView.bounds, point)) {
+                    receive = false
+                    stop.initialize(true)
+                }
             }
+            return receive
         }
-        return receive
+        return true
     }
     
     func tapGesture(sender: UIGestureRecognizer) {
@@ -160,13 +171,7 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         if !didEdit {
             // タップした位置にテキストボックスを配置する
             let location = sender.locationInView(_playView!.currentPageContentView)
-            weak var w = self
-            let textHandleView = LLTextHandleView(frame: CGRectMake(location.x, location.y, 80, 40), type: .Normal, htmlString: nil, tapBlock: { (view) in
-                guard let s = w else { return }
-                s.organizeTextObjects(view)
-            }) { (view) in
-                view.enterEditMode()
-            }
+            let textHandleView = LLTextHandleView(frame: CGRectMake(location.x, location.y, 80, 40), type: .Normal, htmlString: nil)
             textHandleView.viewDelegate = self
             _playView!.currentPageContentView.addSubview(textHandleView)
             _textHandleViews.append(textHandleView)
@@ -181,7 +186,7 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     }
     private func organizeTextObjects(movable: LLTextHandleView?, inout didEdit: Bool) {
         didEdit = false
-        // 種別を確認して、ノーマルの場合はハンドル自体を削除、タイトル / サブタイトルの場合はテキストがなくなったらプリセット文言を表示する
+        // 種別を確認して、ノーマルの場合はハンドル自体を削除する
         var removeTextHandleViews = [LLTextHandleView]()
         (_textHandleViews as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
             if (!obj.isKindOfClass(LLTextHandleView)) { return }
@@ -204,13 +209,61 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         }
     }
     
+    func longPressGesture(sender: UILongPressGestureRecognizer) {
+        if sender.state != .Began { return }
+        if nil == _copiedData { return }
+        // カット/コピー中のものがあればメニューを表示してペーストできるようにする
+        _locationWithLongPress = sender.locationInView(_playView!.currentPageContentView)
+        self.becomeFirstResponder()
+        let menuItemPaste = UIMenuItem(title: NSLocalizedString("710", comment: "") /* ペースト */, action: #selector(LLClipMultiTextInputViewController.menuPaste(_:)))
+        UIMenuController.sharedMenuController().menuItems = [menuItemPaste]
+        UIMenuController.sharedMenuController().setTargetRect(CGRectMake(_locationWithLongPress!.x, _locationWithLongPress!.y, 0, 0), inView: _playView!.currentPageContentView)
+        UIMenuController.sharedMenuController().setMenuVisible(true, animated: true)
+    }
+    
+    override func canBecomeFirstResponder() -> Bool {
+        return true
+    }
+    
+    override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
+        if (action == #selector(LLClipMultiTextInputViewController.menuPaste(_:))) {
+            return true
+        }
+        return false
+    }
+
+    func menuPaste(sender: AnyObject) {
+        let textHandleView = LLTextHandleView.textHandleView(_copiedData)
+        if nil == textHandleView || nil == _locationWithLongPress { return }
+        textHandleView!.frame = CGRectMake(_locationWithLongPress!.x, _locationWithLongPress!.y, CGRectGetWidth(textHandleView!.frame), CGRectGetHeight(textHandleView!.frame))
+        textHandleView!.viewDelegate = self
+        _playView!.currentPageContentView.addSubview(textHandleView!)
+        _textHandleViews.append(textHandleView!)
+        organizeTextObjects(textHandleView!)
+        textHandleView!.enterEditMode()
+    }
+    
     //MARK:- LLTextHandleViewDelegate
+    func textHandleViewTap(textHandleView: LLTextHandleView, tapCount: Int) {
+        if (!_textHandleViews.contains(textHandleView)) { return }
+        if 1 == tapCount {
+            self.organizeTextObjects(textHandleView)
+        }
+        else if 2 == tapCount {
+            textHandleView.enterEditMode()
+        }
+    }
+    
     func textHandleViewMenuCut(textHandleView: LLTextHandleView) {
-        NSLog("\(self.className + "." + #function)")
+        if (!_textHandleViews.contains(textHandleView)) { return }
+        _copiedData = textHandleView.serialize((UIApplication.sharedApplication().delegate?.window)!)
+        textHandleView.removeFromSuperview()
+        _textHandleViews.removeAtIndex(_textHandleViews.indexOf(textHandleView)!)
     }
     
     func textHandleViewMenuCopy(textHandleView: LLTextHandleView) {
-        NSLog("\(self.className + "." + #function)")
+        if (!_textHandleViews.contains(textHandleView)) { return }
+        _copiedData = textHandleView.serialize((UIApplication.sharedApplication().delegate?.window)!)
     }
     
     func textHandleViewMenuDelete(textHandleView: LLTextHandleView) {
