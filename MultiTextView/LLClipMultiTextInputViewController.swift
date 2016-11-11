@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerDelegate {
+class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerDelegate, LLTextHandleViewDelegate {
 
     @IBOutlet weak var closeButton: LLBorderedButton!
     @IBOutlet weak var backgroundColorButton: UIButton!
@@ -123,6 +123,7 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         }) { (view) in
             view.enterEditMode()
         }
+        textHandleView.viewDelegate = self
         _playView!.currentPageContentView.addSubview(textHandleView)
         textHandleView.center = CGPointMake(CGRectGetWidth(self.view.bounds) * 0.5, CGRectGetHeight(self.view.bounds) * 0.5)
         _textHandleViews.append(textHandleView)
@@ -166,6 +167,7 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
             }) { (view) in
                 view.enterEditMode()
             }
+            textHandleView.viewDelegate = self
             _playView!.currentPageContentView.addSubview(textHandleView)
             _textHandleViews.append(textHandleView)
             textHandleView.enterEditMode()
@@ -200,5 +202,20 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         (removeTextHandleViews as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
             self._textHandleViews.removeAtIndex(self._textHandleViews.indexOf(obj as! LLTextHandleView)!)
         }
+    }
+    
+    //MARK:- LLTextHandleViewDelegate
+    func textHandleViewMenuCut(textHandleView: LLTextHandleView) {
+        NSLog("\(self.className + "." + #function)")
+    }
+    
+    func textHandleViewMenuCopy(textHandleView: LLTextHandleView) {
+        NSLog("\(self.className + "." + #function)")
+    }
+    
+    func textHandleViewMenuDelete(textHandleView: LLTextHandleView) {
+        if (!_textHandleViews.contains(textHandleView)) { return }
+        textHandleView.removeFromSuperview()
+        _textHandleViews.removeAtIndex(_textHandleViews.indexOf(textHandleView)!)
     }
 }

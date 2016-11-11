@@ -87,6 +87,18 @@ private class LLSizeChangerView: UIView {
     case SubTitle
 }
 
+/** プロトコル */
+@objc protocol LLTextHandleViewDelegate {
+    /** メニュー：カット */
+    optional func textHandleViewMenuCut(textHandleView: LLTextHandleView)
+    /** メニュー：コピー */
+    optional func textHandleViewMenuCopy(textHandleView: LLTextHandleView)
+    /** メニュー：削除 */
+    optional func textHandleViewMenuDelete(textHandleView: LLTextHandleView)
+    /** メニュー：編集 */
+    optional func textHandleViewMenuEditText(textHandleView: LLTextHandleView)
+}
+
 /** テキストのハンドル */
 class LLTextHandleView: ZSSRichTextViewer {
 
@@ -158,7 +170,10 @@ class LLTextHandleView: ZSSRichTextViewer {
     private var _doubleTapBlock: ((view: LLTextHandleView) -> ())?
     
     private var _richTextEditor: ZSSRichTextEditor?
-
+    
+    /** デリゲート */
+    weak var viewDelegate: LLTextHandleViewDelegate?
+    
     init(frame: CGRect, type: LLTextHandleViewType, htmlString: String?, tapBlock: ((view: LLTextHandleView) -> ())?, doubleTapBlock: ((view: LLTextHandleView) -> ())?) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.clearColor()
@@ -545,19 +560,20 @@ class LLTextHandleView: ZSSRichTextViewer {
     }
     
     func menuCut(sender: AnyObject) {
-        NSLog("\(self.className + "." + #function)")
+        viewDelegate?.textHandleViewMenuCut!(self)
     }
     
     func menuCopy(sender: AnyObject) {
-        NSLog("\(self.className + "." + #function)")
+        viewDelegate?.textHandleViewMenuCopy!(self)
     }
     
     func menuDelete(sender: AnyObject) {
-        NSLog("\(self.className + "." + #function)")
+        viewDelegate?.textHandleViewMenuDelete!(self)
     }
     
     func menuEditText(sender: AnyObject) {
         self.enterEditMode()
+        viewDelegate?.textHandleViewMenuEditText!(self)
     }
     
     /** メニューを消す */
