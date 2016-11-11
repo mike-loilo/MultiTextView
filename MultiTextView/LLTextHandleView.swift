@@ -548,7 +548,7 @@ class LLTextHandleView: ZSSRichTextViewer {
         return ["origin": ["x": (CGRectGetMinX(frame)), "y": (CGRectGetMinY(frame))],
         "size": ["width": (CGRectGetWidth(frame)), "height": (CGRectGetHeight(frame))],
         "type": (_type.rawValue),
-        "text": self.stringByEvaluatingJavaScriptFromString("document.body.innerHTML")!]
+        "text": nil != _htmlString ? _htmlString! : NSNull()]
     }
     
     /** デシリアライズしてオブジェクトを返す */
@@ -556,7 +556,6 @@ class LLTextHandleView: ZSSRichTextViewer {
         func nn(obj: AnyObject?) -> AnyObject? { return true == obj?.isKindOfClass(NSNull) ? nil : obj }
         func toFloat(obj: AnyObject?) -> Float { return nil == nn(obj) ? 0 : nn(obj)!.floatValue }
         func toInt(obj: AnyObject?) -> Int { return nil == nn(obj) ? 0 : nn(obj)!.integerValue }
-        //TODO:- 不正なデータが入っていたときの検証をやっておくこと！
         let origin = nn(serialized["origin"]) as? NSDictionary
         let x = CGFloat(toFloat(origin?["x"]))
         let y = CGFloat(toFloat(origin?["y"]))

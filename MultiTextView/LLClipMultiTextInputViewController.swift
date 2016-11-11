@@ -234,7 +234,12 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
 
     func menuPaste(sender: AnyObject) {
         let textHandleView = LLTextHandleView.textHandleView(_copiedData)
-        if nil == textHandleView || nil == _locationWithLongPress { return }
+        if nil == textHandleView || nil == _locationWithLongPress {
+            // 万が一、不正なデータを含んでいてデシリアライズできない場合はデータ自体を破棄しておく
+            _copiedData = nil
+            _locationWithLongPress = nil
+            return
+        }
         textHandleView!.frame = CGRectMake(_locationWithLongPress!.x, _locationWithLongPress!.y, CGRectGetWidth(textHandleView!.frame), CGRectGetHeight(textHandleView!.frame))
         textHandleView!.viewDelegate = self
         _playView!.currentPageContentView.addSubview(textHandleView!)
