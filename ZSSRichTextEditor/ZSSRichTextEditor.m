@@ -18,74 +18,6 @@
 @import JavaScriptCore;
 
 
-/**
- 
- UIWebView modifications for hiding the inputAccessoryView
- 
- **/
-@interface UIWebView (HackishAccessoryHiding)
-@property (nonatomic, assign) BOOL hidesInputAccessoryView;
-@end
-
-@implementation UIWebView (HackishAccessoryHiding)
-
-static const char * const hackishFixClassName = "UIWebBrowserViewMinusAccessoryView";
-static Class hackishFixClass = Nil;
-
-- (UIView *)hackishlyFoundBrowserView {
-    UIScrollView *scrollView = self.scrollView;
-    
-    UIView *browserView = nil;
-    for (UIView *subview in scrollView.subviews) {
-        if ([NSStringFromClass([subview class]) hasPrefix:@"UIWebBrowserView"]) {
-            browserView = subview;
-            break;
-        }
-    }
-    return browserView;
-}
-
-- (id)methodReturningNil {
-    return nil;
-}
-
-- (void)ensureHackishSubclassExistsOfBrowserViewClass:(Class)browserViewClass {
-    if (!hackishFixClass) {
-        Class newClass = objc_allocateClassPair(browserViewClass, hackishFixClassName, 0);
-        newClass = objc_allocateClassPair(browserViewClass, hackishFixClassName, 0);
-        IMP nilImp = [self methodForSelector:@selector(methodReturningNil)];
-        class_addMethod(newClass, @selector(inputAccessoryView), nilImp, "@@:");
-        objc_registerClassPair(newClass);
-        
-        hackishFixClass = newClass;
-    }
-}
-
-- (BOOL) hidesInputAccessoryView {
-    UIView *browserView = [self hackishlyFoundBrowserView];
-    return [browserView class] == hackishFixClass;
-}
-
-- (void) setHidesInputAccessoryView:(BOOL)value {
-    UIView *browserView = [self hackishlyFoundBrowserView];
-    if (browserView == nil) {
-        return;
-    }
-    [self ensureHackishSubclassExistsOfBrowserViewClass:[browserView class]];
-    
-    if (value) {
-        object_setClass(browserView, hackishFixClass);
-    }
-    else {
-        Class normalClass = objc_getClass("UIWebBrowserView");
-        object_setClass(browserView, normalClass);
-    }
-    [browserView reloadInputViews];
-}
-
-@end
-
-
 @interface ZSSRichTextEditor ()
 
 /*
@@ -358,7 +290,6 @@ static CGFloat kDefaultScale = 0.5;
     
     self.editorView = [[UIWebView alloc] initWithFrame:frame];
     self.editorView.delegate = self;
-    self.editorView.hidesInputAccessoryView = YES;
     self.editorView.keyboardDisplayRequiresUserAction = NO;
     self.editorView.scalesPageToFit = YES;
     self.editorView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
@@ -2048,7 +1979,7 @@ static CGFloat kDefaultScale = 0.5;
     // Correct Curve
     UIViewAnimationOptions animationOptions = curve << 16;
     
-    const int extraHeight = 10;
+//    const int extraHeight = 10;
     
     if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
         
@@ -2249,24 +2180,20 @@ static CGFloat kDefaultScale = 0.5;
 
 #pragma mark - Custom ZSSRichTextViewer
 
-@interface ZSSRichTextViewer() <UIWebViewDelegate>
+@interface ZSSRichTextViewer() <WKNavigationDelegate>
 @end
 @implementation ZSSRichTextViewer {
     NSString *_internalHTML;
     BOOL _editorLoaded;
 }
-- (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
+- (instancetype)initWithFrame:(CGRect)frame configuration:(nonnull WKWebViewConfiguration *)configuration {
+    self = [super initWithFrame:frame configuration:configuration];
     
     _internalHTML = nil;
     _editorLoaded = NO;
     
-    self.delegate = self;
-    self.hidesInputAccessoryView = YES;
-    self.keyboardDisplayRequiresUserAction = NO;
-    self.scalesPageToFit = YES;
+    self.navigationDelegate = self;
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-    self.dataDetectorTypes = UIDataDetectorTypeNone;
     self.scrollView.bounces = NO;
     self.scrollView.contentInset = UIEdgeInsetsZero;
     self.scrollView.scrollIndicatorInsets = UIEdgeInsetsZero;
@@ -2280,11 +2207,10 @@ static CGFloat kDefaultScale = 0.5;
         [self updateHTML];
     }
 }
-
 - (void)updateHTML {
-    [self stringByEvaluatingJavaScriptFromString:[ZSSRichTextEditor javaScriptForResourceLoadedFromSetHTML:_internalHTML]];
+    [self evaluateJavaScript:[ZSSRichTextEditor javaScriptForResourceLoadedFromSetHTML:_internalHTML] completionHandler:NULL];
 }
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
     _editorLoaded = YES;
     if (!_internalHTML) {
         _internalHTML = @"";

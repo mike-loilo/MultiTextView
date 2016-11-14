@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <WebKit/WebKit.h>
 #import "ZSSFontsViewController.h"
 
 /**
@@ -235,6 +236,6 @@ static NSString * const ZSSRichTextEditorToolbarFontSize = @"com.zedsaid.toolbar
 #pragma mark - Custom ZSSRichTextViewer
 
 /** ZSSRichTextEditor.editorViewのHTML読込、表示部分だけを抽出したビュー */
-@interface ZSSRichTextViewer : UIWebView
+@interface ZSSRichTextViewer : WKWebView
 - (void)setHTML:(NSString *)html;
 @end

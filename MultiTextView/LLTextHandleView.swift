@@ -173,7 +173,7 @@ class LLTextHandleView: ZSSRichTextViewer {
     weak var viewDelegate: LLTextHandleViewDelegate?
     
     init(frame: CGRect, type: LLTextHandleViewType, htmlString: String?) {
-        super.init(frame: frame)
+        super.init(frame: frame, configuration:WKWebViewConfiguration())
         self.backgroundColor = UIColor.clearColor()
         self.opaque = false
         self.scrollView.showsVerticalScrollIndicator = false
@@ -325,10 +325,6 @@ class LLTextHandleView: ZSSRichTextViewer {
         
         self.movable = true
         self.hiddenBorder = !self.movable
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     private var className: String {
@@ -520,20 +516,20 @@ class LLTextHandleView: ZSSRichTextViewer {
     }
     
     func menuCut(sender: AnyObject) {
-        viewDelegate?.textHandleViewMenuCut!(self)
+        viewDelegate?.textHandleViewMenuCut?(self)
     }
     
     func menuCopy(sender: AnyObject) {
-        viewDelegate?.textHandleViewMenuCopy!(self)
+        viewDelegate?.textHandleViewMenuCopy?(self)
     }
     
     func menuDelete(sender: AnyObject) {
-        viewDelegate?.textHandleViewMenuDelete!(self)
+        viewDelegate?.textHandleViewMenuDelete?(self)
     }
     
     func menuEditText(sender: AnyObject) {
         self.enterEditMode()
-        viewDelegate?.textHandleViewMenuEditText!(self)
+        viewDelegate?.textHandleViewMenuEditText?(self)
     }
     
     /** メニューを消す */
