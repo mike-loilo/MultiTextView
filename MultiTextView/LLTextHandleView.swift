@@ -98,10 +98,14 @@ private class LLSizeChangerView: UIView {
     optional func textHandleViewMenuDelete(textHandleView: LLTextHandleView)
     /** メニュー：編集 */
     optional func textHandleViewMenuEditText(textHandleView: LLTextHandleView)
+    /** テキスト編集状態の変化 */
+    optional func textHandleViewDidChangeStatus(textHandleView: LLTextHandleView, isEditing: Bool)
+    /** テキストの変化 */
+    optional func textHandleViewDidChangeText(textHandleView: LLTextHandleView, text: String?, html: String?)
 }
 
 /** テキストのハンドル */
-class LLTextHandleView: ZSSRichTextViewer {
+class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
 
     /** 種別（ノーマルの場合はハンドル自体を削除、タイトル / サブタイトルの場合はテキストがなくなったらプリセット文言を表示する） */
     private var _type: LLTextHandleViewType = .Normal
@@ -440,11 +444,10 @@ class LLTextHandleView: ZSSRichTextViewer {
         _richTextEditor!.view.autoresizingMask = [.FlexibleLeftMargin, .FlexibleWidth, .FlexibleRightMargin, .FlexibleTopMargin, .FlexibleHeight, .FlexibleBottomMargin];
         _richTextEditor!.view.frame = self.bounds
         self.addSubview(_richTextEditor!.view)
-//        findViewControllerInResponderChain(self).addChildViewController(_richTextEditor!)
         _richTextEditor!.parentViewForToolbar = self.superview!
         _richTextEditor!.viewWithKeyboard = self
         _richTextEditor!.alwaysShowToolbar = false
-        _richTextEditor!.receiveEditorDidChangeEvents = false
+        _richTextEditor!.receiver = self
         _richTextEditor!.enabledToolbarItems = [ZSSRichTextEditorToolbarBold,
                                                 ZSSRichTextEditorToolbarFonts,
                                                 ZSSRichTextEditorToolbarFontSize,
@@ -462,6 +465,8 @@ class LLTextHandleView: ZSSRichTextViewer {
         // 最前面に持ってくる
         _zIndex = self.superview!.subviews.indexOf(self)
         self.superview!.bringSubviewToFront(self)
+        
+        viewDelegate?.textHandleViewDidChangeStatus?(self, isEditing: true)
     }
     
     var isEditingText: Bool { return nil != _richTextEditor }
@@ -487,6 +492,8 @@ class LLTextHandleView: ZSSRichTextViewer {
             self.superview!.insertSubview(self, atIndex: _zIndex!)
             _zIndex = nil
         }
+        
+        viewDelegate?.textHandleViewDidChangeStatus?(self, isEditing: false)
     }
     
     /** メニューを表示する */
@@ -564,5 +571,12 @@ class LLTextHandleView: ZSSRichTextViewer {
             return nil
         }
         return LLTextHandleView(frame: CGRectMake(x, y, width, height), type: type!, htmlString: text)
+    }
+    
+    //MARK:- ZSSRichTextEditorDelegate
+    func richTextEditor(editor: ZSSRichTextEditor, didChangeWith text: String?, html: String?) {
+        if editor == _richTextEditor {
+            viewDelegate?.textHandleViewDidChangeText?(self, text: text, html: html)
+        }
     }
 }

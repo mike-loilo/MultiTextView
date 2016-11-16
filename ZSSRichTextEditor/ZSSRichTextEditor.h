@@ -53,6 +53,15 @@ static NSString * const ZSSRichTextEditorToolbarFontSize = @"com.zedsaid.toolbar
 
 @class ZSSBarButtonItem;
 
+#pragma mark - Custom
+
+/** テキストの変化を受け付けるプロトコル */
+@class ZSSRichTextEditor;
+@protocol ZSSRichTextEditorDelegate <NSObject>
+@optional
+- (void)richTextEditor:(ZSSRichTextEditor *)editor didChangeWith:(NSString *)text html:(NSString *)html;
+@end
+
 /**
  *  The viewController used with ZSSRichTextEditor
  */
@@ -229,6 +238,8 @@ static NSString * const ZSSRichTextEditorToolbarFontSize = @"com.zedsaid.toolbar
 @property (nonatomic, weak) UIView *parentViewForToolbar;
 /** キーボードに連動して動かすビュー(nilの場合はself.view) */
 @property (nonatomic, weak) UIView *viewWithKeyboard;
+/** テキストの変化を受け付けるデリゲート */
+@property (nonatomic, weak) id<ZSSRichTextEditorDelegate> receiver;
 
 @end
 

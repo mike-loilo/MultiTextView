@@ -1841,7 +1841,10 @@ static CGFloat kDefaultScale = 0.5;
 - (void)editorDidScrollWithPosition:(NSInteger)position {}
 
 //Blank implementation
-- (void)editorDidChangeWithText:(NSString *)text andHTML:(NSString *)html  {}
+- (void)editorDidChangeWithText:(NSString *)text andHTML:(NSString *)html {
+    if ([_receiver respondsToSelector:@selector(richTextEditor:didChangeWith:html:)])
+        [_receiver richTextEditor:self didChangeWith:text html:html];
+}
 
 //Blank implementation
 - (void)hashtagRecognizedWithWord:(NSString *)word {}
@@ -2174,6 +2177,11 @@ static CGFloat kDefaultScale = 0.5;
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
     _popoverController.delegate = nil;
+}
+
+- (void)setReceiver:(id<ZSSRichTextEditorDelegate>)receiver {
+    _receiver = receiver;
+    _receiveEditorDidChangeEvents = _receiver;
 }
 
 @end
