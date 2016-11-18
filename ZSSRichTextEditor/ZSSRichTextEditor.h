@@ -59,7 +59,7 @@ static NSString * const ZSSRichTextEditorToolbarFontSize = @"com.zedsaid.toolbar
 @class ZSSRichTextEditor;
 @protocol ZSSRichTextEditorDelegate <NSObject>
 @optional
-- (void)richTextEditor:(ZSSRichTextEditor *)editor didChangeWith:(NSString *)text html:(NSString *)html;
+- (void)richTextEditor:(ZSSRichTextEditor *)editor didChangeWith:(NSString *)text html:(NSString *)html caretRect:(CGRect)caretRect;
 @end
 
 /**

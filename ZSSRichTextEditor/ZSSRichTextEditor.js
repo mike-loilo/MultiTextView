@@ -696,4 +696,73 @@ zss_editor.blurEditor = function() {
     $('#zss_editor_content').blur();
 }
 
+zss_editor.getSelectionCoords = function() {
+    var sel = document.selection, range, rect;
+    var x = 0, y = 0, w = 0, h = 0;
+    if (sel) {
+        if (sel.type != "Control") {
+            range = sel.createRange();
+            range.collapse(true);
+            x = range.boundingLeft;
+            y = range.boundingTop;
+            w = range.boundingWidth;
+            h = range.boundingHeight;
+        }
+    } else if (window.getSelection) {
+        sel = window.getSelection();
+        if (sel.rangeCount) {
+            range = sel.getRangeAt(0).cloneRange();
+            if (range.getClientRects) {
+                range.collapse(true);
+                if (range.getClientRects().length>0){
+                    rect = range.getClientRects()[0];
+                    x = rect.left;
+                    y = rect.top;
+                    w = rect.width;
+                    h = rect.height;
+                }
+            }
+            // Fall back to inserting a temporary element
+            if (x == 0 && y == 0) {
+                var span = document.createElement("span");
+                if (span.getClientRects) {
+                    // Ensure span has dimensions and position by
+                    // adding a zero-width space character
+                    span.appendChild( document.createTextNode("\u200b") );
+                    range.insertNode(span);
+                    rect = span.getClientRects()[0];
+                    x = rect.left;
+                    y = rect.top;
+                    w = rect.width;
+                    h = rect.height;
+                    var spanParent = span.parentNode;
+                    spanParent.removeChild(span);
+                    
+                    // Glue any broken text nodes back together
+                    spanParent.normalize();
+                }
+            }
+        }
+    }
+    return "{{" + x + ", " + y + "}, {" + w + ", " + h + "}}";
+}
+
+/** Xcode側でもログ出力させるためのメソッド */
+window.log = function(msg) {
+    
+    // まずは通常通りのログ出力を行う。
+    console.log(msg);
+    
+    var iframe = document.createElement("IFRAME");
+    iframe.setAttribute("src", "ios-log:#iOS#" + msg);
+    document.documentElement.appendChild(iframe);
+    iframe.parentNode.removeChild(iframe);
+    iframe = null;
+}
+
+/** エラーログをXcode側で出力 */
+window.onerror = function(errMsg, url, lineNumber) {
+    window.log(errMsg + ", file=" + url + ":" + lineNumber);
+}
+
 //end

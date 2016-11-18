@@ -101,7 +101,7 @@ private class LLSizeChangerView: UIView {
     /** テキスト編集状態の変化 */
     optional func textHandleViewDidChangeStatus(textHandleView: LLTextHandleView, isEditing: Bool)
     /** テキストの変化 */
-    optional func textHandleViewDidChangeText(textHandleView: LLTextHandleView, text: String?, html: String?)
+    func textHandleViewDidChangeText(textHandleView: LLTextHandleView, text: String?, html: String?, caretRect: CGRect)
 }
 
 /** テキストのハンドル */
@@ -574,9 +574,9 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
     }
     
     //MARK:- ZSSRichTextEditorDelegate
-    func richTextEditor(editor: ZSSRichTextEditor, didChangeWith text: String?, html: String?) {
+    func richTextEditor(editor: ZSSRichTextEditor, didChangeWith text: String?, html: String?, caretRect: CGRect) {
         if editor == _richTextEditor {
-            viewDelegate?.textHandleViewDidChangeText?(self, text: text, html: html)
+            viewDelegate?.textHandleViewDidChangeText(self, text: text, html: html, caretRect: caretRect)
         }
     }
 }

@@ -1717,6 +1717,18 @@ static CGFloat kDefaultScale = 0.5;
         [self editorDidScrollWithPosition:position];
         
     }
+
+    // リクエストに「ios-log:#iOS#」が含まれる場合には、リクエストをキャッチする。
+    if ([urlString hasPrefix:@"ios-log:"]) {
+        
+        // リクエスト内容から、ログ内容を取得する。
+        // 文字列はパーセントエスケープされているので、デコードする。
+        NSString *const iOSLog = [[urlString stringByReplacingOccurrencesOfString:@"ios-log:"withString:@""] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSLog(@"%@", iOSLog);
+        
+        // このリクエストは、ここで中断する。
+        return NO;
+    }    
     
     return YES;
     
@@ -1842,8 +1854,8 @@ static CGFloat kDefaultScale = 0.5;
 
 //Blank implementation
 - (void)editorDidChangeWithText:(NSString *)text andHTML:(NSString *)html {
-    if ([_receiver respondsToSelector:@selector(richTextEditor:didChangeWith:html:)])
-        [_receiver richTextEditor:self didChangeWith:text html:html];
+    if ([_receiver respondsToSelector:@selector(richTextEditor:didChangeWith:html:caretRect:)])
+        [_receiver richTextEditor:self didChangeWith:text html:html caretRect:CGRectFromString(self.getSelectionCoords)];
 }
 
 //Blank implementation
@@ -2182,6 +2194,11 @@ static CGFloat kDefaultScale = 0.5;
 - (void)setReceiver:(id<ZSSRichTextEditorDelegate>)receiver {
     _receiver = receiver;
     _receiveEditorDidChangeEvents = _receiver;
+}
+
+- (NSString *)getSelectionCoords {
+    NSString *js = [NSString stringWithFormat:@"zss_editor.getSelectionCoords();"];
+    return [self.editorView stringByEvaluatingJavaScriptFromString:js];
 }
 
 @end
