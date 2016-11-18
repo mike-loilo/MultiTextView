@@ -276,4 +276,8 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         textHandleView.removeFromSuperview()
         _textHandleViews.removeAtIndex(_textHandleViews.indexOf(textHandleView)!)
     }
+    
+    func textHandleViewDidChangeText(textHandleView: LLTextHandleView, text: String?, html: String?, caretRect: CGRect) {
+        if (!_textHandleViews.contains(textHandleView)) { return }
+    }
 }
