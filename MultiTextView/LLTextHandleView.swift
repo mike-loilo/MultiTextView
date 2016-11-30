@@ -102,6 +102,8 @@ private class LLSizeChangerView: UIView {
     optional func textHandleViewDidChangeStatus(textHandleView: LLTextHandleView, isEditing: Bool)
     /** テキストの変化 */
     func textHandleViewDidChangeText(textHandleView: LLTextHandleView, text: String?, html: String?, caretRect: CGRect)
+    /** コンテントサイズの変化 */
+    func textHandleViewDidChangeContentSize(textHandleView: LLTextHandleView, contentSize: CGSize)
 }
 
 /** テキストのハンドル */
@@ -444,7 +446,12 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
         _richTextEditor!.view.autoresizingMask = [.FlexibleLeftMargin, .FlexibleWidth, .FlexibleRightMargin, .FlexibleTopMargin, .FlexibleHeight, .FlexibleBottomMargin];
         _richTextEditor!.view.frame = self.bounds
         self.addSubview(_richTextEditor!.view)
-        _richTextEditor!.parentViewForToolbar = self.superview!
+        // ツールバーは最前面に配置しておく
+        var topController = UIApplication.sharedApplication().keyWindow?.rootViewController
+        while nil != topController?.presentedViewController {
+            topController = topController?.presentedViewController
+        }
+        _richTextEditor!.parentViewForToolbar = topController?.view
         _richTextEditor!.viewWithKeyboard = self
         _richTextEditor!.alwaysShowToolbar = false
         _richTextEditor!.receiver = self
@@ -470,6 +477,9 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
     }
     
     var isEditingText: Bool { return nil != _richTextEditor }
+    
+    /** ツールバー */
+    var toolbar: UIView? { return _richTextEditor?.toolbarHolder }
     
     /** 編集状態を抜ける */
     func leaveEditMode() {
@@ -577,6 +587,12 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
     func richTextEditor(editor: ZSSRichTextEditor, didChangeWith text: String?, html: String?, caretRect: CGRect) {
         if editor == _richTextEditor {
             viewDelegate?.textHandleViewDidChangeText(self, text: text, html: html, caretRect: caretRect)
+        }
+    }
+
+    func richTextEditor(editor: ZSSRichTextEditor!, didChangeContentSize contentSize: CGSize) {
+        if editor == _richTextEditor {
+            viewDelegate?.textHandleViewDidChangeContentSize(self, contentSize: contentSize)
         }
     }
 }

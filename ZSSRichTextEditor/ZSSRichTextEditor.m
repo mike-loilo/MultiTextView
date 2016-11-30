@@ -31,11 +31,6 @@
 @property (nonatomic, strong) UIToolbar *toolbar;
 
 /*
- *  Holder for all of the toolbar components
- */
-@property (nonatomic, strong) UIView *toolbarHolder;
-
-/*
  *  String for the HTML
  */
 @property (nonatomic, strong) NSString *htmlString;
@@ -299,6 +294,8 @@ static CGFloat kDefaultScale = 0.5;
     self.editorView.opaque = NO;
     [self.view addSubview:self.editorView];
     
+    [self.editorView.scrollView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:NULL];
+    
 }
 
 - (void)setUpImagePicker {
@@ -336,7 +333,7 @@ static CGFloat kDefaultScale = 0.5;
     backgroundToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     
     //Parent holding view
-    self.toolbarHolder = [[UIView alloc] init];
+    _toolbarHolder = [[UIView alloc] init];
     
     CGSize const parentSize = _parentViewForToolbar ? _parentViewForToolbar.bounds.size : self.view.bounds.size;
     if (_alwaysShowToolbar) {
@@ -2024,7 +2021,11 @@ static CGFloat kDefaultScale = 0.5;
 
             
             
-        } completion:nil];
+        } completion:^(BOOL finished) {
+            // キーボードが表示された後、テキストボックスを見える位置に移動させて欲しいので、キャレット位置を伝えておく
+            if ([_receiver respondsToSelector:@selector(richTextEditor:didChangeWith:html:caretRect:)])
+                [_receiver richTextEditor:self didChangeWith:self.getText html:self.getHTML caretRect:CGRectFromString(self.getSelectionCoords)];
+        }];
         
     } else {
         
@@ -2153,6 +2154,7 @@ static CGFloat kDefaultScale = 0.5;
 
 - (void)dealloc {
     [self.toolbarHolder removeFromSuperview];
+    [self.editorView.scrollView removeObserver:self forKeyPath:@"contentSize"];
 }
 
 /** WebView用のリソースHTMLString */
@@ -2199,6 +2201,17 @@ static CGFloat kDefaultScale = 0.5;
 - (NSString *)getSelectionCoords {
     NSString *js = [NSString stringWithFormat:@"zss_editor.getSelectionCoords();"];
     return [self.editorView stringByEvaluatingJavaScriptFromString:js];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"contentSize"]) {
+        if ([object isEqual:self.editorView.scrollView]) {
+            [self.editorView.scrollView removeObserver:self forKeyPath:@"contentSize"];
+            if ([_receiver respondsToSelector:@selector(richTextEditor:didChangeContentSize:)])
+                [_receiver richTextEditor:self didChangeContentSize:self.editorView.scrollView.contentSize];
+            [self.editorView.scrollView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:NULL];
+        }
+    }
 }
 
 @end

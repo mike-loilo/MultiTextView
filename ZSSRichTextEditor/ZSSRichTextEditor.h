@@ -60,6 +60,7 @@ static NSString * const ZSSRichTextEditorToolbarFontSize = @"com.zedsaid.toolbar
 @protocol ZSSRichTextEditorDelegate <NSObject>
 @optional
 - (void)richTextEditor:(ZSSRichTextEditor *)editor didChangeWith:(NSString *)text html:(NSString *)html caretRect:(CGRect)caretRect;
+- (void)richTextEditor:(ZSSRichTextEditor *)editor didChangeContentSize:(CGSize)contentSize;
 @end
 
 /**
@@ -240,6 +241,10 @@ static NSString * const ZSSRichTextEditorToolbarFontSize = @"com.zedsaid.toolbar
 @property (nonatomic, weak) UIView *viewWithKeyboard;
 /** テキストの変化を受け付けるデリゲート */
 @property (nonatomic, weak) id<ZSSRichTextEditorDelegate> receiver;
+/*
+ *  Holder for all of the toolbar components
+ */
+@property (nonatomic, readonly) UIView *toolbarHolder;
 
 @end
 

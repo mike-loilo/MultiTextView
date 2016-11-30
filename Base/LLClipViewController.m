@@ -108,6 +108,7 @@
 {
     [self setupTextInputViewController];
     
+    _playView.scrollEnabled = NO;
     [self dismissControllerAnimated:animated option:LLDismissControllerOptionAll completion:^{
         _multiTextInputViewController.controllerParent = self.view;
         [_multiTextInputViewController.view.superview insertSubview:_multiTextInputViewController.view atIndex:0];
@@ -119,6 +120,7 @@
 /** テキスト入力ビューの非表示 */
 - (void)dismissTextInputViewController
 {
+    _playView.scrollEnabled = YES;
     [_multiTextInputViewController.view removeFromSuperview];
     [_multiTextInputViewController removeFromParentViewController];
     _multiTextInputViewController = nil;

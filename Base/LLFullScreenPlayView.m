@@ -92,9 +92,13 @@
     | UIViewAutoresizingFlexibleHeight
     | UIViewAutoresizingFlexibleBottomMargin;
     [self addSubview:_preview];
+    self.contentSize = frame.size;
     return self;
 }
 - (UIView *)currentPageContentView {
     return _preview;
+}
+- (void)setScrollEnabled:(BOOL)scrollEnabled {
+    _preview.scroll.userInteractionEnabled = super.scrollEnabled = scrollEnabled;
 }
 @end

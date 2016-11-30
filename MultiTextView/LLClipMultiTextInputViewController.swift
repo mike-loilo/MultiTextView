@@ -44,11 +44,11 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         
         _tapGesture = UITapGestureRecognizer(target: self, action: #selector(LLClipMultiTextInputViewController.tapGesture(_:)))
         _tapGesture!.delegate = self
-        _playView?.currentPageContentView.addGestureRecognizer(_tapGesture!)
+        _playView!.currentPageContentView.addGestureRecognizer(_tapGesture!)
         
         _longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(LLClipMultiTextInputViewController.longPressGesture(_:)))
         _longPressGesture!.delegate = self
-        _playView?.currentPageContentView.addGestureRecognizer(_longPressGesture!)
+        _playView!.currentPageContentView.addGestureRecognizer(_longPressGesture!)
     }
     
     /** ボタンの親になるビューを設定 */
@@ -195,6 +195,12 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
             textHandleView.hiddenBorder = !textHandleView.movable
             if (textHandleView.isEditingText) {
                 textHandleView.leaveEditMode()
+                // スクロールしている場合があるため元に戻す
+                var frame = self._playView!.currentPageContentView.frame
+                frame.origin.y = 0
+                UIView.animateWithDuration(0.1, animations: {
+                    self._playView!.currentPageContentView.frame = frame
+                })
                 didEdit = true
             }
             if (!textHandleView.movable && textHandleView.type == .Normal) {
@@ -277,7 +283,30 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         _textHandleViews.removeAtIndex(_textHandleViews.indexOf(textHandleView)!)
     }
     
+    func textHandleViewDidChangeStatus(textHandleView: LLTextHandleView, isEditing: Bool) {
+        if (!_textHandleViews.contains(textHandleView)) { return }
+    }
+    
     func textHandleViewDidChangeText(textHandleView: LLTextHandleView, text: String?, html: String?, caretRect: CGRect) {
         if (!_textHandleViews.contains(textHandleView)) { return }
+        // 該当するhtmlHandleViewがキーボードを除く部分に見えるようにスクロールする
+        let rect = textHandleView.convertRect(caretRect, toView: _playView!.currentPageContentView)
+        let toolbarRect = textHandleView.toolbar!.convertRect(textHandleView.toolbar!.bounds, toView: _playView!.currentPageContentView)
+        if CGRectGetMinY(toolbarRect) < CGRectGetMaxY(rect) {
+            var frame = _playView!.currentPageContentView.frame
+            frame.origin.y -= CGRectGetMaxY(rect) - CGRectGetMinY(toolbarRect)
+            UIView.animateWithDuration(0.2, animations: {
+                self._playView!.currentPageContentView.frame = frame
+            })
+        }
+    }
+    
+    func textHandleViewDidChangeContentSize(textHandleView: LLTextHandleView, contentSize: CGSize) {
+        if (!_textHandleViews.contains(textHandleView)) { return }
+        // コンテントサイズが大きくなったら、それに合わせて大きくする
+        var frame = textHandleView.frame
+        frame.size.width = max(CGRectGetWidth(frame), contentSize.width)
+        frame.size.height = max(CGRectGetHeight(frame), contentSize.height)
+        textHandleView.frame = frame
     }
 }
