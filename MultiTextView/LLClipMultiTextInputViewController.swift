@@ -136,7 +136,10 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         textHandleView.center = CGPointMake(CGRectGetWidth(self.view.bounds) * 0.5, CGRectGetHeight(self.view.bounds) * 0.5)
         _textHandleViews.append(textHandleView)
         self.organizeTextObjects(textHandleView)
-        textHandleView.enterEditMode()
+        // 起動後の初回だけ、即時に編集状態にすると、かなり時間がかかることがあるため、遅延実行する
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.25 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
+            textHandleView.enterEditMode()
+        })
     }
     
     @IBAction func addClipButtonDidTap(sender: AnyObject) {
