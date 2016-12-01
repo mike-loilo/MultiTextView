@@ -27,7 +27,7 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     private var _closeCallback: (() -> ())?
     
     /** カット/コピー中のテキストボックス */
-    private var _copiedData: NSDictionary?
+    private var _copiedData: LLRichText?
     /** 長押し */
     private var _longPressGesture: UILongPressGestureRecognizer?
     /** 最後に長押しメニューを表示した位置 */
@@ -59,7 +59,7 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
             }
         }
         didSet {
-            if (nil != self.controllerParent) {
+            if nil != self.controllerParent {
                 (_topButtons as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
                     self.controllerParent!.addSubview(obj as! UIView)
                 }
@@ -84,6 +84,18 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         self.closeButton.setWhiteStyle()
         self.insertButton.setTitle(NSLocalizedString("707", comment: "") /* 挿入 */, forState: .Normal)
         self.insertButton.setWhiteStyle()
+        
+        //TODO:- 数が多くなるとUIに影響を与えかねないので、実際には少しずつ追加する
+        for obj in _clipItem!.clip.richTexts {
+            if !obj.isKindOfClass(LLRichText) { continue }
+            let richText = obj as! LLRichText
+            NSLog("[\(_clipItem!.clip.richTexts.indexOfObject(richText)) / \(self._clipItem!.clip.richTexts.count)] : \(richText)")
+            let textHandleView = LLTextHandleView(richText: richText, type: .Normal)
+            textHandleView.viewDelegate = self
+            self._playView!.currentPageContentView.addSubview(textHandleView)
+            self._textHandleViews.append(textHandleView)
+        }
+        self.organizeTextObjects(nil)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -116,13 +128,13 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     override func prefersStatusBarHidden() -> Bool { return true }
     
     @IBAction func closeButtonDidTap(sender: AnyObject) {
-        if (nil != _closeCallback) {
+        if nil != _closeCallback {
             _closeCallback!()
         }
     }
     
     @IBAction func backgroundColorButtonDidTap(sender: AnyObject) {
-        if (nil != _changeBGColorBlock) {
+        if nil != _changeBGColorBlock {
             _changeBGColorBlock!(color: UIColor.brownColor())
         }
     }
@@ -130,7 +142,11 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     @IBAction func insertButtonDidTap(sender: AnyObject) {
         //TODO:- 本当は既存のHTML文字列を読み込ませる
         let htmlString = "<!-- This is an HTML comment --><p>This is a test of the <strong>ZSSRichTextEditor</strong> by <a title=\"Zed Said\" href=\"http://www.zedsaid.com\">Zed Said Studio</a></p>"
-        let textHandleView = LLTextHandleView(frame: CGRectMake(0, 0, 400, 200), type: .Normal, htmlString: htmlString)
+        let richText = LLRichText()
+        richText.text = htmlString
+        richText.origin = CGPointZero
+        richText.size = CGSizeMake(400, 200)
+        let textHandleView = LLTextHandleView(richText: richText, type: .Normal)
         textHandleView.viewDelegate = self
         _playView!.currentPageContentView.addSubview(textHandleView)
         textHandleView.center = CGPointMake(CGRectGetWidth(self.view.bounds) * 0.5, CGRectGetHeight(self.view.bounds) * 0.5)
@@ -174,7 +190,10 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         if !didEdit {
             // タップした位置にテキストボックスを配置する
             let location = sender.locationInView(_playView!.currentPageContentView)
-            let textHandleView = LLTextHandleView(frame: CGRectMake(location.x, location.y, 80, 40), type: .Normal, htmlString: nil)
+            let richText = LLRichText()
+            richText.origin = location
+            richText.size = CGSizeMake(80, 40)
+            let textHandleView = LLTextHandleView(richText: richText, type: .Normal)
             textHandleView.viewDelegate = self
             _playView!.currentPageContentView.addSubview(textHandleView)
             _textHandleViews.append(textHandleView)
@@ -192,11 +211,11 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         // 種別を確認して、ノーマルの場合はハンドル自体を削除する
         var removeTextHandleViews = [LLTextHandleView]()
         (_textHandleViews as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
-            if (!obj.isKindOfClass(LLTextHandleView)) { return }
+            if !obj.isKindOfClass(LLTextHandleView) { return }
             let textHandleView = obj as! LLTextHandleView
             textHandleView.movable = textHandleView == movable
             textHandleView.hiddenBorder = !textHandleView.movable
-            if (textHandleView.isEditingText) {
+            if textHandleView.isEditingText {
                 textHandleView.leaveEditMode()
                 // スクロールしている場合があるため元に戻す
                 var frame = self._playView!.currentPageContentView.frame
@@ -206,8 +225,8 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
                 })
                 didEdit = true
             }
-            if (!textHandleView.movable && textHandleView.type == .Normal) {
-                if (!textHandleView.hasText) {
+            if !textHandleView.movable && textHandleView.type == .Normal {
+                if !textHandleView.hasText {
                     textHandleView.removeFromSuperview()
                     removeTextHandleViews.append(textHandleView)
                 }
@@ -215,6 +234,18 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         }
         (removeTextHandleViews as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
             self._textHandleViews.removeAtIndex(self._textHandleViews.indexOf(obj as! LLTextHandleView)!)
+        }
+        self.syncRichTexts()
+    }
+    
+    /** LLClip.richTextsを同期する */
+    func syncRichTexts() {
+        _clipItem!.clip.richTexts.removeAllObjects()
+        (_textHandleViews as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
+            if !obj.isKindOfClass(LLTextHandleView) { return }
+            let textHandleView = obj as! LLTextHandleView
+            if nil == textHandleView.richText { return }
+            self._clipItem!.clip.richTexts.addObject(textHandleView.richText!)
         }
     }
     
@@ -235,31 +266,47 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     }
     
     override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
-        if (action == #selector(LLClipMultiTextInputViewController.menuPaste(_:))) {
+        if action == #selector(LLClipMultiTextInputViewController.menuPaste(_:)) {
             return true
         }
         return false
     }
 
     func menuPaste(sender: AnyObject) {
-        let textHandleView = LLTextHandleView.textHandleView(_copiedData)
-        if nil == textHandleView || nil == _locationWithLongPress {
+        if nil == _copiedData || nil == _locationWithLongPress {
             // 万が一、不正なデータを含んでいてデシリアライズできない場合はデータ自体を破棄しておく
             _copiedData = nil
             _locationWithLongPress = nil
             return
         }
-        textHandleView!.frame = CGRectMake(_locationWithLongPress!.x, _locationWithLongPress!.y, CGRectGetWidth(textHandleView!.frame), CGRectGetHeight(textHandleView!.frame))
-        textHandleView!.viewDelegate = self
-        _playView!.currentPageContentView.addSubview(textHandleView!)
-        _textHandleViews.append(textHandleView!)
-        organizeTextObjects(textHandleView!)
-        textHandleView!.enterEditMode()
+        let textHandleView = self.textHandleViewFrom(_copiedData!, type: .Normal)
+        textHandleView.frame = CGRectMake(_locationWithLongPress!.x, _locationWithLongPress!.y, CGRectGetWidth(textHandleView.frame), CGRectGetHeight(textHandleView.frame))
+        textHandleView.viewDelegate = self
+        _playView!.currentPageContentView.addSubview(textHandleView)
+        _textHandleViews.append(textHandleView)
+        organizeTextObjects(textHandleView)
+        textHandleView.enterEditMode()
+    }
+    
+    /** LLTextHandleViewをLLRichTextに変換する */
+    func richTextFrom(textHandleView: LLTextHandleView) -> LLRichText {
+        let frame = textHandleView.convertRect(textHandleView.bounds, toView: (UIApplication.sharedApplication().delegate?.window)!)
+        let richText = LLRichText()
+        richText.text = textHandleView.htmlString
+        richText.zIndex = textHandleView.superview!.subviews.indexOf(textHandleView)!
+        richText.origin = frame.origin
+        richText.size = frame.size
+        return richText
+    }
+    
+    /** LLRichTextからLLTextHandleViewに変換する */
+    func textHandleViewFrom(richText: LLRichText, type: LLTextHandleViewType) -> LLTextHandleView {
+        return LLTextHandleView(richText: richText, type: type)
     }
     
     //MARK:- LLTextHandleViewDelegate
     func textHandleViewTap(textHandleView: LLTextHandleView, tapCount: Int) {
-        if (!_textHandleViews.contains(textHandleView)) { return }
+        if !_textHandleViews.contains(textHandleView) { return }
         if 1 == tapCount {
             self.organizeTextObjects(textHandleView)
         }
@@ -269,29 +316,31 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     }
     
     func textHandleViewMenuCut(textHandleView: LLTextHandleView) {
-        if (!_textHandleViews.contains(textHandleView)) { return }
-        _copiedData = textHandleView.serialize((UIApplication.sharedApplication().delegate?.window)!)
+        if !_textHandleViews.contains(textHandleView) { return }
+        _copiedData = self.richTextFrom(textHandleView)
         textHandleView.removeFromSuperview()
         _textHandleViews.removeAtIndex(_textHandleViews.indexOf(textHandleView)!)
+        self.syncRichTexts()
     }
     
     func textHandleViewMenuCopy(textHandleView: LLTextHandleView) {
-        if (!_textHandleViews.contains(textHandleView)) { return }
-        _copiedData = textHandleView.serialize((UIApplication.sharedApplication().delegate?.window)!)
+        if !_textHandleViews.contains(textHandleView) { return }
+        _copiedData = self.richTextFrom(textHandleView)
     }
     
     func textHandleViewMenuDelete(textHandleView: LLTextHandleView) {
-        if (!_textHandleViews.contains(textHandleView)) { return }
+        if !_textHandleViews.contains(textHandleView) { return }
         textHandleView.removeFromSuperview()
         _textHandleViews.removeAtIndex(_textHandleViews.indexOf(textHandleView)!)
+        self.syncRichTexts()
     }
     
     func textHandleViewDidChangeStatus(textHandleView: LLTextHandleView, isEditing: Bool) {
-        if (!_textHandleViews.contains(textHandleView)) { return }
+        if !_textHandleViews.contains(textHandleView) { return }
     }
     
     func textHandleViewDidChangeText(textHandleView: LLTextHandleView, text: String?, html: String?, caretRect: CGRect) {
-        if (!_textHandleViews.contains(textHandleView)) { return }
+        if !_textHandleViews.contains(textHandleView) { return }
         // 該当するhtmlHandleViewがキーボードを除く部分に見えるようにスクロールする
         let rect = textHandleView.convertRect(caretRect, toView: _playView!.currentPageContentView)
         let toolbarRect = textHandleView.toolbar!.convertRect(textHandleView.toolbar!.bounds, toView: _playView!.currentPageContentView)
@@ -305,7 +354,7 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     }
     
     func textHandleViewDidChangeContentSize(textHandleView: LLTextHandleView, contentSize: CGSize) {
-        if (!_textHandleViews.contains(textHandleView)) { return }
+        if !_textHandleViews.contains(textHandleView) { return }
         // コンテントサイズが大きくなったら、それに合わせて大きくする
         var frame = textHandleView.frame
         frame.size.width = max(CGRectGetWidth(frame), contentSize.width)

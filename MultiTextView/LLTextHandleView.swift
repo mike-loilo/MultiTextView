@@ -62,19 +62,19 @@ private class LLSizeChangerView: UIView {
     }
     
     private override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        if (nil != _touchesBegan) { _touchesBegan!(view: self, touches: touches, event: event) }
+        if nil != _touchesBegan { _touchesBegan!(view: self, touches: touches, event: event) }
     }
     
     private override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        if (nil != _touchesMoved) { _touchesMoved!(view: self, touches: touches, event: event) }
+        if nil != _touchesMoved { _touchesMoved!(view: self, touches: touches, event: event) }
     }
     
     private override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        if (nil != _touchesEnded) { _touchesEnded!(view: self, touches: touches, event: event) }
+        if nil != _touchesEnded { _touchesEnded!(view: self, touches: touches, event: event) }
     }
     
     private override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
-        if (nil != _touchesCancelled) { _touchesCancelled!(view: self, touches: touches, event: event) }
+        if nil != _touchesCancelled { _touchesCancelled!(view: self, touches: touches, event: event) }
     }
 }
 
@@ -135,15 +135,18 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
     
     /** テキストがあるかどうか */
     var hasText: Bool {
-        if (nil != _richTextEditor) {
+        if nil != _richTextEditor {
             return 0 < _richTextEditor!.getHTML().lengthOfBytesUsingEncoding(NSUTF8StringEncoding)
         }
-        else if (nil != _htmlString) {
+        else if nil != _htmlString {
             return 0 < _htmlString!.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)
         }
         return false
     }
     private var _htmlString: String?
+    var htmlString: String? {
+        get { return _htmlString }
+    }
     
     /** 動かせるかどうか */
     var movable: Bool = false {
@@ -178,6 +181,16 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
     /** デリゲート */
     weak var viewDelegate: LLTextHandleViewDelegate?
     
+    /** LLRichText */
+    private var _richText: LLRichText?
+    var richText: LLRichText? {
+        get { return _richText }
+    }
+    
+    convenience init(richText: LLRichText, type: LLTextHandleViewType) {
+        self.init(frame: CGRectMake(richText.origin.x, richText.origin.y, richText.size.width, richText.size.height), type: type, htmlString: richText.text)
+        _richText = richText
+    }
     init(frame: CGRect, type: LLTextHandleViewType, htmlString: String?) {
         super.init(frame: frame, configuration:WKWebViewConfiguration())
         self.backgroundColor = UIColor.clearColor()
@@ -187,7 +200,7 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
         self.scrollView.userInteractionEnabled = false
 
         _htmlString = htmlString
-        if (nil == _htmlString) {
+        if nil == _htmlString {
             _htmlString = ""
         }
         self.setHTML(_htmlString!)
@@ -225,7 +238,7 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
                 guard let s = w else { return }
                 let point = (touches.first?.locationInView(s.superview))!
                 let size = CGSizeMake(CGRectGetMaxX(startRect) - point.x, CGRectGetMaxY(startRect) - point.y)
-                if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
+                if minSize.width <= abs(size.width) && minSize.height <= abs(size.height) {
                     s.frame = CGRectMake(point.x, point.y, size.width, size.height)
                 }
             }, touchesEnded: nil, touchesCancelled: nil)
@@ -238,7 +251,7 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
                 guard let s = w else { return }
                 let point = (touches.first?.locationInView(s.superview))!
                 let size = CGSizeMake(CGRectGetWidth(startRect), CGRectGetMaxY(startRect) - point.y)
-                if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
+                if minSize.width <= abs(size.width) && minSize.height <= abs(size.height) {
                     s.frame = CGRectMake(CGRectGetMinX(startRect), point.y, size.width, size.height)
                 }
             }, touchesEnded: nil, touchesCancelled: nil)
@@ -251,7 +264,7 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
                 guard let s = w else { return }
                 let point = (touches.first?.locationInView(s.superview))!
                 let size = CGSizeMake(point.x - CGRectGetMinX(startRect), CGRectGetMaxY(startRect) - point.y)
-                if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
+                if minSize.width <= abs(size.width) && minSize.height <= abs(size.height) {
                     s.frame = CGRectMake(CGRectGetMinX(startRect), point.y, size.width, size.height)
                 }
             }, touchesEnded: nil, touchesCancelled: nil)
@@ -264,7 +277,7 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
                 guard let s = w else { return }
                 let point = (touches.first?.locationInView(s.superview))!
                 let size = CGSizeMake(CGRectGetMaxX(startRect) - point.x, CGRectGetHeight(startRect))
-                if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
+                if minSize.width <= abs(size.width) && minSize.height <= abs(size.height) {
                     s.frame = CGRectMake(point.x, CGRectGetMinY(startRect), size.width, size.height)
                 }
             }, touchesEnded: nil, touchesCancelled: nil)
@@ -277,7 +290,7 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
                 guard let s = w else { return }
                 let point = (touches.first?.locationInView(s.superview))!
                 let size = CGSizeMake(point.x - CGRectGetMinX(startRect), CGRectGetHeight(startRect))
-                if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
+                if minSize.width <= abs(size.width) && minSize.height <= abs(size.height) {
                     s.frame = CGRectMake(CGRectGetMinX(startRect), CGRectGetMinY(startRect), size.width, size.height)
                 }
             }, touchesEnded: nil, touchesCancelled: nil)
@@ -290,7 +303,7 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
                 guard let s = w else { return }
                 let point = (touches.first?.locationInView(s.superview))!
                 let size = CGSizeMake(CGRectGetMaxX(startRect) - point.x, point.y - CGRectGetMinY(startRect))
-                if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
+                if minSize.width <= abs(size.width) && minSize.height <= abs(size.height) {
                     s.frame = CGRectMake(point.x, CGRectGetMinY(startRect), size.width, size.height)
                 }
             }, touchesEnded: nil, touchesCancelled: nil)
@@ -303,7 +316,7 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
                 guard let s = w else { return }
                 let point = (touches.first?.locationInView(s.superview))!
                 let size = CGSizeMake(CGRectGetWidth(startRect), point.y - CGRectGetMinY(startRect))
-                if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
+                if minSize.width <= abs(size.width) && minSize.height <= abs(size.height) {
                     s.frame = CGRectMake(CGRectGetMinX(startRect), CGRectGetMinY(startRect), size.width, size.height)
                 }
             }, touchesEnded: nil, touchesCancelled: nil)
@@ -316,7 +329,7 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
                 guard let s = w else { return }
                 let point = (touches.first?.locationInView(s.superview))!
                 let size = CGSizeMake(point.x - CGRectGetMinX(startRect), point.y - CGRectGetMinY(startRect))
-                if (minSize.width <= abs(size.width) && minSize.height <= abs(size.height)) {
+                if minSize.width <= abs(size.width) && minSize.height <= abs(size.height) {
                     s.frame = CGRectMake(CGRectGetMinX(startRect), CGRectGetMinY(startRect), size.width, size.height)
                 }
             }, touchesEnded: nil, touchesCancelled: nil)
@@ -366,41 +379,44 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
             _blHandle?.center = CGPointMake(0, CGRectGetHeight(self.bounds))
             _bcHandle?.center = CGPointMake(CGRectGetWidth(self.bounds) * 0.5, CGRectGetHeight(self.bounds))
             _brHandle?.center = CGPointMake(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds))
+            
+            _richText?.origin = self.frame.origin
+            _richText?.size = self.frame.size
         }
     }
     
     override func hitTest(point: CGPoint, withEvent event: UIEvent?) -> UIView? {
         // 各サイズ変更ハンドルは、ビューの外にはみ出ている部分があるので、そこを触ってもイベントが発生するようにしておく必要がある
         var pointForTargetView = _tlHandle!.convertPoint(point, fromView: self)
-        if (CGRectContainsPoint(_tlHandle!.bounds, pointForTargetView)) {
+        if CGRectContainsPoint(_tlHandle!.bounds, pointForTargetView) {
             return _tlHandle!.hitTest(pointForTargetView, withEvent: event)
         }
         pointForTargetView = _tcHandle!.convertPoint(point, fromView: self)
-        if (CGRectContainsPoint(_tcHandle!.bounds, pointForTargetView)) {
+        if CGRectContainsPoint(_tcHandle!.bounds, pointForTargetView) {
             return _tcHandle!.hitTest(pointForTargetView, withEvent: event)
         }
         pointForTargetView = _trHandle!.convertPoint(point, fromView: self)
-        if (CGRectContainsPoint(_trHandle!.bounds, pointForTargetView)) {
+        if CGRectContainsPoint(_trHandle!.bounds, pointForTargetView) {
             return _trHandle!.hitTest(pointForTargetView, withEvent: event)
         }
         pointForTargetView = _lcHandle!.convertPoint(point, fromView: self)
-        if (CGRectContainsPoint(_lcHandle!.bounds, pointForTargetView)) {
+        if CGRectContainsPoint(_lcHandle!.bounds, pointForTargetView) {
             return _lcHandle!.hitTest(pointForTargetView, withEvent: event)
         }
         pointForTargetView = _rcHandle!.convertPoint(point, fromView: self)
-        if (CGRectContainsPoint(_rcHandle!.bounds, pointForTargetView)) {
+        if CGRectContainsPoint(_rcHandle!.bounds, pointForTargetView) {
             return _rcHandle!.hitTest(pointForTargetView, withEvent: event)
         }
         pointForTargetView = _blHandle!.convertPoint(point, fromView: self)
-        if (CGRectContainsPoint(_blHandle!.bounds, pointForTargetView)) {
+        if CGRectContainsPoint(_blHandle!.bounds, pointForTargetView) {
             return _blHandle!.hitTest(pointForTargetView, withEvent: event)
         }
         pointForTargetView = _bcHandle!.convertPoint(point, fromView: self)
-        if (CGRectContainsPoint(_bcHandle!.bounds, pointForTargetView)) {
+        if CGRectContainsPoint(_bcHandle!.bounds, pointForTargetView) {
             return _bcHandle!.hitTest(pointForTargetView, withEvent: event)
         }
         pointForTargetView = _brHandle!.convertPoint(point, fromView: self)
-        if (CGRectContainsPoint(_brHandle!.bounds, pointForTargetView)) {
+        if CGRectContainsPoint(_brHandle!.bounds, pointForTargetView) {
             return _brHandle!.hitTest(pointForTargetView, withEvent: event)
         }
         return super.hitTest(point, withEvent: event)
@@ -408,14 +424,14 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
     
     private var _startDiff: CGVector = CGVectorMake(0, 0)
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        if (!self.movable) { return }
+        if !self.movable { return }
         let point = (touches.first?.locationInView(self.superview))!
         _startDiff = CGVectorMake(CGRectGetMinX(self.frame) - point.x, CGRectGetMinY(self.frame) - point.y)
         self.hideMenu()
     }
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        if (!self.movable) { return }
+        if !self.movable { return }
         let point = (touches.first?.locationInView(self.superview))!
         self.frame = CGRectMake(_startDiff.dx + point.x, _startDiff.dy + point.y, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame))
     }
@@ -438,7 +454,7 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
         _tapGesture?.enabled = false
         _doubleTapGesture?.enabled = false
         
-        if (nil != _richTextEditor) {
+        if nil != _richTextEditor {
             _richTextEditor!.removeFromParentViewController()
             _richTextEditor!.view.removeFromSuperview()
         }
@@ -483,17 +499,18 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
     
     /** 編集状態を抜ける */
     func leaveEditMode() {
-        if (nil != _richTextEditor) {
+        if nil != _richTextEditor {
             _htmlString = _richTextEditor!.getHTML()
             _richTextEditor!.removeFromParentViewController()
             _richTextEditor!.view.removeFromSuperview()
         }
+        _richText?.text = _htmlString
         _richTextEditor = nil
         
         _tapGesture?.enabled = true
         _doubleTapGesture?.enabled = true
         
-        if (nil != _htmlString) {
+        if nil != _htmlString {
             self.setHTML(_htmlString!)
         }
         
@@ -523,10 +540,10 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
     }
     
     override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
-        if ((action == #selector(LLTextHandleView.menuCut(_:))
+        if (action == #selector(LLTextHandleView.menuCut(_:))
             || action == #selector(LLTextHandleView.menuCopy(_:))
             || action == #selector(LLTextHandleView.menuDelete(_:))
-            || action == #selector(LLTextHandleView.menuEditText(_:))) && !self.isEditingText) {
+            || action == #selector(LLTextHandleView.menuEditText(_:))) && !self.isEditingText {
             return true
         }
         return false
@@ -553,34 +570,6 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
     func hideMenu() {
         self.resignFirstResponder()
         UIMenuController.sharedMenuController().menuVisible = false
-    }
-    
-    /** シリアライズ */
-    func serialize(parentView: UIView?) -> NSDictionary! {
-        let frame = self.convertRect(self.bounds, toView: parentView)
-        return ["origin": ["x": (CGRectGetMinX(frame)), "y": (CGRectGetMinY(frame))],
-        "size": ["width": (CGRectGetWidth(frame)), "height": (CGRectGetHeight(frame))],
-        "type": (_type.rawValue),
-        "text": nil != _htmlString ? _htmlString! : NSNull()]
-    }
-    
-    /** デシリアライズしてオブジェクトを返す */
-    class func textHandleView(serialized: NSDictionary!) -> LLTextHandleView? {
-        func nn(obj: AnyObject?) -> AnyObject? { return true == obj?.isKindOfClass(NSNull) ? nil : obj }
-        func toFloat(obj: AnyObject?) -> Float { return nil == nn(obj) ? 0 : nn(obj)!.floatValue }
-        func toInt(obj: AnyObject?) -> Int { return nil == nn(obj) ? 0 : nn(obj)!.integerValue }
-        let origin = nn(serialized["origin"]) as? NSDictionary
-        let x = CGFloat(toFloat(origin?["x"]))
-        let y = CGFloat(toFloat(origin?["y"]))
-        let size = nn(serialized["size"]) as? NSDictionary
-        let width = CGFloat(toFloat(size?["width"]))
-        let height = CGFloat(toFloat(size?["height"]))
-        let type = LLTextHandleViewType(rawValue: toInt(serialized["type"]))
-        let text = nn(serialized["text"]) as? String
-        if width <= 0 || height <= 0 || nil == text {
-            return nil
-        }
-        return LLTextHandleView(frame: CGRectMake(x, y, width, height), type: type!, htmlString: text)
     }
     
     //MARK:- ZSSRichTextEditorDelegate

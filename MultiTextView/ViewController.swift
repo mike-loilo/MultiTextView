@@ -11,7 +11,8 @@ import UIKit
 class ViewController: UIViewController {
     
     @IBOutlet weak var editButton: UIButton!
-    private var clipViewController: LLClipViewController?
+    private var _clipViewController: LLClipViewController?
+    private var _clipItem: LLClipItem?
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -39,16 +40,19 @@ class ViewController: UIViewController {
     }
 
     @IBAction func editButtonDidTap(sender: AnyObject) {
-        if (nil != self.clipViewController) {
-            self.clipViewController!.dismissViewControllerAnimated(false, completion: nil)
+        if nil == _clipItem {
+            _clipItem = LLClipItem()
+        }
+        if nil != _clipViewController {
+            _clipViewController!.dismissViewControllerAnimated(false, completion: nil)
         }
         weak var w = self
-        self.clipViewController = LLClipViewController(closeCallback: {
+        _clipViewController = LLClipViewController(clipItem: _clipItem) {
             guard let s = w else { return }
-            s.clipViewController = nil
-        })
+            s._clipViewController = nil
+        }
         self.editButton.hidden = true
-        self.presentViewController(self.clipViewController!, animated: true) {
+        self.presentViewController(_clipViewController!, animated: true) {
             guard let s = w else { return }
             s.editButton.hidden = false
         }

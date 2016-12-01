@@ -7,7 +7,23 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
+#pragma mark - LLRichText
+
+@interface LLRichText : NSObject
+- (id)initWithJson:(id)json;
+@property (nonatomic) NSString *text;
+@property (nonatomic) NSInteger zIndex;
+@property (nonatomic) CGPoint origin;
+@property (nonatomic) CGSize size;
+@property (nonatomic, readonly) id serialize;
+@end
+
+#pragma mark - LLClip
 
 @interface LLClip : NSObject
+
+@property (nonatomic) NSMutableArray<__kindof LLRichText *> *richTexts;
 
 @end

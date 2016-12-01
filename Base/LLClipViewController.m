@@ -18,19 +18,19 @@
     __weak IBOutlet UIButton *_textButton;
     __weak IBOutlet UIButton *_closeButton;
     
+    __weak LLClipItem *_clipItem;
     void (^_closeCallback)();
 
-    LLClipItem *_item;
     LLFullScreenPlayView *_playView;
     
     LLClipMultiTextInputViewController *_multiTextInputViewController;
 }
 
-- (id)initWithCloseCallback:(void (^)())closeCallback {
+- (id)initWithClipItem:(LLClipItem *)clipItem closeCallback:(void (^)())closeCallback {
     self = [super init];
+    _clipItem = clipItem;
     _closeCallback = closeCallback;
     
-    _item = [LLClipItem new];
     _playView = [LLFullScreenPlayView.alloc initWithFrame:self.view.bounds];
     _playView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin
     | UIViewAutoresizingFlexibleWidth
@@ -82,7 +82,7 @@
 - (void)setupTextInputViewController
 {
     __weak typeof(self) __self = self;
-    _multiTextInputViewController = [LLClipMultiTextInputViewController.alloc initWithClipItem:_item playView:_playView changeBGColorBlock:^(UIColor * _Nullable color) {
+    _multiTextInputViewController = [LLClipMultiTextInputViewController.alloc initWithClipItem:_clipItem playView:_playView changeBGColorBlock:^(UIColor * _Nullable color) {
         typeof(self) self = __self;
         if (!self) return;
         

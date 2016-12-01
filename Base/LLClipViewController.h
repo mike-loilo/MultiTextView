@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class LLClipItem;
+
 @interface LLClipViewController : UIViewController
 
-- (id)initWithCloseCallback:(void (^)())closeCallback;
+- (id)initWithClipItem:(LLClipItem *)clipItem closeCallback:(void (^)())closeCallback;
 
 @end

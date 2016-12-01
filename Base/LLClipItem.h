@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+@class LLClip;
+
 @interface LLClipItem : NSObject
+
+@property (nonatomic, readonly) LLClip *clip;
 
 @end

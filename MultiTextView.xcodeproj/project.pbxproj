@@ -105,8 +105,8 @@
 		2789D8A41D86254100B283A7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8A31D86254100B283A7 /* Assets.xcassets */; };
 		2789D8A71D86254100B283A7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8A51D86254100B283A7 /* LaunchScreen.storyboard */; };
 		2789D8B21D86268C00B283A7 /* LLClipViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2789D8B11D86268C00B283A7 /* LLClipViewController.m */; };
-		2789D8B51D8626F200B283A7 /* LLClipItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2789D8B41D8626F200B283A7 /* LLClipItem.m */; };
-		2789D8B81D86270300B283A7 /* LLClip.m in Sources */ = {isa = PBXBuildFile; fileRef = 2789D8B71D86270300B283A7 /* LLClip.m */; };
+		2789D8B51D8626F200B283A7 /* LLClipItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2789D8B41D8626F200B283A7 /* LLClipItem.mm */; };
+		2789D8B81D86270300B283A7 /* LLClip.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2789D8B71D86270300B283A7 /* LLClip.mm */; };
 		2789D8BA1D8627D400B283A7 /* LLClipViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8B91D8627D400B283A7 /* LLClipViewController.xib */; };
 		2789D8BE1D862E2B00B283A7 /* LLClipViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8BD1D862E2B00B283A7 /* LLClipViewController~iphone.xib */; };
 		2789D8C11D8640E500B283A7 /* LLClipMultiTextInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2789D8BF1D8640E500B283A7 /* LLClipMultiTextInputViewController.swift */; };
@@ -252,9 +252,9 @@
 		2789D8B01D86268C00B283A7 /* LLClipViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LLClipViewController.h; path = Base/LLClipViewController.h; sourceTree = "<group>"; };
 		2789D8B11D86268C00B283A7 /* LLClipViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LLClipViewController.m; path = Base/LLClipViewController.m; sourceTree = "<group>"; };
 		2789D8B31D8626F200B283A7 /* LLClipItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LLClipItem.h; path = Base/LLClipItem.h; sourceTree = "<group>"; };
-		2789D8B41D8626F200B283A7 /* LLClipItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LLClipItem.m; path = Base/LLClipItem.m; sourceTree = "<group>"; };
+		2789D8B41D8626F200B283A7 /* LLClipItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = LLClipItem.mm; path = Base/LLClipItem.mm; sourceTree = "<group>"; };
 		2789D8B61D86270300B283A7 /* LLClip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LLClip.h; path = Base/LLClip.h; sourceTree = "<group>"; };
-		2789D8B71D86270300B283A7 /* LLClip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LLClip.m; path = Base/LLClip.m; sourceTree = "<group>"; };
+		2789D8B71D86270300B283A7 /* LLClip.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = LLClip.mm; path = Base/LLClip.mm; sourceTree = "<group>"; };
 		2789D8B91D8627D400B283A7 /* LLClipViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LLClipViewController.xib; path = Base/LLClipViewController.xib; sourceTree = "<group>"; };
 		2789D8BD1D862E2B00B283A7 /* LLClipViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "LLClipViewController~iphone.xib"; path = "Base/LLClipViewController~iphone.xib"; sourceTree = "<group>"; };
 		2789D8BF1D8640E500B283A7 /* LLClipMultiTextInputViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLClipMultiTextInputViewController.swift; sourceTree = "<group>"; };
@@ -484,9 +484,9 @@
 				278DE6391DD013910034468B /* LLButton.h */,
 				278DE63A1DD013910034468B /* LLButton.m */,
 				2789D8B61D86270300B283A7 /* LLClip.h */,
-				2789D8B71D86270300B283A7 /* LLClip.m */,
+				2789D8B71D86270300B283A7 /* LLClip.mm */,
 				2789D8B31D8626F200B283A7 /* LLClipItem.h */,
-				2789D8B41D8626F200B283A7 /* LLClipItem.m */,
+				2789D8B41D8626F200B283A7 /* LLClipItem.mm */,
 				2724BE241DCC74C1001812E6 /* LLClipTextInputViewController.h */,
 				2724BE251DCC74C1001812E6 /* LLClipTextInputViewController.mm */,
 				2789D8B01D86268C00B283A7 /* LLClipViewController.h */,
@@ -727,7 +727,7 @@
 				278DE62F1DD005F00034468B /* MJPopoverController.m in Sources */,
 				2789D8C11D8640E500B283A7 /* LLClipMultiTextInputViewController.swift in Sources */,
 				2711B3E71D95007C00BB1363 /* ZSSTextView.m in Sources */,
-				2789D8B81D86270300B283A7 /* LLClip.m in Sources */,
+				2789D8B81D86270300B283A7 /* LLClip.mm in Sources */,
 				2789D8C51D86426200B283A7 /* LLBorderedButton.m in Sources */,
 				2711B3E61D95007C00BB1363 /* ZSSRichTextEditor.m in Sources */,
 				2711B3DA1D95007C00BB1363 /* CYRTextStorage.m in Sources */,
@@ -741,7 +741,7 @@
 				278DE62D1DD005F00034468B /* MJArrowView.m in Sources */,
 				2789D8D11D8674B400B283A7 /* LLFullScreenPlayView.m in Sources */,
 				2711B3E31D95007C00BB1363 /* ZSSBarButtonItem.m in Sources */,
-				2789D8B51D8626F200B283A7 /* LLClipItem.m in Sources */,
+				2789D8B51D8626F200B283A7 /* LLClipItem.mm in Sources */,
 				2789D89D1D86254100B283A7 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
