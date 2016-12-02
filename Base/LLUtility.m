@@ -11,3 +11,11 @@ UIViewController *findViewControllerInResponderChain(UIResponder *responder)
     else
         return nil;
 }
+
+NSString *getUniqueID()
+{
+    CFUUIDRef uuid = CFUUIDCreate(NULL);
+    NSString *s = (id)CFBridgingRelease(CFUUIDCreateString(NULL,uuid));
+    CFRelease(uuid);
+    return s;
+}

@@ -7,11 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @class LLClip;
 
 @interface LLClipItem : NSObject
 
 @property (nonatomic, readonly) LLClip *clip;
+- (NSDictionary *)serialize:(BOOL)updateAuthor positionOffset:(CGPoint)positionOffset;
+- (id)initWithSavedData:(NSDictionary *)data documentId:(UInt64)documentId atIndex:(NSUInteger)index;
 
 @end

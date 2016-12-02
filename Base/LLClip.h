@@ -25,5 +25,8 @@
 @interface LLClip : NSObject
 
 @property (nonatomic) NSMutableArray<__kindof LLRichText *> *richTexts;
+- (id)initWithSavedData:(NSDictionary *)data documentId:(UInt64)documentId atIndex:(NSUInteger)index;
+- (NSMutableDictionary *)serialize:(BOOL)updateAuthor;
+- (void)serialize:(NSMutableDictionary *)data updateAuthor:(BOOL)updateAuthor;
 
 @end

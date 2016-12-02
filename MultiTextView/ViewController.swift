@@ -13,6 +13,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var editButton: UIButton!
     private var _clipViewController: LLClipViewController?
     private var _clipItem: LLClipItem?
+    private var _serialized: NSDictionary?
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -43,6 +44,9 @@ class ViewController: UIViewController {
         if nil == _clipItem {
             _clipItem = LLClipItem()
         }
+        if nil != _serialized {
+            _clipItem = LLClipItem.init(savedData: _serialized! as [NSObject : AnyObject], documentId: 0, atIndex: 0)
+        }
         if nil != _clipViewController {
             _clipViewController!.dismissViewControllerAnimated(false, completion: nil)
         }
@@ -50,6 +54,7 @@ class ViewController: UIViewController {
         _clipViewController = LLClipViewController(clipItem: _clipItem) {
             guard let s = w else { return }
             s._clipViewController = nil
+            s._serialized = s._clipItem!.serialize(true, positionOffset: CGPointZero)
         }
         self.editButton.hidden = true
         self.presentViewController(_clipViewController!, animated: true) {

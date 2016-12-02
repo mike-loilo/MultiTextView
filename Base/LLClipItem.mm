@@ -18,5 +18,15 @@
     _clip = [LLClip.alloc init];
     return self;
 }
+- (NSDictionary *)serialize:(BOOL)updateAuthor positionOffset:(CGPoint)positionOffset
+{
+    return [_clip serialize:updateAuthor];
+}
+- (id)initWithSavedData:(NSDictionary *)data documentId:(UInt64)documentId atIndex:(NSUInteger)index
+{
+    self = super.init;
+    _clip = [LLClip.alloc initWithSavedData:data documentId:documentId atIndex:index];
+    return self;
+}
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "LLClip.h"
+#import "LLUtility.h"
 
 static id nn(id obj) { return NSNull.null == obj ? nil : obj; }
 static id _nn(id obj) { return obj ?: NSNull.null; }
@@ -63,10 +64,39 @@ static id _nn(id obj) { return obj ?: NSNull.null; }
 
 - (id)init
 {
-    self = [super init];
-    if (!self) return nil;
+    self = super.init;
     _richTexts = @[].mutableCopy;
     return self;
+}
+- (id)initWithSavedData:(NSDictionary *)data documentId:(UInt64)documentId atIndex:(NSUInteger)index
+{
+    self = super.init;
+    NSDictionary *gadgets = nn(data[@"gadgets"]);
+    NSMutableArray *richTexts = @[].mutableCopy;
+    [nn(gadgets[@"richtexts"]) enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [richTexts addObject:[LLRichText.alloc initWithJson:obj]];
+    }];
+    _richTexts = richTexts;
+    return self;
+}
+- (NSMutableDictionary *)serialize:(BOOL)updateAuthor
+{
+    NSMutableDictionary *data = NSMutableDictionary.dictionary;
+    [self serialize:data updateAuthor:updateAuthor];
+    return data;
+}
+- (void)serialize:(NSMutableDictionary *)data updateAuthor:(BOOL)updateAuthor
+{
+    data[@"id"] = getUniqueID();
+    
+    NSMutableDictionary *gadgets = NSMutableDictionary.dictionary;
+    data[@"gadgets"] = gadgets;
+    
+    NSMutableArray *richTexts = @[].mutableCopy;
+    [_richTexts enumerateObjectsUsingBlock:^(__kindof LLRichText * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [richTexts addObject:obj.serialize];
+    }];
+    gadgets[@"richtexts"] = richTexts;
 }
 
 @end
