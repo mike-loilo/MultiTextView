@@ -99,6 +99,9 @@
 		2711B4891D951F8800BB1363 /* JSBeautifier.js in Resources */ = {isa = PBXBuildFile; fileRef = 2711B43A1D951F8800BB1363 /* JSBeautifier.js */; };
 		2724BE261DCC74C1001812E6 /* LLClipTextInputViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2724BE251DCC74C1001812E6 /* LLClipTextInputViewController.mm */; };
 		2753BECD1D891AD900BFED52 /* LLTextHandleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2753BECC1D891AD900BFED52 /* LLTextHandleView.swift */; };
+		27580C001DF146B2005F98DA /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27580BFF1DF146B2005F98DA /* AVFoundation.framework */; };
+		277E0B271DF5076700655C80 /* NSString+Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 277E0B261DF5076700655C80 /* NSString+Util.m */; };
+		278337151DF1194700E3B7B5 /* LLClipResource.mm in Sources */ = {isa = PBXBuildFile; fileRef = 278337141DF1194700E3B7B5 /* LLClipResource.mm */; };
 		2789D89D1D86254100B283A7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2789D89C1D86254100B283A7 /* AppDelegate.swift */; };
 		2789D89F1D86254100B283A7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2789D89E1D86254100B283A7 /* ViewController.swift */; };
 		2789D8A21D86254100B283A7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2789D8A01D86254100B283A7 /* Main.storyboard */; };
@@ -241,6 +244,11 @@
 		2724BE241DCC74C1001812E6 /* LLClipTextInputViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LLClipTextInputViewController.h; path = Base/LLClipTextInputViewController.h; sourceTree = "<group>"; };
 		2724BE251DCC74C1001812E6 /* LLClipTextInputViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = LLClipTextInputViewController.mm; path = Base/LLClipTextInputViewController.mm; sourceTree = "<group>"; };
 		2753BECC1D891AD900BFED52 /* LLTextHandleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLTextHandleView.swift; sourceTree = "<group>"; };
+		27580BFF1DF146B2005F98DA /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		277E0B251DF5076700655C80 /* NSString+Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Util.h"; path = "Base/NSString+Util.h"; sourceTree = "<group>"; };
+		277E0B261DF5076700655C80 /* NSString+Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Util.m"; path = "Base/NSString+Util.m"; sourceTree = "<group>"; };
+		278337131DF1194700E3B7B5 /* LLClipResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LLClipResource.h; path = Base/LLClipResource.h; sourceTree = "<group>"; };
+		278337141DF1194700E3B7B5 /* LLClipResource.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = LLClipResource.mm; path = Base/LLClipResource.mm; sourceTree = "<group>"; };
 		2789D8991D86254100B283A7 /* MultiTextView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MultiTextView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2789D89C1D86254100B283A7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2789D89E1D86254100B283A7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -301,6 +309,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27580C001DF146B2005F98DA /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -442,6 +451,7 @@
 		2789D8901D86254100B283A7 = {
 			isa = PBXGroup;
 			children = (
+				27580BFF1DF146B2005F98DA /* AVFoundation.framework */,
 				278DE6311DD006710034468B /* Other Sources */,
 				2711B3B81D95006100BB1363 /* External */,
 				2789D8AE1D86264E00B283A7 /* Base */,
@@ -487,6 +497,8 @@
 				2789D8B71D86270300B283A7 /* LLClip.mm */,
 				2789D8B31D8626F200B283A7 /* LLClipItem.h */,
 				2789D8B41D8626F200B283A7 /* LLClipItem.mm */,
+				278337131DF1194700E3B7B5 /* LLClipResource.h */,
+				278337141DF1194700E3B7B5 /* LLClipResource.mm */,
 				2724BE241DCC74C1001812E6 /* LLClipTextInputViewController.h */,
 				2724BE251DCC74C1001812E6 /* LLClipTextInputViewController.mm */,
 				2789D8B01D86268C00B283A7 /* LLClipViewController.h */,
@@ -499,6 +511,8 @@
 				2711B3E91D950EF200BB1363 /* LLUtility.m */,
 				2789D8CA1D86494800B283A7 /* Localizable.strings */,
 				2789D8AF1D86268C00B283A7 /* MultiTextView-Bridging-Header.h */,
+				277E0B251DF5076700655C80 /* NSString+Util.h */,
+				277E0B261DF5076700655C80 /* NSString+Util.m */,
 				278DE6161DCFF8A40034468B /* UIColor+Util.swift */,
 			);
 			name = Base;
@@ -736,7 +750,9 @@
 				278DE6301DD005F00034468B /* MJPopoverView.m in Sources */,
 				2711B3D91D95007C00BB1363 /* CYRLayoutManager.m in Sources */,
 				2711B3EA1D950EF200BB1363 /* LLUtility.m in Sources */,
+				278337151DF1194700E3B7B5 /* LLClipResource.mm in Sources */,
 				278DE62E1DD005F00034468B /* MJPopoverContainerViewController.m in Sources */,
+				277E0B271DF5076700655C80 /* NSString+Util.m in Sources */,
 				2711B3DC1D95007C00BB1363 /* CYRToken.m in Sources */,
 				278DE62D1DD005F00034468B /* MJArrowView.m in Sources */,
 				2789D8D11D8674B400B283A7 /* LLFullScreenPlayView.m in Sources */,
