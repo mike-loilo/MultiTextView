@@ -10,6 +10,7 @@
 #import "LLClip.h"
 #import "LLClipItem.h"
 #import "LLFullScreenPlayView.h"
+#import "LLClipResource.h"
 #import "MultiTextView-Swift.h"
 
 @implementation LLClipViewController
@@ -31,13 +32,11 @@
     _clipItem = clipItem;
     _closeCallback = closeCallback;
     
-    _playView = [LLFullScreenPlayView.alloc initWithFrame:self.view.bounds];
-    _playView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin
-    | UIViewAutoresizingFlexibleWidth
-    | UIViewAutoresizingFlexibleRightMargin
-    | UIViewAutoresizingFlexibleTopMargin
-    | UIViewAutoresizingFlexibleHeight
-    | UIViewAutoresizingFlexibleBottomMargin;
+    // なぜかランドスケープなのにポートレートサイズが取得できてしまう
+    CGSize size = self.view.bounds.size;
+    if (size.width < size.height)
+        size = CGSizeMake(size.height, size.width);
+    _playView = [LLFullScreenPlayView.alloc initWithFrame:(CGRect) { .size = size } clipItem:clipItem];
     _playView.backgroundColor = UIColor.lightGrayColor;
     [self.view insertSubview:_playView belowSubview:_topController];
     
@@ -101,6 +100,9 @@
     [self addChildViewController:_multiTextInputViewController];
     // viewをロードするために便宜上追加しておく
     [self.view addSubview:_multiTextInputViewController.view];
+    
+    // テキスト無しにしておく
+    [_playView setupClipItem:_clipItem flags:LL_SRF_NO_TEXT];
 }
 
 /** テキスト入力ビューの表示 */
@@ -120,6 +122,9 @@
 /** テキスト入力ビューの非表示 */
 - (void)dismissTextInputViewController
 {
+    // 元に戻す
+    [_playView setupClipItem:_clipItem flags:0];
+    
     _playView.scrollEnabled = YES;
     [_multiTextInputViewController.view removeFromSuperview];
     [_multiTextInputViewController removeFromParentViewController];

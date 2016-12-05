@@ -18,6 +18,7 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
 
     private var _topButtons = [UIView]()
     private var _textHandleViews = [LLTextHandleView]()
+    var textHandleViews: [LLTextHandleView] { return _textHandleViews }
     private var _tapGesture: UITapGestureRecognizer?
     
     private var _clipItem: LLClipItem?
@@ -89,11 +90,10 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         for obj in _clipItem!.clip.richTexts {
             if !obj.isKindOfClass(LLRichText) { continue }
             let richText = obj as! LLRichText
-            NSLog("[\(_clipItem!.clip.richTexts.indexOfObject(richText)) / \(self._clipItem!.clip.richTexts.count)] : \(richText)")
             let textHandleView = LLTextHandleView(richText: richText, type: .Normal)
             textHandleView.viewDelegate = self
-            self._playView!.currentPageContentView.addSubview(textHandleView)
-            self._textHandleViews.append(textHandleView)
+            _playView!.currentPageContentView.addSubview(textHandleView)
+            _textHandleViews.append(textHandleView)
         }
         self.organizeTextObjects(nil)
     }

@@ -144,9 +144,7 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
         return false
     }
     private var _htmlString: String?
-    var htmlString: String? {
-        get { return _htmlString }
-    }
+    var htmlString: String? { return _htmlString }
     
     /** 動かせるかどうか */
     var movable: Bool = false {
@@ -183,9 +181,7 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
     
     /** LLRichText */
     private var _richText: LLRichText?
-    var richText: LLRichText? {
-        get { return _richText }
-    }
+    var richText: LLRichText? { return _richText }
     
     convenience init(richText: LLRichText, type: LLTextHandleViewType) {
         self.init(frame: CGRectMake(richText.origin.x, richText.origin.y, richText.size.width, richText.size.height), type: type, htmlString: richText.text)

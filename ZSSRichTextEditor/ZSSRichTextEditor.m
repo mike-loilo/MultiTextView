@@ -14,6 +14,8 @@
 #import "ZSSTextView.h"
 #import "LLClipTextInputViewController.h"
 #import "MJPopoverController.h"
+#import "NSString+Util.h"
+#import "LLUtility.h"
 
 @import JavaScriptCore;
 
@@ -2218,6 +2220,7 @@ static CGFloat kDefaultScale = 0.5;
 
 #pragma mark - Custom ZSSRichTextViewer
 
+static BOOL isPositiveValid(CGFloat f) { return 0 < f && !isnan(f); }
 @interface ZSSRichTextViewer() <WKNavigationDelegate>
 @end
 @implementation ZSSRichTextViewer {
@@ -2248,11 +2251,54 @@ static CGFloat kDefaultScale = 0.5;
 - (void)updateHTML {
     [self evaluateJavaScript:[ZSSRichTextEditor javaScriptForResourceLoadedFromSetHTML:_internalHTML] completionHandler:NULL];
 }
+- (void)getHTML:(void (^)(NSString * _Nullable html, NSError * _Nullable error))completion {
+    [self evaluateJavaScript:@"zss_editor.getHTML();" completionHandler:completion];
+}
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
     _editorLoaded = YES;
     if (!_internalHTML) {
         _internalHTML = @"";
     }
     [self updateHTML];
+    if (_internalHTML.isMeaningful) {
+        // HTMLテキストやサイズなど、ちゃんとロードされるまで待つ
+        __weak typeof(self) __self = self;
+        performActionOnSubThread(^{
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            while (YES) {
+                typeof(self) self = __self;
+                if (!__self) break;
+                __block BOOL isLoaded = NO;
+                [self getHTML:^(NSString * _Nullable html, NSError * _Nullable error) {
+                    performActionOnMainThread(^{
+                        // HTMLテキストがロードされていることを確認する
+                        isLoaded = [_internalHTML isEqualToString:html];
+                        // サイズが正になっていなければ未ロード扱いとする
+                        if (isPositiveValid(CGRectGetWidth(self.bounds)) && isPositiveValid(CGRectGetHeight(self.bounds)) && (!isPositiveValid(self.scrollView.contentSize.width) || !isPositiveValid(self.scrollView.contentSize.height)))
+                            isLoaded = NO;
+                        dispatch_semaphore_signal(semaphore);
+                    });
+                }];
+                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+                if (isLoaded) break;
+                // ほんの少し待ってチェックしないと、直後に画像化しても意図したものが得られない
+                [NSThread sleepForTimeInterval:0.1];
+            }
+        }, ^{
+            if (_didFinishNavigation) _didFinishNavigation(self, navigation);
+        });
+    }
+    else {
+        if (_didFinishNavigation) _didFinishNavigation(self, navigation);
+    }
+}
+- (UIImage *)screenCapture {
+    CGSize const size = self.scrollView.contentSize;
+    if (!isPositiveValid(size.width) || !isPositiveValid(size.height)) return nil;
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+    [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:NO];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
 }
 @end

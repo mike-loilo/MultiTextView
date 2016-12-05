@@ -9,6 +9,8 @@ extern "C" {
 
 UIViewController *findViewControllerInResponderChain(UIResponder *responder);
 NSString *getUniqueID();
+void performActionOnMainThread(void (^action)());
+void performActionOnSubThread(void (^action)(), void (^completionOnMainThread)());
 
 #ifdef __cplusplus
 }

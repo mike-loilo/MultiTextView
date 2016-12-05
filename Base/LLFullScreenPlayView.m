@@ -7,39 +7,18 @@
 //
 
 #import "LLFullScreenPlayView.h"
-
-#pragma mark - MTContentView
-
-@interface MTContentView : UIView
-@end
-@implementation MTContentView
-+ (Class)layerClass {
-    return CAGradientLayer.class;
-}
-- (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    CAGradientLayer *layer = (CAGradientLayer *)self.layer;
-    layer.colors = @[(id)[UIColor colorWithRed:238/255. green:130/255. blue:238/255. alpha:1].CGColor /* Violet */,
-                     (id)[UIColor colorWithRed:75/255. green:0 blue:130/255. alpha:1].CGColor /* Indigo */,
-                     (id)[UIColor colorWithRed:0 green:0 blue:1 alpha:1].CGColor /* Blue */,
-                     (id)[UIColor colorWithRed:0 green:1 blue:0 alpha:1].CGColor /* Green */,
-                     (id)[UIColor colorWithRed:1 green:1 blue:0 alpha:1].CGColor /* Yellow */,
-                     (id)[UIColor colorWithRed:1 green:165/255. blue:0 alpha:1].CGColor /* Orange */,
-                     (id)[UIColor colorWithRed:1 green:0 blue:0 alpha:1].CGColor /* Red */];
-    layer.startPoint = CGPointMake(0, 0);
-    layer.endPoint = CGPointMake(1.0, 1.0);
-    return self;
-}
-@end
+#import "LLClipResource.h"
 
 #pragma mark - LLFullScreenPlayViewItem
 
 @interface LLFullScreenPlayViewItem : UIView<UIScrollViewDelegate>
 @property (nonatomic, readonly) UIScrollView *scroll;
-@property (nonatomic, readonly) MTContentView *contentView;
+@property (nonatomic, readonly) UIView *contentView;
 @end
-@implementation LLFullScreenPlayViewItem
-- (instancetype)initWithFrame:(CGRect)frame {
+@implementation LLFullScreenPlayViewItem {
+    LLPlayableResource *_clipResource;
+}
+- (instancetype)initWithFrame:(CGRect)frame clipItem:(LLClipItem *)clipItem flags:(int)flags {
     self = [super initWithFrame:frame];
     
     _scroll = [UIScrollView.alloc initWithFrame:frame];
@@ -56,7 +35,7 @@
     _scroll.scrollsToTop = NO;
     [self addSubview:_scroll];
 
-    _contentView = [MTContentView.alloc initWithFrame:frame];
+    _contentView = [UIView.alloc initWithFrame:frame];
     _contentView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin
     | UIViewAutoresizingFlexibleWidth
     | UIViewAutoresizingFlexibleRightMargin
@@ -64,6 +43,8 @@
     | UIViewAutoresizingFlexibleHeight
     | UIViewAutoresizingFlexibleBottomMargin;
     [_scroll addSubview:_contentView];
+    
+    [self setupClipItem:clipItem flags:flags];
     
     return self;
 }
@@ -74,17 +55,23 @@
     if (scrollView.zoomScale <= scrollView.minimumZoomScale)
         [self viewForZoomingInScrollView:scrollView].center = scrollView.center;
 }
+- (void)setupClipItem:(LLClipItem *)clipItem flags:(int)flags {
+    if (_clipResource)
+        [_clipResource.playerLayer removeFromSuperlayer];
+    // 省略
+    _clipResource = [LLClipResource makeSingleResource:clipItem playerSize:self.bounds.size textAreaNotifier:NULL flags:flags];
+    [_contentView.layer addSublayer:_clipResource.playerLayer];
+}
 @end
 
 #pragma mark - LLFullScreenPlayView
 
-@implementation LLFullScreenPlayView
-{
+@implementation LLFullScreenPlayView {
     LLFullScreenPlayViewItem *_preview;
 }
-- (instancetype)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame clipItem:(LLClipItem *)clipItem {
     self = [super initWithFrame:frame];
-    _preview = [LLFullScreenPlayViewItem.alloc initWithFrame:frame];
+    _preview = [LLFullScreenPlayViewItem.alloc initWithFrame:self.bounds clipItem:clipItem flags:0];
     _preview.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin
     | UIViewAutoresizingFlexibleWidth
     | UIViewAutoresizingFlexibleRightMargin
@@ -100,5 +87,8 @@
 }
 - (void)setScrollEnabled:(BOOL)scrollEnabled {
     _preview.scroll.userInteractionEnabled = super.scrollEnabled = scrollEnabled;
+}
+- (void)setupClipItem:(LLClipItem *)clipItem flags:(int)flags {
+    [_preview setupClipItem:clipItem flags:flags];
 }
 @end

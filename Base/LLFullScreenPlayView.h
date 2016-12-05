@@ -8,8 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@class LLClipItem;
+
 @interface LLFullScreenPlayView : UIScrollView
 
+- (instancetype)initWithFrame:(CGRect)frame clipItem:(LLClipItem *)clipItem;
 @property (nonatomic, readonly) UIView *currentPageContentView;
+- (void)setupClipItem:(LLClipItem *)clipItem flags:(int)flags;
 
 @end

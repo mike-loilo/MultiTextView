@@ -254,4 +254,7 @@ static NSString * const ZSSRichTextEditorToolbarFontSize = @"com.zedsaid.toolbar
 /** ZSSRichTextEditor.editorViewのHTML読込、表示部分だけを抽出したビュー */
 @interface ZSSRichTextViewer : WKWebView
 - (void)setHTML:(NSString *)html;
+@property (nonatomic, copy) void (^didFinishNavigation)(id viewer, WKNavigation *navigation);
+/** WKWebViewのスクリーンショット（UIView+Snapshotでは意図した画像が取得できない） */
+@property (nonatomic, readonly) UIImage *screenCapture;
 @end
