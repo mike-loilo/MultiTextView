@@ -11,7 +11,7 @@
 
 #pragma mark - LLRichText
 
-@interface LLRichText : NSObject
+@interface LLRichText : NSObject<NSCopying>
 - (id)initWithJson:(id)json;
 @property (nonatomic) NSString *text;
 @property (nonatomic) NSInteger zIndex;

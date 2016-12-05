@@ -100,9 +100,6 @@
     [self addChildViewController:_multiTextInputViewController];
     // viewをロードするために便宜上追加しておく
     [self.view addSubview:_multiTextInputViewController.view];
-    
-    // テキスト無しにしておく
-    [_playView setupClipItem:_clipItem flags:LL_SRF_NO_TEXT];
 }
 
 /** テキスト入力ビューの表示 */
@@ -110,7 +107,10 @@
 {
     [self setupTextInputViewController];
     
+    // テキスト無しにしておく
+    [_playView setupClipItem:_clipItem flags:LL_SRF_NO_TEXT];
     _playView.scrollEnabled = NO;
+    
     [self dismissControllerAnimated:animated option:LLDismissControllerOptionAll completion:^{
         _multiTextInputViewController.controllerParent = self.view;
         [_multiTextInputViewController.view.superview insertSubview:_multiTextInputViewController.view atIndex:0];
@@ -124,8 +124,8 @@
 {
     // 元に戻す
     [_playView setupClipItem:_clipItem flags:0];
-    
     _playView.scrollEnabled = YES;
+    
     [_multiTextInputViewController.view removeFromSuperview];
     [_multiTextInputViewController removeFromParentViewController];
     _multiTextInputViewController = nil;

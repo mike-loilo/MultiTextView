@@ -56,6 +56,14 @@ static id _nn(id obj) { return obj ?: NSNull.null; }
              @"origin": @{@"x": @(_origin.x), @"y": @(_origin.y)},
              @"size": @{@"width": @(_size.width), @"height": @(_size.height)}};
 }
+- (id)copyWithZone:(NSZone *)zone {
+    LLRichText *copied = [self.class allocWithZone:zone];
+    copied.text = self.text;
+    copied.zIndex = self.zIndex;
+    copied.origin = self.origin;
+    copied.size = self.size;
+    return copied;
+}
 @end
 
 #pragma mark - LLClip

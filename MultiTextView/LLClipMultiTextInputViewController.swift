@@ -87,13 +87,13 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         self.insertButton.setWhiteStyle()
         
         //TODO:- 数が多くなるとUIに影響を与えかねないので、実際には少しずつ追加する
-        for obj in _clipItem!.clip.richTexts {
-            if !obj.isKindOfClass(LLRichText) { continue }
+        _clipItem!.clip.richTexts.enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
+            if !obj.isKindOfClass(LLRichText) { return }
             let richText = obj as! LLRichText
             let textHandleView = LLTextHandleView(richText: richText, type: .Normal)
             textHandleView.viewDelegate = self
-            _playView!.currentPageContentView.addSubview(textHandleView)
-            _textHandleViews.append(textHandleView)
+            self._playView!.currentPageContentView.addSubview(textHandleView)
+            self._textHandleViews.append(textHandleView)
         }
         self.organizeTextObjects(nil)
     }
@@ -128,6 +128,7 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     override func prefersStatusBarHidden() -> Bool { return true }
     
     @IBAction func closeButtonDidTap(sender: AnyObject) {
+        self.organizeTextObjects(nil)
         if nil != _closeCallback {
             _closeCallback!()
         }
@@ -279,7 +280,7 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
             _locationWithLongPress = nil
             return
         }
-        let textHandleView = self.textHandleViewFrom(_copiedData!, type: .Normal)
+        let textHandleView = self.textHandleViewFrom(_copiedData!.copy() as! LLRichText, type: .Normal)
         textHandleView.frame = CGRectMake(_locationWithLongPress!.x, _locationWithLongPress!.y, CGRectGetWidth(textHandleView.frame), CGRectGetHeight(textHandleView.frame))
         textHandleView.viewDelegate = self
         _playView!.currentPageContentView.addSubview(textHandleView)
@@ -317,7 +318,7 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     
     func textHandleViewMenuCut(textHandleView: LLTextHandleView) {
         if !_textHandleViews.contains(textHandleView) { return }
-        _copiedData = self.richTextFrom(textHandleView)
+        _copiedData = self.richTextFrom(textHandleView).copy() as? LLRichText
         textHandleView.removeFromSuperview()
         _textHandleViews.removeAtIndex(_textHandleViews.indexOf(textHandleView)!)
         self.syncRichTexts()
@@ -325,7 +326,7 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     
     func textHandleViewMenuCopy(textHandleView: LLTextHandleView) {
         if !_textHandleViews.contains(textHandleView) { return }
-        _copiedData = self.richTextFrom(textHandleView)
+        _copiedData = self.richTextFrom(textHandleView).copy() as? LLRichText
     }
     
     func textHandleViewMenuDelete(textHandleView: LLTextHandleView) {
