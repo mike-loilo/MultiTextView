@@ -68,7 +68,7 @@
                                             expression:@"<!--(.*?)-->"
                                             attributes:@{
                                                          NSForegroundColorAttributeName : RGB(31, 131, 0),
-                                                         NSFontAttributeName : self.italicFont
+                                                         NSFontAttributeName : self.italicFont ?: NSNull.null
                                                          }],
                                [CYRToken tokenWithName:@"attributes"
                                             expression:@"(?<==)('|\").*?\\1(?=.*?>)"

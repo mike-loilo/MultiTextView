@@ -1283,7 +1283,8 @@ static CGFloat kDefaultScale = 0.5;
     } else if (tag == 2) {
         trigger = [NSString stringWithFormat:@"zss_editor.setBackgroundColor(\"%@\");", hex];
     }
-    [self.editorView stringByEvaluatingJavaScriptFromString:trigger];
+    if (trigger)
+        [self.editorView stringByEvaluatingJavaScriptFromString:trigger];
     
 }
 
