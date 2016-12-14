@@ -7,6 +7,7 @@
 //
 
 #import "LLBorderedButton.h"
+#import "MultiTextView-Swift.h"
 #import <QuartzCore/CALayer.h>
 
 @implementation LLBorderedButton
@@ -19,8 +20,8 @@
 
 - (instancetype)_init
 {
-    self.layer.borderWidth = 1 * UIScreen.mainScreen.scale;
-    self.layer.cornerRadius = 5 * UIScreen.mainScreen.scale;
+    self.layer.borderWidth = 1 * UIScreen.scaleToStandard;
+    self.layer.cornerRadius = 5 * UIScreen.scaleToStandard;
     self.layer.shadowRadius = 0;
     self.layer.shadowColor = nil;
     
@@ -97,7 +98,7 @@
 - (void)setWhiteStyle
 {
     self.userInteractionEnabled = YES;
-    self.borderWidth = 2 * UIScreen.mainScreen.scale;
+    self.borderWidth = 2 * UIScreen.scaleToStandard;
     self.cornerRadius = MIN(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds)) * 0.45;
     self.backgroundColor = [UIColor colorWithRed:46/255. green:100/255. blue:124/255. alpha:0.75];
     self.tintColor = UIColor.whiteColor;

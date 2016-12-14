@@ -138,6 +138,7 @@
 		278DE6431DD013FD0034468B /* moji@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 278DE63F1DD013FD0034468B /* moji@2x.png */; };
 		27AC94B91DC9E80D007C8D56 /* ZSSfontSize.png in Resources */ = {isa = PBXBuildFile; fileRef = 27AC94B71DC9E80D007C8D56 /* ZSSfontSize.png */; };
 		27AC94BA1DC9E80D007C8D56 /* ZSSfontSize@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 27AC94B81DC9E80D007C8D56 /* ZSSfontSize@2x.png */; };
+		27F57A091E01317A00E041A4 /* UIScreen+LandscapeSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F57A081E01317A00E041A4 /* UIScreen+LandscapeSize.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -302,6 +303,7 @@
 		278DE63F1DD013FD0034468B /* moji@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "moji@2x.png"; path = "images/moji@2x.png"; sourceTree = "<group>"; };
 		27AC94B71DC9E80D007C8D56 /* ZSSfontSize.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ZSSfontSize.png; sourceTree = "<group>"; };
 		27AC94B81DC9E80D007C8D56 /* ZSSfontSize@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ZSSfontSize@2x.png"; sourceTree = "<group>"; };
+		27F57A081E01317A00E041A4 /* UIScreen+LandscapeSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIScreen+LandscapeSize.swift"; path = "Base/UIScreen+LandscapeSize.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -514,6 +516,7 @@
 				277E0B251DF5076700655C80 /* NSString+Util.h */,
 				277E0B261DF5076700655C80 /* NSString+Util.m */,
 				278DE6161DCFF8A40034468B /* UIColor+Util.swift */,
+				27F57A081E01317A00E041A4 /* UIScreen+LandscapeSize.swift */,
 			);
 			name = Base;
 			sourceTree = "<group>";
@@ -744,6 +747,7 @@
 				2789D8B81D86270300B283A7 /* LLClip.mm in Sources */,
 				2789D8C51D86426200B283A7 /* LLBorderedButton.m in Sources */,
 				2711B3E61D95007C00BB1363 /* ZSSRichTextEditor.m in Sources */,
+				27F57A091E01317A00E041A4 /* UIScreen+LandscapeSize.swift in Sources */,
 				2711B3DA1D95007C00BB1363 /* CYRTextStorage.m in Sources */,
 				278DE6171DCFF8A40034468B /* UIColor+Util.swift in Sources */,
 				2753BECD1D891AD900BFED52 /* LLTextHandleView.swift in Sources */,
