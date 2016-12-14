@@ -296,8 +296,6 @@ static CGFloat kDefaultScale = 0.5;
     self.editorView.opaque = NO;
     [self.view addSubview:self.editorView];
     
-    [self.editorView.scrollView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:NULL];
-    
 }
 
 - (void)setUpImagePicker {
@@ -2010,8 +2008,8 @@ static CGFloat kDefaultScale = 0.5;
 //            editorFrame.size.height = (self.view.frame.size.height - keyboardHeight) - sizeOfToolbar - extraHeight;
 //            self.editorView.frame = editorFrame;
 //            self.editorViewFrame = self.editorView.frame;
-            self.editorView.scrollView.contentInset = UIEdgeInsetsZero;
-            self.editorView.scrollView.scrollIndicatorInsets = UIEdgeInsetsZero;
+//            self.editorView.scrollView.contentInset = UIEdgeInsetsZero;
+//            self.editorView.scrollView.scrollIndicatorInsets = UIEdgeInsetsZero;
             
 //            // Source View
 //            CGRect sourceFrame = self.sourceView.frame;
@@ -2029,6 +2027,8 @@ static CGFloat kDefaultScale = 0.5;
             if ([_receiver respondsToSelector:@selector(richTextEditor:didChangeWith:html:caretRect:)])
                 [_receiver richTextEditor:self didChangeWith:self.getText html:self.getHTML caretRect:CGRectFromString(self.getSelectionCoords)];
         }];
+        
+        [self.editorView.scrollView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:NULL];
         
     } else {
         
@@ -2055,8 +2055,8 @@ static CGFloat kDefaultScale = 0.5;
 //            
 //            self.editorView.frame = editorFrame;
 //            self.editorViewFrame = self.editorView.frame;
-            self.editorView.scrollView.contentInset = UIEdgeInsetsZero;
-            self.editorView.scrollView.scrollIndicatorInsets = UIEdgeInsetsZero;
+//            self.editorView.scrollView.contentInset = UIEdgeInsetsZero;
+//            self.editorView.scrollView.scrollIndicatorInsets = UIEdgeInsetsZero;
             
 //            // Source View
 //            CGRect sourceFrame = self.sourceView.frame;
@@ -2071,6 +2071,8 @@ static CGFloat kDefaultScale = 0.5;
             
         } completion:nil];
         
+        [self.editorView.scrollView removeObserver:self forKeyPath:@"contentSize"];
+
     }
     
 }
@@ -2157,7 +2159,6 @@ static CGFloat kDefaultScale = 0.5;
 
 - (void)dealloc {
     [self.toolbarHolder removeFromSuperview];
-    [self.editorView.scrollView removeObserver:self forKeyPath:@"contentSize"];
 }
 
 /** WebView用のリソースHTMLString */
