@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 extension UIScreen {
-    private struct ClassProperty {
+    fileprivate struct ClassProperty {
         static var landscapeSizeStore: NSValue!
         static var scaleXtoStandardStore: NSNumber!
         static var scaleYtoStandardStore: NSNumber!
@@ -19,29 +19,29 @@ extension UIScreen {
     class func landscapeSize() -> CGSize {
         if ClassProperty.landscapeSizeStore != nil {
             // iPad Proの場合は意図したサイズが取れていない場合があるので注意
-            if UI_USER_INTERFACE_IDIOM() != .Pad || ClassProperty.landscapeSizeStore.CGSizeValue().width != 1366 {
-                return ClassProperty.landscapeSizeStore.CGSizeValue()
+            if UI_USER_INTERFACE_IDIOM() != .pad || ClassProperty.landscapeSizeStore.cgSizeValue.width != 1366 {
+                return ClassProperty.landscapeSizeStore.cgSizeValue
             }
         }
-        var size = UIScreen.mainScreen().bounds.size
-        if (!CGSizeEqualToSize(size, CGSizeZero)) {
+        var size = UIScreen.main.bounds.size
+        if (!size.equalTo(CGSize.zero)) {
             if (size.width < size.height) {
-                size = CGSizeMake(size.height, size.width)
+                size = CGSize(width: size.height, height: size.width)
             }
-            ClassProperty.landscapeSizeStore = NSValue(CGSize: size)
+            ClassProperty.landscapeSizeStore = NSValue(cgSize: size)
         }
         return size
     }
     
     class func standardSize() -> CGSize {
-        return CGSizeMake(1024, 768)
+        return CGSize(width: 1024, height: 768)
     }
     
     class func scaleXtoStandard() -> Float {
         if ClassProperty.scaleXtoStandardStore != nil {
             return ClassProperty.scaleXtoStandardStore.floatValue
         }
-        ClassProperty.scaleXtoStandardStore = NSNumber(float: (Float)(landscapeSize().width / self.standardSize().width))
+        ClassProperty.scaleXtoStandardStore = NSNumber(value: (Float)(landscapeSize().width / self.standardSize().width) as Float)
         return ClassProperty.scaleXtoStandardStore.floatValue
     }
     
@@ -49,7 +49,7 @@ extension UIScreen {
         if ClassProperty.scaleYtoStandardStore != nil {
             return ClassProperty.scaleYtoStandardStore.floatValue
         }
-        ClassProperty.scaleYtoStandardStore = NSNumber(float: (Float)(landscapeSize().height / self.standardSize().height))
+        ClassProperty.scaleYtoStandardStore = NSNumber(value: (Float)(landscapeSize().height / self.standardSize().height) as Float)
         return ClassProperty.scaleYtoStandardStore.floatValue
     }
     

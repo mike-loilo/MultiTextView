@@ -16,25 +16,25 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     @IBOutlet weak var insertButton: LLBorderedButton!
     @IBOutlet weak var addClipButton: UIButton!
 
-    private var _topButtons = [UIView]()
-    private var _textHandleViews = [LLTextHandleView]()
+    fileprivate var _topButtons = [UIView]()
+    fileprivate var _textHandleViews = [LLTextHandleView]()
     var textHandleViews: [LLTextHandleView] { return _textHandleViews }
-    private var _tapGesture: UITapGestureRecognizer?
+    fileprivate var _tapGesture: UITapGestureRecognizer?
     
-    private var _clipItem: LLClipItem?
-    private var _playView: LLFullScreenPlayView?
-    private var _changeBGColorBlock: ((color: UIColor?) -> ())?
-    private var _addClipBlock: ((item: LLClipItem?) -> ())?
-    private var _closeCallback: (() -> ())?
+    fileprivate var _clipItem: LLClipItem?
+    fileprivate var _playView: LLFullScreenPlayView?
+    fileprivate var _changeBGColorBlock: ((_ color: UIColor?) -> ())?
+    fileprivate var _addClipBlock: ((_ item: LLClipItem?) -> ())?
+    fileprivate var _closeCallback: (() -> ())?
     
     /** カット/コピー中のテキストボックス */
-    private var _copiedData: LLRichText?
+    fileprivate var _copiedData: LLRichText?
     /** 長押し */
-    private var _longPressGesture: UILongPressGestureRecognizer?
+    fileprivate var _longPressGesture: UILongPressGestureRecognizer?
     /** 最後に長押しメニューを表示した位置 */
-    private var _locationWithLongPress: CGPoint?
+    fileprivate var _locationWithLongPress: CGPoint?
     
-    init(clipItem: LLClipItem!, playView: LLFullScreenPlayView!, changeBGColorBlock: ((color: UIColor?) -> ())?, addClipBlock: ((item: LLClipItem?) -> ())?, closeCallback: (() -> ())?) {
+    init(clipItem: LLClipItem!, playView: LLFullScreenPlayView!, changeBGColorBlock: ((_ color: UIColor?) -> ())?, addClipBlock: ((_ item: LLClipItem?) -> ())?, closeCallback: (() -> ())?) {
         super.init(nibName: "LLClipMultiTextInputViewController", bundle: nil)
 
         _clipItem = clipItem
@@ -55,15 +55,15 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     /** ボタンの親になるビューを設定 */
     var controllerParent: UIView? {
         willSet {
-            (_topButtons as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
-                obj.removeFromSuperview()
-            }
+            (_topButtons as AnyObject).enumerateObjects({ (obj, idx, stop) in
+                (obj as! UIView).removeFromSuperview()
+            })
         }
         didSet {
             if nil != self.controllerParent {
-                (_topButtons as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
+                (_topButtons as AnyObject).enumerateObjects({ (obj, idx, stop) in
                     self.controllerParent!.addSubview(obj as! UIView)
-                }
+                })
             }
         }
     }
@@ -81,42 +81,42 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         _topButtons.append(self.insertButton)
         _topButtons.append(self.addClipButton)
         
-        self.closeButton.setTitle(NSLocalizedString("026", comment: "") /* 完了 */, forState: .Normal)
+        self.closeButton.setTitle(NSLocalizedString("026", comment: "") /* 完了 */, for: UIControlState())
         self.closeButton.setWhiteStyle()
-        self.insertButton.setTitle(NSLocalizedString("707", comment: "") /* 挿入 */, forState: .Normal)
+        self.insertButton.setTitle(NSLocalizedString("707", comment: "") /* 挿入 */, for: UIControlState())
         self.insertButton.setWhiteStyle()
         
         //TODO:- 数が多くなるとUIに影響を与えかねないので、実際には少しずつ追加する
-        _clipItem!.clip.richTexts.enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
-            if !obj.isKindOfClass(LLRichText) { return }
+        _clipItem!.clip.richTexts.enumerateObjects({ (obj, idx, stop) in
+            if !(obj is LLRichText) { return }
             let richText = obj as! LLRichText
-            let textHandleView = LLTextHandleView(richText: richText, type: .Normal)
+            let textHandleView = LLTextHandleView(richText: richText, type: .normal)
             textHandleView.viewDelegate = self
             self._playView!.currentPageContentView.addSubview(textHandleView)
             self._textHandleViews.append(textHandleView)
-        }
+        })
         self.organizeTextObjects(nil)
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         self.view.frame = self.view.superview!.bounds
     }
     
-    private var className: String {
+    fileprivate var className: String {
         get {
-            return NSStringFromClass(self.dynamicType).stringByReplacingOccurrencesOfString(NSBundle.mainBundle().infoDictionary?[kCFBundleNameKey as String] as! String + ".", withString: "", options: .CaseInsensitiveSearch, range: nil)
+            return NSStringFromClass(type(of: self)).replacingOccurrences(of: Bundle.main.infoDictionary?[kCFBundleNameKey as String] as! String + ".", with: "", options: .caseInsensitive, range: nil)
         }
     }
     deinit {
         NSLog("\(self.className + "." + #function)")
-        (_topButtons as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
-            obj.removeFromSuperview()
-        }
-        (_textHandleViews as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
-            obj.removeFromSuperview()
-        }
+        (_topButtons as AnyObject).enumerateObjects({ (obj, idx, stop) in
+            (obj as! UIView).removeFromSuperview()
+        })
+        (_textHandleViews as AnyObject).enumerateObjects({ (obj, idx, stop) in
+            (obj as! UIView).removeFromSuperview()
+        })
         if nil != _tapGesture!.view {
             _tapGesture!.view!.removeGestureRecognizer(_tapGesture!)
         }
@@ -125,76 +125,76 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         }
     }
     
-    override func prefersStatusBarHidden() -> Bool { return true }
+    override var prefersStatusBarHidden : Bool { return true }
     
-    @IBAction func closeButtonDidTap(sender: AnyObject) {
+    @IBAction func closeButtonDidTap(_ sender: AnyObject) {
         self.organizeTextObjects(nil)
         if nil != _closeCallback {
             _closeCallback!()
         }
     }
     
-    @IBAction func backgroundColorButtonDidTap(sender: AnyObject) {
+    @IBAction func backgroundColorButtonDidTap(_ sender: AnyObject) {
         if nil != _changeBGColorBlock {
-            _changeBGColorBlock!(color: UIColor.brownColor())
+            _changeBGColorBlock!(UIColor.brown)
         }
     }
     
-    @IBAction func insertButtonDidTap(sender: AnyObject) {
+    @IBAction func insertButtonDidTap(_ sender: AnyObject) {
         //TODO:- 本当は既存のHTML文字列を読み込ませる
         let htmlString = "<!-- This is an HTML comment --><p>This is a test of the <strong>ZSSRichTextEditor</strong> by <a title=\"Zed Said\" href=\"http://www.zedsaid.com\">Zed Said Studio</a></p>"
         let richText = LLRichText()
         richText.text = htmlString
-        richText.origin = CGPointZero
-        richText.size = CGSizeMake(400, 200)
-        let textHandleView = LLTextHandleView(richText: richText, type: .Normal)
+        richText.origin = CGPoint.zero
+        richText.size = CGSize(width: 400, height: 200)
+        let textHandleView = LLTextHandleView(richText: richText, type: .normal)
         textHandleView.viewDelegate = self
         _playView!.currentPageContentView.addSubview(textHandleView)
-        textHandleView.center = CGPointMake(CGRectGetWidth(self.view.bounds) * 0.5, CGRectGetHeight(self.view.bounds) * 0.5)
+        textHandleView.center = CGPoint(x: self.view.bounds.width * 0.5, y: self.view.bounds.height * 0.5)
         _textHandleViews.append(textHandleView)
         self.organizeTextObjects(textHandleView)
         // 起動後の初回だけ、即時に編集状態にすると、かなり時間がかかることがあるため、遅延実行する
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.25 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(0.25 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: { () -> Void in
             textHandleView.enterEditMode()
         })
     }
     
-    @IBAction func addClipButtonDidTap(sender: AnyObject) {
+    @IBAction func addClipButtonDidTap(_ sender: AnyObject) {
         if (nil != _addClipBlock) {
-            _addClipBlock!(item: nil);
+            _addClipBlock!(nil);
         }
     }
     
-    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         if _tapGesture == gestureRecognizer {
             // テキストハンドル上で、シングルタップを検出しないようにする
             var receive = true
-            (_textHandleViews as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
-                if (!obj.isKindOfClass(LLTextHandleView)) { return }
+            (_textHandleViews as AnyObject).enumerateObjects({ (obj, idx, stop) in
+                if !(obj is LLTextHandleView) { return }
                 let textHandleView = obj as! LLTextHandleView
-                let point = touch.locationInView(textHandleView)
-                if (CGRectContainsPoint(textHandleView.bounds, point)) {
+                let point = touch.location(in: textHandleView)
+                if (textHandleView.bounds.contains(point)) {
                     receive = false
-                    stop.initialize(true)
+                    stop.initialize(to: true)
                 }
-            }
+            })
             return receive
         }
         return true
     }
     
-    func tapGesture(sender: UIGestureRecognizer) {
+    func tapGesture(_ sender: UIGestureRecognizer) {
         // テキストボックスを整理する
         var didEdit = false
         self.organizeTextObjects(nil, didEdit: &didEdit)
         
         if !didEdit {
             // タップした位置にテキストボックスを配置する
-            let location = sender.locationInView(_playView!.currentPageContentView)
+            let location = sender.location(in: _playView!.currentPageContentView)
             let richText = LLRichText()
             richText.origin = location
-            richText.size = CGSizeMake(80, 40)
-            let textHandleView = LLTextHandleView(richText: richText, type: .Normal)
+            richText.size = CGSize(width: 80, height: 40)
+            let textHandleView = LLTextHandleView(richText: richText, type: .normal)
             textHandleView.viewDelegate = self
             _playView!.currentPageContentView.addSubview(textHandleView)
             _textHandleViews.append(textHandleView)
@@ -203,16 +203,16 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     }
     
     /** テキストボックスを整理する */
-    private func organizeTextObjects(movable: LLTextHandleView?) {
+    fileprivate func organizeTextObjects(_ movable: LLTextHandleView?) {
         var didEdit = false
         self.organizeTextObjects(movable, didEdit: &didEdit)
     }
-    private func organizeTextObjects(movable: LLTextHandleView?, inout didEdit: Bool) {
+    fileprivate func organizeTextObjects(_ movable: LLTextHandleView?, didEdit: inout Bool) {
         didEdit = false
         // 種別を確認して、ノーマルの場合はハンドル自体を削除する
         var removeTextHandleViews = [LLTextHandleView]()
-        (_textHandleViews as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
-            if !obj.isKindOfClass(LLTextHandleView) { return }
+        (_textHandleViews as AnyObject).enumerateObjects({ (obj, idx, stop) in
+            if !(obj is LLTextHandleView) { return }
             let textHandleView = obj as! LLTextHandleView
             textHandleView.movable = textHandleView == movable
             textHandleView.hiddenBorder = !textHandleView.movable
@@ -221,67 +221,67 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
                 // スクロールしている場合があるため元に戻す
                 var frame = self._playView!.currentPageContentView.frame
                 frame.origin.y = 0
-                UIView.animateWithDuration(0.1, animations: {
+                UIView.animate(withDuration: 0.1, animations: {
                     self._playView!.currentPageContentView.frame = frame
                 })
                 didEdit = true
             }
-            if !textHandleView.movable && textHandleView.type == .Normal {
+            if !textHandleView.movable && textHandleView.type == .normal {
                 if !textHandleView.hasText {
                     textHandleView.removeFromSuperview()
                     removeTextHandleViews.append(textHandleView)
                 }
             }
-        }
-        (removeTextHandleViews as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
-            self._textHandleViews.removeAtIndex(self._textHandleViews.indexOf(obj as! LLTextHandleView)!)
-        }
+        })
+        (removeTextHandleViews as AnyObject).enumerateObjects({ (obj, idx, stop) in
+            self._textHandleViews.remove(at: self._textHandleViews.index(of: obj as! LLTextHandleView)!)
+        })
         self.syncRichTexts()
     }
     
     /** LLClip.richTextsを同期する */
     func syncRichTexts() {
         _clipItem!.clip.richTexts.removeAllObjects()
-        (_textHandleViews as NSArray).enumerateObjectsUsingBlock { (obj: AnyObject, idx: Int, stop: UnsafeMutablePointer<ObjCBool>) in
-            if !obj.isKindOfClass(LLTextHandleView) { return }
+        (_textHandleViews as AnyObject).enumerateObjects({ (obj, idx, stop) in
+            if !(obj is LLTextHandleView) { return }
             let textHandleView = obj as! LLTextHandleView
             if nil == textHandleView.richText { return }
-            self._clipItem!.clip.richTexts.addObject(textHandleView.richText!)
-        }
+            self._clipItem!.clip.richTexts.add(textHandleView.richText!)
+        })
     }
     
-    func longPressGesture(sender: UILongPressGestureRecognizer) {
-        if sender.state != .Began { return }
+    func longPressGesture(_ sender: UILongPressGestureRecognizer) {
+        if sender.state != .began { return }
         if nil == _copiedData { return }
         // カット/コピー中のものがあればメニューを表示してペーストできるようにする
-        _locationWithLongPress = sender.locationInView(_playView!.currentPageContentView)
+        _locationWithLongPress = sender.location(in: _playView!.currentPageContentView)
         self.becomeFirstResponder()
         let menuItemPaste = UIMenuItem(title: NSLocalizedString("710", comment: "") /* ペースト */, action: #selector(LLClipMultiTextInputViewController.menuPaste(_:)))
-        UIMenuController.sharedMenuController().menuItems = [menuItemPaste]
-        UIMenuController.sharedMenuController().setTargetRect(CGRectMake(_locationWithLongPress!.x, _locationWithLongPress!.y, 0, 0), inView: _playView!.currentPageContentView)
-        UIMenuController.sharedMenuController().setMenuVisible(true, animated: true)
+        UIMenuController.shared.menuItems = [menuItemPaste]
+        UIMenuController.shared.setTargetRect(CGRect(x: _locationWithLongPress!.x, y: _locationWithLongPress!.y, width: 0, height: 0), in: _playView!.currentPageContentView)
+        UIMenuController.shared.setMenuVisible(true, animated: true)
     }
     
-    override func canBecomeFirstResponder() -> Bool {
+    override var canBecomeFirstResponder : Bool {
         return true
     }
     
-    override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         if action == #selector(LLClipMultiTextInputViewController.menuPaste(_:)) {
             return true
         }
         return false
     }
 
-    func menuPaste(sender: AnyObject) {
+    func menuPaste(_ sender: AnyObject) {
         if nil == _copiedData || nil == _locationWithLongPress {
             // 万が一、不正なデータを含んでいてデシリアライズできない場合はデータ自体を破棄しておく
             _copiedData = nil
             _locationWithLongPress = nil
             return
         }
-        let textHandleView = self.textHandleViewFrom(_copiedData!.copy() as! LLRichText, type: .Normal)
-        textHandleView.frame = CGRectMake(_locationWithLongPress!.x, _locationWithLongPress!.y, CGRectGetWidth(textHandleView.frame), CGRectGetHeight(textHandleView.frame))
+        let textHandleView = self.textHandleViewFrom(_copiedData!.copy() as! LLRichText, type: .normal)
+        textHandleView.frame = CGRect(x: _locationWithLongPress!.x, y: _locationWithLongPress!.y, width: textHandleView.frame.width, height: textHandleView.frame.height)
         textHandleView.viewDelegate = self
         _playView!.currentPageContentView.addSubview(textHandleView)
         _textHandleViews.append(textHandleView)
@@ -290,23 +290,23 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     }
     
     /** LLTextHandleViewをLLRichTextに変換する */
-    func richTextFrom(textHandleView: LLTextHandleView) -> LLRichText {
-        let frame = textHandleView.convertRect(textHandleView.bounds, toView: (UIApplication.sharedApplication().delegate?.window)!)
+    func richTextFrom(_ textHandleView: LLTextHandleView) -> LLRichText {
+        let frame = textHandleView.convert(textHandleView.bounds, to: (UIApplication.shared.delegate?.window)!)
         let richText = LLRichText()
         richText.text = textHandleView.htmlString
-        richText.zIndex = textHandleView.superview!.subviews.indexOf(textHandleView)!
+        richText.zIndex = textHandleView.superview!.subviews.index(of: textHandleView)!
         richText.origin = frame.origin
         richText.size = frame.size
         return richText
     }
     
     /** LLRichTextからLLTextHandleViewに変換する */
-    func textHandleViewFrom(richText: LLRichText, type: LLTextHandleViewType) -> LLTextHandleView {
+    func textHandleViewFrom(_ richText: LLRichText, type: LLTextHandleViewType) -> LLTextHandleView {
         return LLTextHandleView(richText: richText, type: type)
     }
     
     //MARK:- LLTextHandleViewDelegate
-    func textHandleViewTap(textHandleView: LLTextHandleView, tapCount: Int) {
+    func textHandleViewTap(_ textHandleView: LLTextHandleView, tapCount: Int) {
         if !_textHandleViews.contains(textHandleView) { return }
         if 1 == tapCount {
             self.organizeTextObjects(textHandleView)
@@ -316,50 +316,50 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         }
     }
     
-    func textHandleViewMenuCut(textHandleView: LLTextHandleView) {
+    func textHandleViewMenuCut(_ textHandleView: LLTextHandleView) {
         if !_textHandleViews.contains(textHandleView) { return }
         _copiedData = self.richTextFrom(textHandleView).copy() as? LLRichText
         textHandleView.removeFromSuperview()
-        _textHandleViews.removeAtIndex(_textHandleViews.indexOf(textHandleView)!)
+        _textHandleViews.remove(at: _textHandleViews.index(of: textHandleView)!)
         self.syncRichTexts()
     }
     
-    func textHandleViewMenuCopy(textHandleView: LLTextHandleView) {
+    func textHandleViewMenuCopy(_ textHandleView: LLTextHandleView) {
         if !_textHandleViews.contains(textHandleView) { return }
         _copiedData = self.richTextFrom(textHandleView).copy() as? LLRichText
     }
     
-    func textHandleViewMenuDelete(textHandleView: LLTextHandleView) {
+    func textHandleViewMenuDelete(_ textHandleView: LLTextHandleView) {
         if !_textHandleViews.contains(textHandleView) { return }
         textHandleView.removeFromSuperview()
-        _textHandleViews.removeAtIndex(_textHandleViews.indexOf(textHandleView)!)
+        _textHandleViews.remove(at: _textHandleViews.index(of: textHandleView)!)
         self.syncRichTexts()
     }
     
-    func textHandleViewDidChangeStatus(textHandleView: LLTextHandleView, isEditing: Bool) {
+    func textHandleViewDidChangeStatus(_ textHandleView: LLTextHandleView, isEditing: Bool) {
         if !_textHandleViews.contains(textHandleView) { return }
     }
     
-    func textHandleViewDidChangeText(textHandleView: LLTextHandleView, text: String?, html: String?, caretRect: CGRect) {
+    func textHandleViewDidChangeText(_ textHandleView: LLTextHandleView, text: String?, html: String?, caretRect: CGRect) {
         if !_textHandleViews.contains(textHandleView) { return }
         // 該当するhtmlHandleViewがキーボードを除く部分に見えるようにスクロールする
-        let rect = textHandleView.convertRect(caretRect, toView: _playView!.currentPageContentView)
-        let toolbarRect = textHandleView.toolbar!.convertRect(textHandleView.toolbar!.bounds, toView: _playView!.currentPageContentView)
-        if CGRectGetMinY(toolbarRect) < CGRectGetMaxY(rect) {
+        let rect = textHandleView.convert(caretRect, to: _playView!.currentPageContentView)
+        let toolbarRect = textHandleView.toolbar!.convert(textHandleView.toolbar!.bounds, to: _playView!.currentPageContentView)
+        if toolbarRect.minY < rect.maxY {
             var frame = _playView!.currentPageContentView.frame
-            frame.origin.y -= CGRectGetMaxY(rect) - CGRectGetMinY(toolbarRect)
-            UIView.animateWithDuration(0.2, animations: {
+            frame.origin.y -= rect.maxY - toolbarRect.minY
+            UIView.animate(withDuration: 0.2, animations: {
                 self._playView!.currentPageContentView.frame = frame
             })
         }
     }
     
-    func textHandleViewDidChangeContentSize(textHandleView: LLTextHandleView, contentSize: CGSize) {
+    func textHandleViewDidChangeContentSize(_ textHandleView: LLTextHandleView, contentSize: CGSize) {
         if !_textHandleViews.contains(textHandleView) { return }
         // コンテントサイズが大きくなったら、それに合わせて大きくする
         var frame = textHandleView.frame
-        frame.size.width = max(CGRectGetWidth(frame), contentSize.width)
-        frame.size.height = max(CGRectGetHeight(frame), contentSize.height)
+        frame.size.width = max(frame.width, contentSize.width)
+        frame.size.height = max(frame.height, contentSize.height)
         textHandleView.frame = frame
     }
 }

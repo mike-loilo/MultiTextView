@@ -12,22 +12,22 @@ import UIKit
 
 /** サイズ変更ハンドル種別 */
 enum LLSizeChangerViewType {
-    case Circle
-    case Rectangle
+    case circle
+    case rectangle
 }
 
 /** サイズ変更ハンドル */
 private class LLSizeChangerView: UIView {
 
     /** 種別 */
-    private var _type: LLSizeChangerViewType = .Circle
+    fileprivate var _type: LLSizeChangerViewType = .circle
     
-    private var _touchesBegan: ((view: LLSizeChangerView, touches: Set<UITouch>, event: UIEvent?) -> ())?
-    private var _touchesMoved: ((view: LLSizeChangerView, touches: Set<UITouch>, event: UIEvent?) -> ())?
-    private var _touchesEnded: ((view: LLSizeChangerView, touches: Set<UITouch>, event: UIEvent?) -> ())?
-    private var _touchesCancelled: ((view: LLSizeChangerView, touches: Set<UITouch>?, event: UIEvent?) -> ())?
+    fileprivate var _touchesBegan: ((_ view: LLSizeChangerView, _ touches: Set<UITouch>, _ event: UIEvent?) -> ())?
+    fileprivate var _touchesMoved: ((_ view: LLSizeChangerView, _ touches: Set<UITouch>, _ event: UIEvent?) -> ())?
+    fileprivate var _touchesEnded: ((_ view: LLSizeChangerView, _ touches: Set<UITouch>, _ event: UIEvent?) -> ())?
+    fileprivate var _touchesCancelled: ((_ view: LLSizeChangerView, _ touches: Set<UITouch>?, _ event: UIEvent?) -> ())?
     
-    init(frame: CGRect, type: LLSizeChangerViewType, touchesBegan: ((view: LLSizeChangerView, touches: Set<UITouch>, event: UIEvent?) -> ())?, touchesMoved: ((view: LLSizeChangerView, touches: Set<UITouch>, event: UIEvent?) -> ())?, touchesEnded: ((view: LLSizeChangerView, touches: Set<UITouch>, event: UIEvent?) -> ())?, touchesCancelled: ((view: LLSizeChangerView, touches: Set<UITouch>?, event: UIEvent?) -> ())?) {
+    init(frame: CGRect, type: LLSizeChangerViewType, touchesBegan: ((_ view: LLSizeChangerView, _ touches: Set<UITouch>, _ event: UIEvent?) -> ())?, touchesMoved: ((_ view: LLSizeChangerView, _ touches: Set<UITouch>, _ event: UIEvent?) -> ())?, touchesEnded: ((_ view: LLSizeChangerView, _ touches: Set<UITouch>, _ event: UIEvent?) -> ())?, touchesCancelled: ((_ view: LLSizeChangerView, _ touches: Set<UITouch>?, _ event: UIEvent?) -> ())?) {
         _type = type
         _touchesBegan = touchesBegan
         _touchesMoved = touchesMoved
@@ -36,8 +36,8 @@ private class LLSizeChangerView: UIView {
         
         super.init(frame: frame)
         
-        self.backgroundColor = UIColor.grayColor()
-        self.layer.borderColor = UIColor.whiteColor().CGColor
+        self.backgroundColor = UIColor.gray
+        self.layer.borderColor = UIColor.white.cgColor
         self.layer.borderWidth = 2
     }
     
@@ -51,30 +51,30 @@ private class LLSizeChangerView: UIView {
             super.frame = frame
             
             switch _type {
-            case .Circle:
-                self.layer.cornerRadius = min(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds)) * 0.5
+            case .circle:
+                self.layer.cornerRadius = min(self.bounds.width, self.bounds.height) * 0.5
                 break
-            case .Rectangle:
-                self.layer.cornerRadius = 4 / UIScreen.mainScreen().scale
+            case .rectangle:
+                self.layer.cornerRadius = 4 / UIScreen.main.scale
                 break
             }
         }
     }
     
-    private override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        if nil != _touchesBegan { _touchesBegan!(view: self, touches: touches, event: event) }
+    fileprivate override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if nil != _touchesBegan { _touchesBegan!(self, touches, event) }
     }
     
-    private override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        if nil != _touchesMoved { _touchesMoved!(view: self, touches: touches, event: event) }
+    fileprivate override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if nil != _touchesMoved { _touchesMoved!(self, touches, event) }
     }
     
-    private override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        if nil != _touchesEnded { _touchesEnded!(view: self, touches: touches, event: event) }
+    fileprivate override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if nil != _touchesEnded { _touchesEnded!(self, touches, event) }
     }
     
-    private override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
-        if nil != _touchesCancelled { _touchesCancelled!(view: self, touches: touches, event: event) }
+    fileprivate override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if nil != _touchesCancelled { _touchesCancelled!(self, touches, event) }
     }
 }
 
@@ -82,68 +82,68 @@ private class LLSizeChangerView: UIView {
 
 /** テキストのハンドル種別 */
 @objc enum LLTextHandleViewType: Int {
-    case Normal
-    case UnDeletable
+    case normal
+    case unDeletable
 }
 
 /** プロトコル */
 @objc protocol LLTextHandleViewDelegate {
     /** タップ */
-    optional func textHandleViewTap(textHandleView: LLTextHandleView, tapCount: Int)
+    @objc optional func textHandleViewTap(_ textHandleView: LLTextHandleView, tapCount: Int)
     /** メニュー：カット */
-    optional func textHandleViewMenuCut(textHandleView: LLTextHandleView)
+    @objc optional func textHandleViewMenuCut(_ textHandleView: LLTextHandleView)
     /** メニュー：コピー */
-    optional func textHandleViewMenuCopy(textHandleView: LLTextHandleView)
+    @objc optional func textHandleViewMenuCopy(_ textHandleView: LLTextHandleView)
     /** メニュー：削除 */
-    optional func textHandleViewMenuDelete(textHandleView: LLTextHandleView)
+    @objc optional func textHandleViewMenuDelete(_ textHandleView: LLTextHandleView)
     /** メニュー：編集 */
-    optional func textHandleViewMenuEditText(textHandleView: LLTextHandleView)
+    @objc optional func textHandleViewMenuEditText(_ textHandleView: LLTextHandleView)
     /** テキスト編集状態の変化 */
-    optional func textHandleViewDidChangeStatus(textHandleView: LLTextHandleView, isEditing: Bool)
+    @objc optional func textHandleViewDidChangeStatus(_ textHandleView: LLTextHandleView, isEditing: Bool)
     /** テキストの変化 */
-    func textHandleViewDidChangeText(textHandleView: LLTextHandleView, text: String?, html: String?, caretRect: CGRect)
+    func textHandleViewDidChangeText(_ textHandleView: LLTextHandleView, text: String?, html: String?, caretRect: CGRect)
     /** コンテントサイズの変化 */
-    func textHandleViewDidChangeContentSize(textHandleView: LLTextHandleView, contentSize: CGSize)
+    func textHandleViewDidChangeContentSize(_ textHandleView: LLTextHandleView, contentSize: CGSize)
 }
 
 /** テキストのハンドル */
 class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
 
     /** 種別（ノーマルの場合はハンドル自体を削除、タイトル / サブタイトルの場合はテキストがなくなったらプリセット文言を表示する） */
-    private var _type: LLTextHandleViewType = .Normal
+    fileprivate var _type: LLTextHandleViewType = .normal
     var type: LLTextHandleViewType { return _type }
     
     /** ボーダー用レイヤー */
-    private var _borderLayerInner: CAShapeLayer?
-    private var _borderLayerOuter: CAShapeLayer?
+    fileprivate var _borderLayerInner: CAShapeLayer?
+    fileprivate var _borderLayerOuter: CAShapeLayer?
     
     /** サイズ変更ハンドル */
-    private var _tlHandle: LLSizeChangerView?
-    private var _tcHandle: LLSizeChangerView?
-    private var _trHandle: LLSizeChangerView?
-    private var _lcHandle: LLSizeChangerView?
-    private var _rcHandle: LLSizeChangerView?
-    private var _blHandle: LLSizeChangerView?
-    private var _bcHandle: LLSizeChangerView?
-    private var _brHandle: LLSizeChangerView?
+    fileprivate var _tlHandle: LLSizeChangerView?
+    fileprivate var _tcHandle: LLSizeChangerView?
+    fileprivate var _trHandle: LLSizeChangerView?
+    fileprivate var _lcHandle: LLSizeChangerView?
+    fileprivate var _rcHandle: LLSizeChangerView?
+    fileprivate var _blHandle: LLSizeChangerView?
+    fileprivate var _bcHandle: LLSizeChangerView?
+    fileprivate var _brHandle: LLSizeChangerView?
     
     /** タップジェスチャー */
-    private var _tapGesture: UITapGestureRecognizer?
+    fileprivate var _tapGesture: UITapGestureRecognizer?
     var tapGesture: UITapGestureRecognizer? { return _tapGesture }
-    private var _doubleTapGesture: UITapGestureRecognizer?
+    fileprivate var _doubleTapGesture: UITapGestureRecognizer?
     var doubleTapGesture: UITapGestureRecognizer? { return _doubleTapGesture! }
     
     /** テキストがあるかどうか */
     var hasText: Bool {
         if nil != _richTextEditor {
-            return 0 < _richTextEditor!.getHTML().lengthOfBytesUsingEncoding(NSUTF8StringEncoding)
+            return 0 < _richTextEditor!.getHTML().lengthOfBytes(using: String.Encoding.utf8)
         }
         else if nil != _htmlString {
-            return 0 < _htmlString!.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)
+            return 0 < _htmlString!.lengthOfBytes(using: String.Encoding.utf8)
         }
         return false
     }
-    private var _htmlString: String?
+    fileprivate var _htmlString: String?
     var htmlString: String? { return _htmlString }
     
     /** 動かせるかどうか */
@@ -151,14 +151,14 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
         didSet {
             CATransaction.begin()
             CATransaction.setDisableActions(true)
-            _tlHandle?.hidden = !movable
-            _tcHandle?.hidden = !movable
-            _trHandle?.hidden = !movable
-            _lcHandle?.hidden = !movable
-            _rcHandle?.hidden = !movable
-            _blHandle?.hidden = !movable
-            _bcHandle?.hidden = !movable
-            _brHandle?.hidden = !movable
+            _tlHandle?.isHidden = !movable
+            _tcHandle?.isHidden = !movable
+            _trHandle?.isHidden = !movable
+            _lcHandle?.isHidden = !movable
+            _rcHandle?.isHidden = !movable
+            _blHandle?.isHidden = !movable
+            _bcHandle?.isHidden = !movable
+            _brHandle?.isHidden = !movable
             CATransaction.commit()
         }
     }
@@ -168,32 +168,32 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
         didSet {
             CATransaction.begin()
             CATransaction.setDisableActions(true)
-            _borderLayerInner?.hidden = hiddenBorder
-            _borderLayerOuter?.hidden = hiddenBorder
+            _borderLayerInner?.isHidden = hiddenBorder
+            _borderLayerOuter?.isHidden = hiddenBorder
             CATransaction.commit()
         }
     }
     
-    private var _richTextEditor: ZSSRichTextEditor?
+    fileprivate var _richTextEditor: ZSSRichTextEditor?
     
     /** デリゲート */
     weak var viewDelegate: LLTextHandleViewDelegate?
     
     /** LLRichText */
-    private var _richText: LLRichText?
+    fileprivate var _richText: LLRichText?
     var richText: LLRichText? { return _richText }
     
     convenience init(richText: LLRichText, type: LLTextHandleViewType) {
-        self.init(frame: CGRectMake(richText.origin.x, richText.origin.y, richText.size.width, richText.size.height), type: type, htmlString: richText.text)
+        self.init(frame: CGRect(x: richText.origin.x, y: richText.origin.y, width: richText.size.width, height: richText.size.height), type: type, htmlString: richText.text)
         _richText = richText
     }
     init(frame: CGRect, type: LLTextHandleViewType, htmlString: String?) {
         super.init(frame: frame, configuration:WKWebViewConfiguration())
-        self.backgroundColor = UIColor.clearColor()
-        self.opaque = false
+        self.backgroundColor = UIColor.clear
+        self.isOpaque = false
         self.scrollView.showsVerticalScrollIndicator = false
         self.scrollView.showsHorizontalScrollIndicator = false
-        self.scrollView.userInteractionEnabled = false
+        self.scrollView.isUserInteractionEnabled = false
 
         _htmlString = htmlString
         if nil == _htmlString {
@@ -202,134 +202,134 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
         self.setHTML(_htmlString!)
         
         _borderLayerInner = CAShapeLayer()
-        _borderLayerInner!.fillColor = UIColor.clearColor().CGColor
-        _borderLayerInner!.strokeColor = UIColor.whiteColor().CGColor
-        let borderWidth = 2 / UIScreen.mainScreen().scale
+        _borderLayerInner!.fillColor = UIColor.clear.cgColor
+        _borderLayerInner!.strokeColor = UIColor.white.cgColor
+        let borderWidth = 2 / UIScreen.main.scale
         _borderLayerInner!.lineWidth = borderWidth
         _borderLayerInner!.frame = self.bounds
         _borderLayerInner!.lineDashPattern = [8, 4]
-        _borderLayerInner!.path = UIBezierPath(rect: _borderLayerInner!.bounds).CGPath
+        _borderLayerInner!.path = UIBezierPath(rect: _borderLayerInner!.bounds).cgPath
         self.layer.addSublayer(_borderLayerInner!)
         
         _borderLayerOuter = CAShapeLayer()
-        _borderLayerOuter!.fillColor = UIColor.clearColor().CGColor
-        _borderLayerOuter!.strokeColor = UIColor.grayColor().CGColor
+        _borderLayerOuter!.fillColor = UIColor.clear.cgColor
+        _borderLayerOuter!.strokeColor = UIColor.gray.cgColor
         _borderLayerOuter!.lineWidth = _borderLayerInner!.lineWidth
-        _borderLayerOuter!.frame = CGRectMake(-borderWidth, -borderWidth, CGRectGetWidth(self.bounds) + borderWidth * 2, CGRectGetHeight(self.bounds) + borderWidth * 2)
+        _borderLayerOuter!.frame = CGRect(x: -borderWidth, y: -borderWidth, width: self.bounds.width + borderWidth * 2, height: self.bounds.height + borderWidth * 2)
         _borderLayerOuter!.lineDashPattern = _borderLayerInner!.lineDashPattern
-        _borderLayerOuter!.path = UIBezierPath(rect: _borderLayerOuter!.bounds).CGPath
+        _borderLayerOuter!.path = UIBezierPath(rect: _borderLayerOuter!.bounds).cgPath
         self.layer.addSublayer(_borderLayerOuter!)
         
         _type = type
         
-        let circleHandleSize = CGSizeMake(16, 16)
-        let rectangleHandleSize = CGSizeMake(14, 14)
-        let minSize = CGSizeMake(6, 6)
+        let circleHandleSize = CGSize(width: 16, height: 16)
+        let rectangleHandleSize = CGSize(width: 14, height: 14)
+        let minSize = CGSize(width: 6, height: 6)
         weak var w = self
         var startRect: CGRect = self.frame
-        _tlHandle = LLSizeChangerView(frame: CGRectMake(0, 0, circleHandleSize.width, circleHandleSize.height), type: .Circle, touchesBegan: { (view, touches, event) in
+        _tlHandle = LLSizeChangerView(frame: CGRect(x: 0, y: 0, width: circleHandleSize.width, height: circleHandleSize.height), type: .circle, touchesBegan: { (view, touches, event) in
                 guard let s = w else { return }
                 startRect = s.frame
             }, touchesMoved: { (view, touches, event) in
                 guard let s = w else { return }
-                let point = (touches.first?.locationInView(s.superview))!
-                let size = CGSizeMake(CGRectGetMaxX(startRect) - point.x, CGRectGetMaxY(startRect) - point.y)
+                let point = (touches.first?.location(in: s.superview))!
+                let size = CGSize(width: startRect.maxX - point.x, height: startRect.maxY - point.y)
                 if minSize.width <= abs(size.width) && minSize.height <= abs(size.height) {
-                    s.frame = CGRectMake(point.x, point.y, size.width, size.height)
+                    s.frame = CGRect(x: point.x, y: point.y, width: size.width, height: size.height)
                 }
             }, touchesEnded: nil, touchesCancelled: nil)
-        _tlHandle!.center = CGPointMake(0, 0)
+        _tlHandle!.center = CGPoint(x: 0, y: 0)
         self.addSubview(_tlHandle!)
-        _tcHandle = LLSizeChangerView(frame: CGRectMake(0, 0, rectangleHandleSize.width, rectangleHandleSize.height), type: .Rectangle, touchesBegan: { (view, touches, event) in
+        _tcHandle = LLSizeChangerView(frame: CGRect(x: 0, y: 0, width: rectangleHandleSize.width, height: rectangleHandleSize.height), type: .rectangle, touchesBegan: { (view, touches, event) in
                 guard let s = w else { return }
                 startRect = s.frame
             }, touchesMoved: { (view, touches, event) in
                 guard let s = w else { return }
-                let point = (touches.first?.locationInView(s.superview))!
-                let size = CGSizeMake(CGRectGetWidth(startRect), CGRectGetMaxY(startRect) - point.y)
+                let point = (touches.first?.location(in: s.superview))!
+                let size = CGSize(width: startRect.width, height: startRect.maxY - point.y)
                 if minSize.width <= abs(size.width) && minSize.height <= abs(size.height) {
-                    s.frame = CGRectMake(CGRectGetMinX(startRect), point.y, size.width, size.height)
+                    s.frame = CGRect(x: startRect.minX, y: point.y, width: size.width, height: size.height)
                 }
             }, touchesEnded: nil, touchesCancelled: nil)
-        _tcHandle!.center = CGPointMake(CGRectGetWidth(self.bounds) * 0.5, 0)
+        _tcHandle!.center = CGPoint(x: self.bounds.width * 0.5, y: 0)
         self.addSubview(_tcHandle!)
-        _trHandle = LLSizeChangerView(frame: CGRectMake(0, 0, circleHandleSize.width, circleHandleSize.height), type: .Circle, touchesBegan: { (view, touches, event) in
+        _trHandle = LLSizeChangerView(frame: CGRect(x: 0, y: 0, width: circleHandleSize.width, height: circleHandleSize.height), type: .circle, touchesBegan: { (view, touches, event) in
                 guard let s = w else { return }
                 startRect = s.frame
             }, touchesMoved: { (view, touches, event) in
                 guard let s = w else { return }
-                let point = (touches.first?.locationInView(s.superview))!
-                let size = CGSizeMake(point.x - CGRectGetMinX(startRect), CGRectGetMaxY(startRect) - point.y)
+                let point = (touches.first?.location(in: s.superview))!
+                let size = CGSize(width: point.x - startRect.minX, height: startRect.maxY - point.y)
                 if minSize.width <= abs(size.width) && minSize.height <= abs(size.height) {
-                    s.frame = CGRectMake(CGRectGetMinX(startRect), point.y, size.width, size.height)
+                    s.frame = CGRect(x: startRect.minX, y: point.y, width: size.width, height: size.height)
                 }
             }, touchesEnded: nil, touchesCancelled: nil)
-        _trHandle!.center = CGPointMake(CGRectGetWidth(self.bounds), 0)
+        _trHandle!.center = CGPoint(x: self.bounds.width, y: 0)
         self.addSubview(_trHandle!)
-        _lcHandle = LLSizeChangerView(frame: CGRectMake(0, 0, rectangleHandleSize.width, rectangleHandleSize.height), type: .Rectangle, touchesBegan: { (view, touches, event) in
+        _lcHandle = LLSizeChangerView(frame: CGRect(x: 0, y: 0, width: rectangleHandleSize.width, height: rectangleHandleSize.height), type: .rectangle, touchesBegan: { (view, touches, event) in
                 guard let s = w else { return }
                 startRect = s.frame
             }, touchesMoved: { (view, touches, event) in
                 guard let s = w else { return }
-                let point = (touches.first?.locationInView(s.superview))!
-                let size = CGSizeMake(CGRectGetMaxX(startRect) - point.x, CGRectGetHeight(startRect))
+                let point = (touches.first?.location(in: s.superview))!
+                let size = CGSize(width: startRect.maxX - point.x, height: startRect.height)
                 if minSize.width <= abs(size.width) && minSize.height <= abs(size.height) {
-                    s.frame = CGRectMake(point.x, CGRectGetMinY(startRect), size.width, size.height)
+                    s.frame = CGRect(x: point.x, y: startRect.minY, width: size.width, height: size.height)
                 }
             }, touchesEnded: nil, touchesCancelled: nil)
-        _lcHandle!.center = CGPointMake(0, CGRectGetHeight(self.bounds) * 0.5)
+        _lcHandle!.center = CGPoint(x: 0, y: self.bounds.height * 0.5)
         self.addSubview(_lcHandle!)
-        _rcHandle = LLSizeChangerView(frame: CGRectMake(0, 0, rectangleHandleSize.width, rectangleHandleSize.height), type: .Rectangle, touchesBegan: { (view, touches, event) in
+        _rcHandle = LLSizeChangerView(frame: CGRect(x: 0, y: 0, width: rectangleHandleSize.width, height: rectangleHandleSize.height), type: .rectangle, touchesBegan: { (view, touches, event) in
                 guard let s = w else { return }
                 startRect = s.frame
             }, touchesMoved: { (view, touches, event) in
                 guard let s = w else { return }
-                let point = (touches.first?.locationInView(s.superview))!
-                let size = CGSizeMake(point.x - CGRectGetMinX(startRect), CGRectGetHeight(startRect))
+                let point = (touches.first?.location(in: s.superview))!
+                let size = CGSize(width: point.x - startRect.minX, height: startRect.height)
                 if minSize.width <= abs(size.width) && minSize.height <= abs(size.height) {
-                    s.frame = CGRectMake(CGRectGetMinX(startRect), CGRectGetMinY(startRect), size.width, size.height)
+                    s.frame = CGRect(x: startRect.minX, y: startRect.minY, width: size.width, height: size.height)
                 }
             }, touchesEnded: nil, touchesCancelled: nil)
-        _rcHandle!.center = CGPointMake(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds) * 0.5)
+        _rcHandle!.center = CGPoint(x: self.bounds.width, y: self.bounds.height * 0.5)
         self.addSubview(_rcHandle!)
-        _blHandle = LLSizeChangerView(frame: CGRectMake(0, 0, circleHandleSize.width, circleHandleSize.height), type: .Circle, touchesBegan: { (view, touches, event) in
+        _blHandle = LLSizeChangerView(frame: CGRect(x: 0, y: 0, width: circleHandleSize.width, height: circleHandleSize.height), type: .circle, touchesBegan: { (view, touches, event) in
                 guard let s = w else { return }
                 startRect = s.frame
             }, touchesMoved: { (view, touches, event) in
                 guard let s = w else { return }
-                let point = (touches.first?.locationInView(s.superview))!
-                let size = CGSizeMake(CGRectGetMaxX(startRect) - point.x, point.y - CGRectGetMinY(startRect))
+                let point = (touches.first?.location(in: s.superview))!
+                let size = CGSize(width: startRect.maxX - point.x, height: point.y - startRect.minY)
                 if minSize.width <= abs(size.width) && minSize.height <= abs(size.height) {
-                    s.frame = CGRectMake(point.x, CGRectGetMinY(startRect), size.width, size.height)
+                    s.frame = CGRect(x: point.x, y: startRect.minY, width: size.width, height: size.height)
                 }
             }, touchesEnded: nil, touchesCancelled: nil)
-        _blHandle!.center = CGPointMake(0, CGRectGetHeight(self.bounds))
+        _blHandle!.center = CGPoint(x: 0, y: self.bounds.height)
         self.addSubview(_blHandle!)
-        _bcHandle = LLSizeChangerView(frame: CGRectMake(0, 0, rectangleHandleSize.width, rectangleHandleSize.height), type: .Rectangle, touchesBegan: { (view, touches, event) in
+        _bcHandle = LLSizeChangerView(frame: CGRect(x: 0, y: 0, width: rectangleHandleSize.width, height: rectangleHandleSize.height), type: .rectangle, touchesBegan: { (view, touches, event) in
                 guard let s = w else { return }
                 startRect = s.frame
             }, touchesMoved: { (view, touches, event) in
                 guard let s = w else { return }
-                let point = (touches.first?.locationInView(s.superview))!
-                let size = CGSizeMake(CGRectGetWidth(startRect), point.y - CGRectGetMinY(startRect))
+                let point = (touches.first?.location(in: s.superview))!
+                let size = CGSize(width: startRect.width, height: point.y - startRect.minY)
                 if minSize.width <= abs(size.width) && minSize.height <= abs(size.height) {
-                    s.frame = CGRectMake(CGRectGetMinX(startRect), CGRectGetMinY(startRect), size.width, size.height)
+                    s.frame = CGRect(x: startRect.minX, y: startRect.minY, width: size.width, height: size.height)
                 }
             }, touchesEnded: nil, touchesCancelled: nil)
-        _bcHandle!.center = CGPointMake(CGRectGetWidth(self.bounds) * 0.5, CGRectGetHeight(self.bounds))
+        _bcHandle!.center = CGPoint(x: self.bounds.width * 0.5, y: self.bounds.height)
         self.addSubview(_bcHandle!)
-        _brHandle = LLSizeChangerView(frame: CGRectMake(0, 0, circleHandleSize.width, circleHandleSize.height), type: .Circle, touchesBegan: { (view, touches, event) in
+        _brHandle = LLSizeChangerView(frame: CGRect(x: 0, y: 0, width: circleHandleSize.width, height: circleHandleSize.height), type: .circle, touchesBegan: { (view, touches, event) in
                 guard let s = w else { return }
                 startRect = s.frame
             }, touchesMoved: { (view, touches, event) in
                 guard let s = w else { return }
-                let point = (touches.first?.locationInView(s.superview))!
-                let size = CGSizeMake(point.x - CGRectGetMinX(startRect), point.y - CGRectGetMinY(startRect))
+                let point = (touches.first?.location(in: s.superview))!
+                let size = CGSize(width: point.x - startRect.minX, height: point.y - startRect.minY)
                 if minSize.width <= abs(size.width) && minSize.height <= abs(size.height) {
-                    s.frame = CGRectMake(CGRectGetMinX(startRect), CGRectGetMinY(startRect), size.width, size.height)
+                    s.frame = CGRect(x: startRect.minX, y: startRect.minY, width: size.width, height: size.height)
                 }
             }, touchesEnded: nil, touchesCancelled: nil)
-        _brHandle!.center = CGPointMake(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds))
+        _brHandle!.center = CGPoint(x: self.bounds.width, y: self.bounds.height)
         self.addSubview(_brHandle!)
 
         _tapGesture = UITapGestureRecognizer(target: self, action: #selector(LLTextHandleView.tapGesture(_:)))
@@ -341,10 +341,14 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
         self.movable = true
         self.hiddenBorder = !self.movable
     }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
-    private var className: String {
+    fileprivate var className: String {
         get {
-            return NSStringFromClass(self.dynamicType).stringByReplacingOccurrencesOfString(NSBundle.mainBundle().infoDictionary?[kCFBundleNameKey as String] as! String + ".", withString: "", options: .CaseInsensitiveSearch, range: nil)
+            return NSStringFromClass(type(of: self)).replacingOccurrences(of: Bundle.main.infoDictionary?[kCFBundleNameKey as String] as! String + ".", with: "", options: .caseInsensitive, range: nil)
         }
     }
     deinit {
@@ -358,108 +362,108 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
             CATransaction.setDisableActions(true)
             _borderLayerInner?.frame = self.bounds
             if nil != _borderLayerInner {
-                _borderLayerInner!.path = UIBezierPath(rect: _borderLayerInner!.bounds).CGPath
+                _borderLayerInner!.path = UIBezierPath(rect: _borderLayerInner!.bounds).cgPath
             }
             let borderWidth = nil != _borderLayerInner ? _borderLayerInner!.borderWidth : 0
-            _borderLayerOuter?.frame = CGRectMake(-borderWidth, -borderWidth, CGRectGetWidth(self.bounds) + borderWidth * 2, CGRectGetHeight(self.bounds) + borderWidth * 2)
+            _borderLayerOuter?.frame = CGRect(x: -borderWidth, y: -borderWidth, width: self.bounds.width + borderWidth * 2, height: self.bounds.height + borderWidth * 2)
             if nil != _borderLayerOuter {
-                _borderLayerOuter!.path = UIBezierPath(rect: _borderLayerOuter!.bounds).CGPath
+                _borderLayerOuter!.path = UIBezierPath(rect: _borderLayerOuter!.bounds).cgPath
             }
             CATransaction.commit()
             
-            _tlHandle?.center = CGPointMake(0, 0)
-            _tcHandle?.center = CGPointMake(CGRectGetWidth(self.bounds) * 0.5, 0)
-            _trHandle?.center = CGPointMake(CGRectGetWidth(self.bounds), 0)
-            _lcHandle?.center = CGPointMake(0, CGRectGetHeight(self.bounds) * 0.5)
-            _rcHandle?.center = CGPointMake(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds) * 0.5)
-            _blHandle?.center = CGPointMake(0, CGRectGetHeight(self.bounds))
-            _bcHandle?.center = CGPointMake(CGRectGetWidth(self.bounds) * 0.5, CGRectGetHeight(self.bounds))
-            _brHandle?.center = CGPointMake(CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds))
+            _tlHandle?.center = CGPoint(x: 0, y: 0)
+            _tcHandle?.center = CGPoint(x: self.bounds.width * 0.5, y: 0)
+            _trHandle?.center = CGPoint(x: self.bounds.width, y: 0)
+            _lcHandle?.center = CGPoint(x: 0, y: self.bounds.height * 0.5)
+            _rcHandle?.center = CGPoint(x: self.bounds.width, y: self.bounds.height * 0.5)
+            _blHandle?.center = CGPoint(x: 0, y: self.bounds.height)
+            _bcHandle?.center = CGPoint(x: self.bounds.width * 0.5, y: self.bounds.height)
+            _brHandle?.center = CGPoint(x: self.bounds.width, y: self.bounds.height)
             
             _richText?.origin = self.frame.origin
             _richText?.size = self.frame.size
         }
     }
     
-    override func hitTest(point: CGPoint, withEvent event: UIEvent?) -> UIView? {
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         // 各サイズ変更ハンドルは、ビューの外にはみ出ている部分があるので、そこを触ってもイベントが発生するようにしておく必要がある
-        var pointForTargetView = _tlHandle!.convertPoint(point, fromView: self)
-        if CGRectContainsPoint(_tlHandle!.bounds, pointForTargetView) {
-            return _tlHandle!.hitTest(pointForTargetView, withEvent: event)
+        var pointForTargetView = _tlHandle!.convert(point, from: self)
+        if _tlHandle!.bounds.contains(pointForTargetView) {
+            return _tlHandle!.hitTest(pointForTargetView, with: event)
         }
-        pointForTargetView = _tcHandle!.convertPoint(point, fromView: self)
-        if CGRectContainsPoint(_tcHandle!.bounds, pointForTargetView) {
-            return _tcHandle!.hitTest(pointForTargetView, withEvent: event)
+        pointForTargetView = _tcHandle!.convert(point, from: self)
+        if _tcHandle!.bounds.contains(pointForTargetView) {
+            return _tcHandle!.hitTest(pointForTargetView, with: event)
         }
-        pointForTargetView = _trHandle!.convertPoint(point, fromView: self)
-        if CGRectContainsPoint(_trHandle!.bounds, pointForTargetView) {
-            return _trHandle!.hitTest(pointForTargetView, withEvent: event)
+        pointForTargetView = _trHandle!.convert(point, from: self)
+        if _trHandle!.bounds.contains(pointForTargetView) {
+            return _trHandle!.hitTest(pointForTargetView, with: event)
         }
-        pointForTargetView = _lcHandle!.convertPoint(point, fromView: self)
-        if CGRectContainsPoint(_lcHandle!.bounds, pointForTargetView) {
-            return _lcHandle!.hitTest(pointForTargetView, withEvent: event)
+        pointForTargetView = _lcHandle!.convert(point, from: self)
+        if _lcHandle!.bounds.contains(pointForTargetView) {
+            return _lcHandle!.hitTest(pointForTargetView, with: event)
         }
-        pointForTargetView = _rcHandle!.convertPoint(point, fromView: self)
-        if CGRectContainsPoint(_rcHandle!.bounds, pointForTargetView) {
-            return _rcHandle!.hitTest(pointForTargetView, withEvent: event)
+        pointForTargetView = _rcHandle!.convert(point, from: self)
+        if _rcHandle!.bounds.contains(pointForTargetView) {
+            return _rcHandle!.hitTest(pointForTargetView, with: event)
         }
-        pointForTargetView = _blHandle!.convertPoint(point, fromView: self)
-        if CGRectContainsPoint(_blHandle!.bounds, pointForTargetView) {
-            return _blHandle!.hitTest(pointForTargetView, withEvent: event)
+        pointForTargetView = _blHandle!.convert(point, from: self)
+        if _blHandle!.bounds.contains(pointForTargetView) {
+            return _blHandle!.hitTest(pointForTargetView, with: event)
         }
-        pointForTargetView = _bcHandle!.convertPoint(point, fromView: self)
-        if CGRectContainsPoint(_bcHandle!.bounds, pointForTargetView) {
-            return _bcHandle!.hitTest(pointForTargetView, withEvent: event)
+        pointForTargetView = _bcHandle!.convert(point, from: self)
+        if _bcHandle!.bounds.contains(pointForTargetView) {
+            return _bcHandle!.hitTest(pointForTargetView, with: event)
         }
-        pointForTargetView = _brHandle!.convertPoint(point, fromView: self)
-        if CGRectContainsPoint(_brHandle!.bounds, pointForTargetView) {
-            return _brHandle!.hitTest(pointForTargetView, withEvent: event)
+        pointForTargetView = _brHandle!.convert(point, from: self)
+        if _brHandle!.bounds.contains(pointForTargetView) {
+            return _brHandle!.hitTest(pointForTargetView, with: event)
         }
-        return super.hitTest(point, withEvent: event)
+        return super.hitTest(point, with: event)
     }
     
-    private var _startDiff: CGVector = CGVectorMake(0, 0)
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    fileprivate var _startDiff: CGVector = CGVector(dx: 0, dy: 0)
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if !self.movable { return }
-        let point = (touches.first?.locationInView(self.superview))!
-        _startDiff = CGVectorMake(CGRectGetMinX(self.frame) - point.x, CGRectGetMinY(self.frame) - point.y)
+        let point = (touches.first?.location(in: self.superview))!
+        _startDiff = CGVector(dx: self.frame.minX - point.x, dy: self.frame.minY - point.y)
         self.hideMenu()
     }
     
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         if !self.movable { return }
-        let point = (touches.first?.locationInView(self.superview))!
-        self.frame = CGRectMake(_startDiff.dx + point.x, _startDiff.dy + point.y, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame))
+        let point = (touches.first?.location(in: self.superview))!
+        self.frame = CGRect(x: _startDiff.dx + point.x, y: _startDiff.dy + point.y, width: self.frame.width, height: self.frame.height)
     }
     
-    func tapGesture(gesture: UIGestureRecognizer) {
+    func tapGesture(_ gesture: UIGestureRecognizer) {
         self.showMenu()
         self.viewDelegate?.textHandleViewTap!(self, tapCount: 1)
     }
     
-    func doubleTapGesture(gesture: UIGestureRecognizer) {
+    func doubleTapGesture(_ gesture: UIGestureRecognizer) {
         self.viewDelegate?.textHandleViewTap!(self, tapCount: 2)
     }
     
     /** 編集状態にする直前のZIndex */
-    private var _zIndex:Int?
+    fileprivate var _zIndex:Int?
     /** 編集状態にする */
     func enterEditMode() {
         self.movable = false
         self.hideMenu()
-        _tapGesture?.enabled = false
-        _doubleTapGesture?.enabled = false
+        _tapGesture?.isEnabled = false
+        _doubleTapGesture?.isEnabled = false
         
         if nil != _richTextEditor {
             _richTextEditor!.removeFromParentViewController()
             _richTextEditor!.view.removeFromSuperview()
         }
         _richTextEditor = ZSSRichTextEditor()
-        _richTextEditor!.view.autoresizingMask = [.FlexibleLeftMargin, .FlexibleWidth, .FlexibleRightMargin, .FlexibleTopMargin, .FlexibleHeight, .FlexibleBottomMargin];
+        _richTextEditor!.view.autoresizingMask = [.flexibleLeftMargin, .flexibleWidth, .flexibleRightMargin, .flexibleTopMargin, .flexibleHeight, .flexibleBottomMargin];
         _richTextEditor!.view.frame = self.bounds
         self.addSubview(_richTextEditor!.view)
         // ツールバーは最前面に配置しておく
-        var topController = UIApplication.sharedApplication().keyWindow?.rootViewController
+        var topController = UIApplication.shared.keyWindow?.rootViewController
         while nil != topController?.presentedViewController {
             topController = topController?.presentedViewController
         }
@@ -482,8 +486,8 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
         _richTextEditor!.setHTML(_htmlString!)
         
         // 最前面に持ってくる
-        _zIndex = self.superview!.subviews.indexOf(self)
-        self.superview!.bringSubviewToFront(self)
+        _zIndex = self.superview!.subviews.index(of: self)
+        self.superview!.bringSubview(toFront: self)
         
         viewDelegate?.textHandleViewDidChangeStatus?(self, isEditing: true)
     }
@@ -503,8 +507,8 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
         _richText?.text = _htmlString
         _richTextEditor = nil
         
-        _tapGesture?.enabled = true
-        _doubleTapGesture?.enabled = true
+        _tapGesture?.isEnabled = true
+        _doubleTapGesture?.isEnabled = true
         
         if nil != _htmlString {
             self.setHTML(_htmlString!)
@@ -512,7 +516,7 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
         
         // 元の位置に戻す
         if nil != _zIndex && nil != self.superview {
-            self.superview!.insertSubview(self, atIndex: _zIndex!)
+            self.superview!.insertSubview(self, at: _zIndex!)
             _zIndex = nil
         }
         
@@ -526,16 +530,16 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
         let menuItemCopy: UIMenuItem = UIMenuItem(title: NSLocalizedString("052", comment: "") /* コピー */, action: #selector(LLTextHandleView.menuCopy(_:)))
         let menuItemDelete: UIMenuItem = UIMenuItem(title: NSLocalizedString("114", comment: "") /* 削除 */, action: #selector(LLTextHandleView.menuDelete(_:)))
         let menuItemEditText: UIMenuItem = UIMenuItem(title: NSLocalizedString("709", comment: "") /* テキストの編集 */, action: #selector(LLTextHandleView.menuEditText(_:)))
-        UIMenuController.sharedMenuController().menuItems = [menuItemCut, menuItemCopy, menuItemDelete, menuItemEditText]
-        UIMenuController.sharedMenuController().setTargetRect(CGRectMake(0, 0, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds)), inView: self)
-        UIMenuController.sharedMenuController().setMenuVisible(true, animated: true)
+        UIMenuController.shared.menuItems = [menuItemCut, menuItemCopy, menuItemDelete, menuItemEditText]
+        UIMenuController.shared.setTargetRect(CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height), in: self)
+        UIMenuController.shared.setMenuVisible(true, animated: true)
     }
     
-    override func canBecomeFirstResponder() -> Bool {
+    override var canBecomeFirstResponder : Bool {
         return true
     }
     
-    override func canPerformAction(action: Selector, withSender sender: AnyObject?) -> Bool {
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         if (action == #selector(LLTextHandleView.menuCut(_:))
             || action == #selector(LLTextHandleView.menuCopy(_:))
             || action == #selector(LLTextHandleView.menuDelete(_:))
@@ -545,19 +549,19 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
         return false
     }
     
-    func menuCut(sender: AnyObject) {
+    func menuCut(_ sender: AnyObject) {
         viewDelegate?.textHandleViewMenuCut?(self)
     }
     
-    func menuCopy(sender: AnyObject) {
+    func menuCopy(_ sender: AnyObject) {
         viewDelegate?.textHandleViewMenuCopy?(self)
     }
     
-    func menuDelete(sender: AnyObject) {
+    func menuDelete(_ sender: AnyObject) {
         viewDelegate?.textHandleViewMenuDelete?(self)
     }
     
-    func menuEditText(sender: AnyObject) {
+    func menuEditText(_ sender: AnyObject) {
         self.enterEditMode()
         viewDelegate?.textHandleViewMenuEditText?(self)
     }
@@ -565,17 +569,17 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
     /** メニューを消す */
     func hideMenu() {
         self.resignFirstResponder()
-        UIMenuController.sharedMenuController().menuVisible = false
+        UIMenuController.shared.isMenuVisible = false
     }
     
     //MARK:- ZSSRichTextEditorDelegate
-    func richTextEditor(editor: ZSSRichTextEditor, didChangeWith text: String?, html: String?, caretRect: CGRect) {
+    func richTextEditor(_ editor: ZSSRichTextEditor, didChangeWith text: String?, html: String?, caretRect: CGRect) {
         if editor == _richTextEditor {
             viewDelegate?.textHandleViewDidChangeText(self, text: text, html: html, caretRect: caretRect)
         }
     }
 
-    func richTextEditor(editor: ZSSRichTextEditor!, didChangeContentSize contentSize: CGSize) {
+    func richTextEditor(_ editor: ZSSRichTextEditor!, didChangeContentSize contentSize: CGSize) {
         if editor == _richTextEditor {
             viewDelegate?.textHandleViewDidChangeContentSize(self, contentSize: contentSize)
         }
