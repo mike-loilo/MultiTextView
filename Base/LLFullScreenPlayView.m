@@ -8,6 +8,10 @@
 
 #import "LLFullScreenPlayView.h"
 #import "LLClipResource.h"
+#import "LLUtility.h"
+#import "LLClipItem.h"
+#import "LLClip.h"
+#import "MultiTextView-Swift.h"
 
 #pragma mark - LLFullScreenPlayViewItem
 
@@ -61,6 +65,28 @@
     // 省略
     _clipResource = [LLClipResource makeSingleResource:clipItem playerSize:self.bounds.size textAreaNotifier:NULL flags:flags];
     [_contentView.layer addSublayer:_clipResource.playerLayer];
+    //TODO:- テキストカード特別対応
+    // LLTextHandleViewを画像化する場合はLLClipResource側での処理で良さそうだが、LLTextHandleViewオブジェクトをそのまま保持しておくため、ここでレイアウトする
+    [self.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) { if ([obj isKindOfClass:LLTextHandleView.class]) [obj removeFromSuperview]; }];
+    if (!(flags & LL_SRF_NO_TEXT)) {
+        performActionOnSubThread(^{
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            [clipItem.clip.richTexts enumerateObjectsUsingBlock:^(__kindof LLRichText * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                LLTextHandleView *const textHandleView = [LLTextHandleView.alloc initWithRichText:obj type:LLTextHandleViewTypeNormal];
+                textHandleView.movable = NO;
+                textHandleView.hiddenBorder = YES;
+                performActionOnMainThread(^{
+                    // HTMLをちゃんとロードするためにViewをレイアウトする必要があるので注意
+                    [self addSubview:textHandleView];
+                    dispatch_semaphore_signal(semaphore);
+                });
+                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+            }];
+        }, NULL);
+    }
+}
+- (void)dealloc {
+    [self.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) { [obj removeFromSuperview]; }];
 }
 @end
 

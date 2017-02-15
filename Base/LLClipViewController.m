@@ -20,14 +20,14 @@
     __weak IBOutlet UIButton *_closeButton;
     
     __weak LLClipItem *_clipItem;
-    void (^_closeCallback)();
+    void (^_closeCallback)(UIImage *screenshot);
 
     LLFullScreenPlayView *_playView;
     
     LLClipMultiTextInputViewController *_multiTextInputViewController;
 }
 
-- (id)initWithClipItem:(LLClipItem *)clipItem closeCallback:(void (^)())closeCallback {
+- (id)initWithClipItem:(LLClipItem *)clipItem closeCallback:(void (^)(UIImage *screenshot))closeCallback {
     self = [super init];
     _clipItem = clipItem;
     _closeCallback = closeCallback;
@@ -69,11 +69,19 @@
 }
 
 - (IBAction)closeButtonDidTap:(id)sender {
+    //TODO:- 全体画像化で、LLTextHandleViewも漏れなく画像化されるか検証
+    // -> 一応、漏れなく画像化されていて、大丈夫みたい
+    CGSize const size = self.view.bounds.size;
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+    [self.view drawViewHierarchyInRect:self.view.bounds afterScreenUpdates:NO];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
     __weak typeof(self) __self = self;
     [self dismissViewControllerAnimated:YES completion:^{
         typeof(self) self = __self;
         if (!self) return;
-        if (self->_closeCallback) self->_closeCallback();
+        if (self->_closeCallback) self->_closeCallback(image);
     }];
 }
 
@@ -107,8 +115,10 @@
 {
     [self setupTextInputViewController];
     
-    // テキスト無しにしておく
-    [_playView setupClipItem:_clipItem flags:LL_SRF_NO_TEXT];
+    //TODO:- テキストカード特別対応
+    // LLTextHandleViewを単体で画像化せず、オブジェクトそのままなのでクリアしない
+//    // テキスト無しにしておく
+//    [_playView setupClipItem:_clipItem flags:LL_SRF_NO_TEXT];
     _playView.scrollEnabled = NO;
     
     [self dismissControllerAnimated:animated option:LLDismissControllerOptionAll completion:^{
@@ -122,8 +132,9 @@
 /** テキスト入力ビューの非表示 */
 - (void)dismissTextInputViewController
 {
-    // 元に戻す
-    [_playView setupClipItem:_clipItem flags:0];
+    //TODO:- テキストカード特別対応
+//    // 元に戻す
+//    [_playView setupClipItem:_clipItem flags:0];
     _playView.scrollEnabled = YES;
     
     [_multiTextInputViewController.view removeFromSuperview];

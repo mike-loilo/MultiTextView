@@ -86,15 +86,24 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         self.insertButton.setTitle(NSLocalizedString("707", comment: "") /* 挿入 */, for: UIControlState())
         self.insertButton.setWhiteStyle()
         
-        //TODO:- 数が多くなるとUIに影響を与えかねないので、実際には少しずつ追加する
-        _clipItem!.clip.richTexts.enumerateObjects({ (obj, idx, stop) in
-            if !(obj is LLRichText) { return }
-            let richText = obj as! LLRichText
-            let textHandleView = LLTextHandleView(richText: richText, type: .normal)
-            textHandleView.viewDelegate = self
-            self._playView!.currentPageContentView.addSubview(textHandleView)
-            self._textHandleViews.append(textHandleView)
-        })
+        //TODO:- テキストカード特別対応
+        // テキスト編集時以外はLLTextHandleViewを画像化する場合は、この時点でオブジェクト化する必要があるが、常時LLTextHandleViewオブジェクトを保持しておくため、操作可能にして_textHandleViewsに加える
+//        //TODO:- 数が多くなるとUIに影響を与えかねないので、実際には少しずつ追加する
+//        _clipItem!.clip.richTexts.enumerateObjects({ (obj, idx, stop) in
+//            if !(obj is LLRichText) { return }
+//            let richText = obj as! LLRichText
+//            let textHandleView = LLTextHandleView(richText: richText, type: .normal)
+//            textHandleView.viewDelegate = self
+//            self._playView!.currentPageContentView.addSubview(textHandleView)
+//            self._textHandleViews.append(textHandleView)
+//        })
+        (self._playView!.currentPageContentView.subviews as AnyObject).enumerateObjects { (obj, idx, stop) in
+            if obj is LLTextHandleView {
+                let textHandleView = obj as! LLTextHandleView
+                textHandleView.viewDelegate = self
+                self._textHandleViews.append(textHandleView)
+            }
+        }
         self.organizeTextObjects(nil)
     }
     
@@ -114,9 +123,11 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         (_topButtons as AnyObject).enumerateObjects({ (obj, idx, stop) in
             (obj as! UIView).removeFromSuperview()
         })
-        (_textHandleViews as AnyObject).enumerateObjects({ (obj, idx, stop) in
-            (obj as! UIView).removeFromSuperview()
-        })
+        //TODO:- テキストカード特別対応
+        // テキスト編集時以外もLLTextHandleViewを保持したまま
+//        (_textHandleViews as AnyObject).enumerateObjects({ (obj, idx, stop) in
+//            (obj as! UIView).removeFromSuperview()
+//        })
         if nil != _tapGesture!.view {
             _tapGesture!.view!.removeGestureRecognizer(_tapGesture!)
         }

@@ -12,6 +12,6 @@
 
 @interface LLClipViewController : UIViewController
 
-- (id)initWithClipItem:(LLClipItem *)clipItem closeCallback:(void (^)())closeCallback;
+- (id)initWithClipItem:(LLClipItem *)clipItem closeCallback:(void (^)(UIImage *screenshot))closeCallback;
 
 @end

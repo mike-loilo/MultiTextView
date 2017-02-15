@@ -437,7 +437,9 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
     }
     
     func tapGesture(_ gesture: UIGestureRecognizer) {
-        self.showMenu()
+        if nil != self.viewDelegate {
+            self.showMenu()
+        }
         self.viewDelegate?.textHandleViewTap!(self, tapCount: 1)
     }
     

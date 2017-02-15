@@ -10,6 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var editButton: UIButton!
     fileprivate var _clipViewController: LLClipViewController?
     fileprivate var _clipItem: LLClipItem?
@@ -51,11 +52,12 @@ class ViewController: UIViewController {
             _clipViewController!.dismiss(animated: false, completion: nil)
         }
         weak var w = self
-        _clipViewController = LLClipViewController(clipItem: _clipItem) {
+        _clipViewController = LLClipViewController(clipItem: _clipItem, closeCallback: { (image) in
             guard let s = w else { return }
             s._clipViewController = nil
             s._serialized = s._clipItem!.serialize(true, positionOffset: CGPoint.zero) as NSDictionary?
-        }
+            s.imageView.image = image
+        })
         self.editButton.isHidden = true
         self.present(_clipViewController!, animated: true) {
             guard let s = w else { return }

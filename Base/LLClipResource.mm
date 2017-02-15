@@ -41,33 +41,35 @@
     layer.frame = playerLayer.bounds;
     [playerLayer addSublayer:layer];
     
-    if (!(flags & LL_SRF_NO_TEXT)) {
-        performActionOnSubThread(^{
-            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-            [item.clip.richTexts enumerateObjectsUsingBlock:^(__kindof LLRichText * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                LLTextHandleView *const textHandleView = [LLTextHandleView.alloc initWithRichText:obj type:LLTextHandleViewTypeNormal];
-                textHandleView.movable = NO;
-                textHandleView.hiddenBorder = YES;
-                performActionOnMainThread(^{
-                    // HTMLをちゃんとロードするためにViewをレイアウトする必要があるので注意
-                    [UIApplication.sharedApplication.keyWindow addSubview:textHandleView];
-                    textHandleView.didFinishNavigation = ^(id viewer, WKNavigation *navigation) {
-                        LLTextHandleView *const view = (LLTextHandleView *)viewer;
-                        // ちゃんと描画しておかないと意図した画像が取得できないので注意
-                        [view.superview setNeedsDisplay];
-                        UIImage *const image = view.screenCapture;
-                        CALayer *const imageLayer = CALayer.layer;
-                        imageLayer.frame = view.frame;
-                        imageLayer.contents = (id)image.CGImage;
-                        [playerLayer addSublayer:imageLayer];
-                        [view removeFromSuperview];
-                        dispatch_semaphore_signal(semaphore);
-                    };
-                });
-                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-            }];
-        }, NULL);
-    }
+    //TODO:- テキストカード特別対応
+    // LLTextHandleViewを個々に画像化しない
+//    if (!(flags & LL_SRF_NO_TEXT)) {
+//        performActionOnSubThread(^{
+//            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+//            [item.clip.richTexts enumerateObjectsUsingBlock:^(__kindof LLRichText * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                LLTextHandleView *const textHandleView = [LLTextHandleView.alloc initWithRichText:obj type:LLTextHandleViewTypeNormal];
+//                textHandleView.movable = NO;
+//                textHandleView.hiddenBorder = YES;
+//                performActionOnMainThread(^{
+//                    // HTMLをちゃんとロードするためにViewをレイアウトする必要があるので注意
+//                    [UIApplication.sharedApplication.keyWindow addSubview:textHandleView];
+//                    textHandleView.didFinishNavigation = ^(id viewer, WKNavigation *navigation) {
+//                        LLTextHandleView *const view = (LLTextHandleView *)viewer;
+//                        // ちゃんと描画しておかないと意図した画像が取得できないので注意
+//                        [view.superview setNeedsDisplay];
+//                        UIImage *const image = view.screenCapture;
+//                        CALayer *const imageLayer = CALayer.layer;
+//                        imageLayer.frame = view.frame;
+//                        imageLayer.contents = (id)image.CGImage;
+//                        [playerLayer addSublayer:imageLayer];
+//                        [view removeFromSuperview];
+//                        dispatch_semaphore_signal(semaphore);
+//                    };
+//                });
+//                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+//            }];
+//        }, NULL);
+//    }
     
     return [LLPlayableResource.alloc initWithLayer:playerLayer resource:[LLClipResource.alloc init]];
 }
