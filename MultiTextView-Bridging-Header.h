@@ -4,6 +4,7 @@
 
 #import "LLClip.h"
 #import "LLClipItem.h"
+#import "LLClipThumbnail.h"
 #import "LLClipViewController.h"
 #import "LLBorderedButton.h"
 #import "LLFullScreenPlayView.h"

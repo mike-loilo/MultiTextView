@@ -11,11 +11,20 @@ import UIKit
 class ViewController: UIViewController {
     
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var thumbnailImageView: UIImageView!
     @IBOutlet weak var editButton: UIButton!
     fileprivate var _clipViewController: LLClipViewController?
     fileprivate var _clipItem: LLClipItem?
     fileprivate var _serialized: NSDictionary?
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.thumbnailImageView.layer.borderColor = UIColor.yellow.cgColor
+        self.thumbnailImageView.layer.borderWidth = 2
+        self.thumbnailImageView.isHidden = true
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -57,6 +66,13 @@ class ViewController: UIViewController {
             s._clipViewController = nil
             s._serialized = s._clipItem!.serialize(true, positionOffset: CGPoint.zero) as NSDictionary?
             s.imageView.image = image
+            
+            LLClipThumbnail.create(s._clipItem!.clip, size: s.thumbnailImageView.frame.size, ignoreLayerType: ClipThumbnailIgnoreLayerType.CTILT_NONE, callback: { (image, type) in
+                performActionOnMainThread({
+                    s.thumbnailImageView.image = image
+                    s.thumbnailImageView.isHidden = false
+                })
+            })
         })
         self.editButton.isHidden = true
         self.present(_clipViewController!, animated: true) {
