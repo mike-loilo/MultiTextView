@@ -23,6 +23,7 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     
     fileprivate var _clipItem: LLClipItem?
     fileprivate var _playView: LLFullScreenPlayView?
+    fileprivate var _enterEditTextHandleView: LLTextHandleView?
     fileprivate var _changeBGColorBlock: ((_ color: UIColor?) -> ())?
     fileprivate var _addClipBlock: ((_ item: LLClipItem?) -> ())?
     fileprivate var _closeCallback: (() -> ())?
@@ -34,11 +35,12 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     /** 最後に長押しメニューを表示した位置 */
     fileprivate var _locationWithLongPress: CGPoint?
     
-    init(clipItem: LLClipItem!, playView: LLFullScreenPlayView!, changeBGColorBlock: ((_ color: UIColor?) -> ())?, addClipBlock: ((_ item: LLClipItem?) -> ())?, closeCallback: (() -> ())?) {
+    init(clipItem: LLClipItem!, playView: LLFullScreenPlayView!, enterEditTextHandleView: LLTextHandleView?, changeBGColorBlock: ((_ color: UIColor?) -> ())?, addClipBlock: ((_ item: LLClipItem?) -> ())?, closeCallback: (() -> ())?) {
         super.init(nibName: "LLClipMultiTextInputViewController", bundle: nil)
 
         _clipItem = clipItem
         _playView = playView
+        _enterEditTextHandleView = enterEditTextHandleView
         _changeBGColorBlock = changeBGColorBlock
         _addClipBlock = addClipBlock
         _closeCallback = closeCallback
@@ -97,14 +99,22 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
 //            self._playView!.currentPageContentView.addSubview(textHandleView)
 //            self._textHandleViews.append(textHandleView)
 //        })
-        (self._playView!.currentPageContentView.subviews as AnyObject).enumerateObjects { (obj, idx, stop) in
+        var enterEditTextView: LLTextHandleView?
+        (_playView!.currentPageContentView.subviews as AnyObject).enumerateObjects { (obj, idx, stop) in
             if obj is LLTextHandleView {
                 let textHandleView = obj as! LLTextHandleView
                 textHandleView.viewDelegate = self
-                self._textHandleViews.append(textHandleView)
+                _textHandleViews.append(textHandleView)
+                if textHandleView == _enterEditTextHandleView {
+                    enterEditTextView = _enterEditTextHandleView
+                }
             }
         }
         self.organizeTextObjects(nil)
+        if nil != enterEditTextView {
+            enterEditTextView!.enterEditMode()
+        }
+        _enterEditTextHandleView = nil
     }
     
     override func viewDidAppear(_ animated: Bool) {

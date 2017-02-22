@@ -183,6 +183,10 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
     fileprivate var _richText: LLRichText?
     var richText: LLRichText? { return _richText }
     
+    /** 通知 */
+    class var didTapNotification: String { get { return "LLTextHandleView.didTapNotification" } }
+    class var notificationTapCountKey: String { get { return "LLTextHandleView.notificationTapCountKey" } }
+    
     convenience init(richText: LLRichText, type: LLTextHandleViewType) {
         self.init(frame: CGRect(x: richText.origin.x, y: richText.origin.y, width: richText.size.width, height: richText.size.height), type: type, htmlString: richText.text)
         _richText = richText
@@ -441,10 +445,12 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
             self.showMenu()
         }
         self.viewDelegate?.textHandleViewTap!(self, tapCount: 1)
+        NotificationCenter.default.post(name: NSNotification.Name(type(of: self).didTapNotification), object: self, userInfo: [type(of: self).notificationTapCountKey: 1])
     }
     
     func doubleTapGesture(_ gesture: UIGestureRecognizer) {
         self.viewDelegate?.textHandleViewTap!(self, tapCount: 2)
+        NotificationCenter.default.post(name: NSNotification.Name(type(of: self).didTapNotification), object: self, userInfo: [type(of: self).notificationTapCountKey: 2])
     }
     
     /** 編集状態にする直前のZIndex */

@@ -55,6 +55,16 @@
         _textButton.tintColor = [UIColor colorWithRed:0.5 green:0.8 blue:1 alpha:1];
     }
     _closeButton.tintColor = _textButton.tintColor;
+    
+    __weak typeof(self) __self = self;
+    [NSNotificationCenter.defaultCenter addObserverForName:LLTextHandleView.didTapNotification object:nil queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+        typeof(self) self = __self;
+        if (!self) return;
+        // テキスト編集中では無い状態でダブルタップされたらテキスト編集中にする
+        if (self->_multiTextInputViewController) return;
+        if (2 != [note.userInfo[LLTextHandleView.notificationTapCountKey] integerValue]) return;
+        [self presentTextInputViewController:note.object animated:YES completion:NULL];
+    }];
 }
 
 - (void)dealloc { NSLog(@"%s", __FUNCTION__); }
@@ -65,7 +75,7 @@
     if (_multiTextInputViewController)
         [_multiTextInputViewController dismissViewControllerAnimated:NO completion:NULL];
     
-    [self presentTextInputViewControllerAnimated:YES completion:NULL];
+    [self presentTextInputViewController:nil animated:YES completion:NULL];
 }
 
 - (IBAction)closeButtonDidTap:(id)sender {
@@ -86,10 +96,10 @@
 }
 
 /** テキスト入力ビューの作成 */
-- (void)setupTextInputViewController
+- (void)setupTextInputViewController:(LLTextHandleView *)enterEditTextHandleView
 {
     __weak typeof(self) __self = self;
-    _multiTextInputViewController = [LLClipMultiTextInputViewController.alloc initWithClipItem:_clipItem playView:_playView changeBGColorBlock:^(UIColor * _Nullable color) {
+    _multiTextInputViewController = [LLClipMultiTextInputViewController.alloc initWithClipItem:_clipItem playView:_playView enterEditTextHandleView:enterEditTextHandleView changeBGColorBlock:^(UIColor * _Nullable color) {
         typeof(self) self = __self;
         if (!self) return;
         
@@ -111,9 +121,9 @@
 }
 
 /** テキスト入力ビューの表示 */
-- (void)presentTextInputViewControllerAnimated:(BOOL)animated completion:(void (^)())completion
+- (void)presentTextInputViewController:(LLTextHandleView *)enterEditTextHandleView animated:(BOOL)animated completion:(void (^)())completion
 {
-    [self setupTextInputViewController];
+    [self setupTextInputViewController:enterEditTextHandleView];
     
     //TODO:- テキストカード特別対応
     // LLTextHandleViewを単体で画像化せず、オブジェクトそのままなのでクリアしない
