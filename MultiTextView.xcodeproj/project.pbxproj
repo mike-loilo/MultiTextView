@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		270D5F041EB334F500A5C0E5 /* NSObject+observers.m in Sources */ = {isa = PBXBuildFile; fileRef = 270D5F031EB334F500A5C0E5 /* NSObject+observers.m */; };
 		2711B3D91D95007C00BB1363 /* CYRLayoutManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2711B3BC1D95007C00BB1363 /* CYRLayoutManager.m */; };
 		2711B3DA1D95007C00BB1363 /* CYRTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2711B3BE1D95007C00BB1363 /* CYRTextStorage.m */; };
 		2711B3DB1D95007C00BB1363 /* CYRTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2711B3C01D95007C00BB1363 /* CYRTextView.m */; };
@@ -144,6 +145,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		270D5F021EB334F500A5C0E5 /* NSObject+observers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+observers.h"; path = "Base/NSObject+observers.h"; sourceTree = "<group>"; };
+		270D5F031EB334F500A5C0E5 /* NSObject+observers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSObject+observers.m"; path = "Base/NSObject+observers.m"; sourceTree = "<group>"; };
 		2711B3BB1D95007C00BB1363 /* CYRLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYRLayoutManager.h; sourceTree = "<group>"; };
 		2711B3BC1D95007C00BB1363 /* CYRLayoutManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYRLayoutManager.m; sourceTree = "<group>"; };
 		2711B3BD1D95007C00BB1363 /* CYRTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYRTextStorage.h; sourceTree = "<group>"; };
@@ -521,6 +524,8 @@
 				2711B3E91D950EF200BB1363 /* LLUtility.m */,
 				2789D8CA1D86494800B283A7 /* Localizable.strings */,
 				2789D8AF1D86268C00B283A7 /* MultiTextView-Bridging-Header.h */,
+				270D5F021EB334F500A5C0E5 /* NSObject+observers.h */,
+				270D5F031EB334F500A5C0E5 /* NSObject+observers.m */,
 				277E0B251DF5076700655C80 /* NSString+Util.h */,
 				277E0B261DF5076700655C80 /* NSString+Util.m */,
 				278DE6161DCFF8A40034468B /* UIColor+Util.swift */,
@@ -759,6 +764,7 @@
 				2711B3E71D95007C00BB1363 /* ZSSTextView.m in Sources */,
 				2789D8B81D86270300B283A7 /* LLClip.mm in Sources */,
 				2789D8C51D86426200B283A7 /* LLBorderedButton.m in Sources */,
+				270D5F041EB334F500A5C0E5 /* NSObject+observers.m in Sources */,
 				2711B3E61D95007C00BB1363 /* ZSSRichTextEditor.m in Sources */,
 				27F57A091E01317A00E041A4 /* UIScreen+LandscapeSize.swift in Sources */,
 				2711B3DA1D95007C00BB1363 /* CYRTextStorage.m in Sources */,

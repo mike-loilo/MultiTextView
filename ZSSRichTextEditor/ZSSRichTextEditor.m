@@ -16,6 +16,7 @@
 #import "MJPopoverController.h"
 #import "NSString+Util.h"
 #import "LLUtility.h"
+#import "NSObject+observers.h"
 
 @import JavaScriptCore;
 
@@ -2028,7 +2029,8 @@ static CGFloat kDefaultScale = 0.5;
                 [_receiver richTextEditor:self didChangeWith:self.getText html:self.getHTML caretRect:CGRectFromString(self.getSelectionCoords)];
         }];
         
-        [self.editorView.scrollView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:NULL];
+        if (![self.editorView.scrollView observedByObserver:self keyPath:@"contentSize"])
+            [self.editorView.scrollView addObserver:self forKeyPath:@"contentSize" options:NSKeyValueObservingOptionNew context:NULL];
         
     } else {
         
@@ -2071,7 +2073,7 @@ static CGFloat kDefaultScale = 0.5;
             
         } completion:nil];
         
-        [self.editorView.scrollView removeObserver:self forKeyPath:@"contentSize"];
+        [self.editorView.scrollView tryRemoveObserver:self forKeyPath:@"contentSize"];
 
     }
     
