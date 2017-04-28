@@ -16,24 +16,24 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     @IBOutlet weak var insertButton: LLBorderedButton!
     @IBOutlet weak var addClipButton: UIButton!
 
-    fileprivate var _topButtons = [UIView]()
-    fileprivate var _textHandleViews = [LLTextHandleView]()
+    private var _topButtons = [UIView]()
+    private var _textHandleViews = [LLTextHandleView]()
     var textHandleViews: [LLTextHandleView] { return _textHandleViews }
-    fileprivate var _tapGesture: UITapGestureRecognizer?
+    private var _tapGesture: UITapGestureRecognizer?
     
-    fileprivate var _clipItem: LLClipItem?
-    fileprivate var _playView: LLFullScreenPlayView?
-    fileprivate var _enterEditTextHandleView: LLTextHandleView?
-    fileprivate var _changeBGColorBlock: ((_ color: UIColor?) -> ())?
-    fileprivate var _addClipBlock: ((_ item: LLClipItem?) -> ())?
-    fileprivate var _closeCallback: (() -> ())?
+    private var _clipItem: LLClipItem?
+    private var _playView: LLFullScreenPlayView?
+    private var _enterEditTextHandleView: LLTextHandleView?
+    private var _changeBGColorBlock: ((_ color: UIColor?) -> ())?
+    private var _addClipBlock: ((_ item: LLClipItem?) -> ())?
+    private var _closeCallback: (() -> ())?
     
     /** カット/コピー中のテキストボックス */
-    fileprivate var _copiedData: LLRichText?
+    private var _copiedData: LLRichText?
     /** 長押し */
-    fileprivate var _longPressGesture: UILongPressGestureRecognizer?
+    private var _longPressGesture: UILongPressGestureRecognizer?
     /** 最後に長押しメニューを表示した位置 */
-    fileprivate var _locationWithLongPress: CGPoint?
+    private var _locationWithLongPress: CGPoint?
     
     init(clipItem: LLClipItem!, playView: LLFullScreenPlayView!, enterEditTextHandleView: LLTextHandleView?, changeBGColorBlock: ((_ color: UIColor?) -> ())?, addClipBlock: ((_ item: LLClipItem?) -> ())?, closeCallback: (() -> ())?) {
         super.init(nibName: "LLClipMultiTextInputViewController", bundle: nil)
@@ -123,7 +123,7 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
         self.view.frame = self.view.superview!.bounds
     }
     
-    fileprivate var className: String {
+    private var className: String {
         get {
             return NSStringFromClass(type(of: self)).replacingOccurrences(of: Bundle.main.infoDictionary?[kCFBundleNameKey as String] as! String + ".", with: "", options: .caseInsensitive, range: nil)
         }
@@ -150,15 +150,11 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     
     @IBAction func closeButtonDidTap(_ sender: AnyObject) {
         self.organizeTextObjects(nil)
-        if nil != _closeCallback {
-            _closeCallback!()
-        }
+        _closeCallback?()
     }
     
     @IBAction func backgroundColorButtonDidTap(_ sender: AnyObject) {
-        if nil != _changeBGColorBlock {
-            _changeBGColorBlock!(UIColor.brown)
-        }
+        _changeBGColorBlock?(UIColor.brown)
     }
     
     @IBAction func insertButtonDidTap(_ sender: AnyObject) {
@@ -181,9 +177,7 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     }
     
     @IBAction func addClipButtonDidTap(_ sender: AnyObject) {
-        if (nil != _addClipBlock) {
-            _addClipBlock!(nil);
-        }
+        _addClipBlock?(nil);
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
@@ -224,11 +218,11 @@ class LLClipMultiTextInputViewController: UIViewController, UIGestureRecognizerD
     }
     
     /** テキストボックスを整理する */
-    fileprivate func organizeTextObjects(_ movable: LLTextHandleView?) {
+    private func organizeTextObjects(_ movable: LLTextHandleView?) {
         var didEdit = false
         self.organizeTextObjects(movable, didEdit: &didEdit)
     }
-    fileprivate func organizeTextObjects(_ movable: LLTextHandleView?, didEdit: inout Bool) {
+    private func organizeTextObjects(_ movable: LLTextHandleView?, didEdit: inout Bool) {
         didEdit = false
         // 種別を確認して、ノーマルの場合はハンドル自体を削除する
         var removeTextHandleViews = [LLTextHandleView]()

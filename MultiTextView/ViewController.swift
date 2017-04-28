@@ -13,9 +13,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var thumbnailImageView: UIImageView!
     @IBOutlet weak var editButton: UIButton!
-    fileprivate var _clipViewController: LLClipViewController?
-    fileprivate var _clipItem: LLClipItem?
-    fileprivate var _serialized: NSDictionary?
+    private var _clipViewController: LLClipViewController?
+    private var _clipItem: LLClipItem?
+    private var _serialized: NSDictionary?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,7 +42,7 @@ class ViewController: UIViewController {
     }
     
     /** editButtonをレイアウトする（AutoLayoutだからなのか、ビューを閉じるときに正しくセンタリングしているにも関わらず位置がずれてしまうので遅延実行する） */
-    fileprivate func layoutEditButton() {
+    private func layoutEditButton() {
         weak var w = self
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(0 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: { () -> Void in
             guard let s = w else { return }

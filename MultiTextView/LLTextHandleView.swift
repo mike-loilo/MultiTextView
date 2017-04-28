@@ -20,12 +20,12 @@ enum LLSizeChangerViewType {
 private class LLSizeChangerView: UIView {
 
     /** 種別 */
-    fileprivate var _type: LLSizeChangerViewType = .circle
+    private var _type: LLSizeChangerViewType = .circle
     
-    fileprivate var _touchesBegan: ((_ view: LLSizeChangerView, _ touches: Set<UITouch>, _ event: UIEvent?) -> ())?
-    fileprivate var _touchesMoved: ((_ view: LLSizeChangerView, _ touches: Set<UITouch>, _ event: UIEvent?) -> ())?
-    fileprivate var _touchesEnded: ((_ view: LLSizeChangerView, _ touches: Set<UITouch>, _ event: UIEvent?) -> ())?
-    fileprivate var _touchesCancelled: ((_ view: LLSizeChangerView, _ touches: Set<UITouch>?, _ event: UIEvent?) -> ())?
+    private var _touchesBegan: ((_ view: LLSizeChangerView, _ touches: Set<UITouch>, _ event: UIEvent?) -> ())?
+    private var _touchesMoved: ((_ view: LLSizeChangerView, _ touches: Set<UITouch>, _ event: UIEvent?) -> ())?
+    private var _touchesEnded: ((_ view: LLSizeChangerView, _ touches: Set<UITouch>, _ event: UIEvent?) -> ())?
+    private var _touchesCancelled: ((_ view: LLSizeChangerView, _ touches: Set<UITouch>?, _ event: UIEvent?) -> ())?
     
     init(frame: CGRect, type: LLSizeChangerViewType, touchesBegan: ((_ view: LLSizeChangerView, _ touches: Set<UITouch>, _ event: UIEvent?) -> ())?, touchesMoved: ((_ view: LLSizeChangerView, _ touches: Set<UITouch>, _ event: UIEvent?) -> ())?, touchesEnded: ((_ view: LLSizeChangerView, _ touches: Set<UITouch>, _ event: UIEvent?) -> ())?, touchesCancelled: ((_ view: LLSizeChangerView, _ touches: Set<UITouch>?, _ event: UIEvent?) -> ())?) {
         _type = type
@@ -62,19 +62,19 @@ private class LLSizeChangerView: UIView {
     }
     
     fileprivate override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if nil != _touchesBegan { _touchesBegan!(self, touches, event) }
+        _touchesBegan?(self, touches, event)
     }
     
     fileprivate override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if nil != _touchesMoved { _touchesMoved!(self, touches, event) }
+        _touchesMoved?(self, touches, event)
     }
     
     fileprivate override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if nil != _touchesEnded { _touchesEnded!(self, touches, event) }
+        _touchesEnded?(self, touches, event)
     }
     
     fileprivate override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if nil != _touchesCancelled { _touchesCancelled!(self, touches, event) }
+        _touchesCancelled?(self, touches, event)
     }
 }
 
@@ -110,27 +110,27 @@ private class LLSizeChangerView: UIView {
 class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
 
     /** 種別（ノーマルの場合はハンドル自体を削除、タイトル / サブタイトルの場合はテキストがなくなったらプリセット文言を表示する） */
-    fileprivate var _type: LLTextHandleViewType = .normal
+    private var _type: LLTextHandleViewType = .normal
     var type: LLTextHandleViewType { return _type }
     
     /** ボーダー用レイヤー */
-    fileprivate var _borderLayerInner: CAShapeLayer?
-    fileprivate var _borderLayerOuter: CAShapeLayer?
+    private var _borderLayerInner: CAShapeLayer?
+    private var _borderLayerOuter: CAShapeLayer?
     
     /** サイズ変更ハンドル */
-    fileprivate var _tlHandle: LLSizeChangerView?
-    fileprivate var _tcHandle: LLSizeChangerView?
-    fileprivate var _trHandle: LLSizeChangerView?
-    fileprivate var _lcHandle: LLSizeChangerView?
-    fileprivate var _rcHandle: LLSizeChangerView?
-    fileprivate var _blHandle: LLSizeChangerView?
-    fileprivate var _bcHandle: LLSizeChangerView?
-    fileprivate var _brHandle: LLSizeChangerView?
+    private var _tlHandle: LLSizeChangerView?
+    private var _tcHandle: LLSizeChangerView?
+    private var _trHandle: LLSizeChangerView?
+    private var _lcHandle: LLSizeChangerView?
+    private var _rcHandle: LLSizeChangerView?
+    private var _blHandle: LLSizeChangerView?
+    private var _bcHandle: LLSizeChangerView?
+    private var _brHandle: LLSizeChangerView?
     
     /** タップジェスチャー */
-    fileprivate var _tapGesture: UITapGestureRecognizer?
+    private var _tapGesture: UITapGestureRecognizer?
     var tapGesture: UITapGestureRecognizer? { return _tapGesture }
-    fileprivate var _doubleTapGesture: UITapGestureRecognizer?
+    private var _doubleTapGesture: UITapGestureRecognizer?
     var doubleTapGesture: UITapGestureRecognizer? { return _doubleTapGesture! }
     
     /** テキストがあるかどうか */
@@ -143,7 +143,7 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
         }
         return false
     }
-    fileprivate var _htmlString: String?
+    private var _htmlString: String?
     var htmlString: String? { return _htmlString }
     
     /** 動かせるかどうか */
@@ -174,13 +174,13 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
         }
     }
     
-    fileprivate var _richTextEditor: ZSSRichTextEditor?
+    private var _richTextEditor: ZSSRichTextEditor?
     
     /** デリゲート */
     weak var viewDelegate: LLTextHandleViewDelegate?
     
     /** LLRichText */
-    fileprivate var _richText: LLRichText?
+    private var _richText: LLRichText?
     var richText: LLRichText? { return _richText }
     
     /** 通知 */
@@ -350,7 +350,7 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    fileprivate var className: String {
+    private var className: String {
         get {
             return NSStringFromClass(type(of: self)).replacingOccurrences(of: Bundle.main.infoDictionary?[kCFBundleNameKey as String] as! String + ".", with: "", options: .caseInsensitive, range: nil)
         }
@@ -426,7 +426,7 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
         return super.hitTest(point, with: event)
     }
     
-    fileprivate var _startDiff: CGVector = CGVector(dx: 0, dy: 0)
+    private var _startDiff: CGVector = CGVector(dx: 0, dy: 0)
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if !self.movable { return }
         let point = (touches.first?.location(in: self.superview))!
@@ -454,7 +454,7 @@ class LLTextHandleView: ZSSRichTextViewer, ZSSRichTextEditorDelegate {
     }
     
     /** 編集状態にする直前のZIndex */
-    fileprivate var _zIndex:Int?
+    private var _zIndex:Int?
     /** 編集状態にする */
     func enterEditMode() {
         self.movable = false

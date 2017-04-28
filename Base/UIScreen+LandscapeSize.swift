@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 extension UIScreen {
-    fileprivate struct ClassProperty {
+    private struct ClassProperty {
         static var landscapeSizeStore: NSValue!
         static var scaleXtoStandardStore: NSNumber!
         static var scaleYtoStandardStore: NSNumber!
